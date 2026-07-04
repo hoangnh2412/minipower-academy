@@ -9,6 +9,7 @@ const WORKSHOPS = [
     description: "Chia sẻ về quản lý dự án và cách AI Minipower thay đổi cuộc chơi.",
     date: "2026-07-04",
     path: "workshops/01-gioi-thieu/",
+    homework: "workshops/01-gioi-thieu/homework.html",
   },
 ];
 
@@ -31,16 +32,23 @@ function renderWorkshops() {
       ? `<span class="badge">${w.status}</span>`
       : "";
 
+    const homeworkLink = w.homework
+      ? `<a class="meta-link" href="${w.homework}">📝 Bài tập về nhà</a>`
+      : "";
+
     return `
       <li>
-        <a class="workshop-card" href="${w.path}">
-          <h2>${w.title} ${statusBadge}</h2>
-          <p>${w.description}</p>
+        <article class="workshop-card">
+          <a class="workshop-card-link" href="${w.path}">
+            <h2>${w.title} ${statusBadge}</h2>
+            <p>${w.description}</p>
+          </a>
           <div class="meta">
             ${w.date ? `<span>📅 ${w.date}</span>` : ""}
-            <span>→ Xem slide</span>
+            <a class="meta-link" href="${w.path}">→ Xem slide</a>
+            ${homeworkLink}
           </div>
-        </a>
+        </article>
       </li>`;
   }).join("");
 }
