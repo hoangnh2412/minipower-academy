@@ -1,0 +1,193 @@
+:root {
+  --slide-bg: #0f1419;
+  --slide-surface: #1a2332;
+  --slide-text: #e8edf4;
+  --slide-muted: #8b9cb3;
+  --slide-accent: #3b82f6;
+  --slide-font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --slide-mono: "SF Mono", "Fira Code", monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--slide-font);
+  color: var(--slide-text);
+  background: var(--slide-bg);
+}
+
+/* Deck layout */
+.deck {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 6vw, 5rem);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.slide h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.slide h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  font-weight: 600;
+  color: var(--slide-accent);
+}
+
+.slide p,
+.slide li {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1.6;
+  color: var(--slide-muted);
+}
+
+.slide ul,
+.slide ol {
+  margin: 0.5rem 0 0;
+  padding-left: 1.5rem;
+}
+
+.slide li + li {
+  margin-top: 0.5rem;
+}
+
+.slide code {
+  font-family: var(--slide-mono);
+  font-size: 0.9em;
+  padding: 0.15em 0.4em;
+  background: var(--slide-surface);
+  border-radius: 4px;
+  color: var(--slide-accent);
+}
+
+.slide pre {
+  margin: 1rem 0 0;
+  padding: 1.25rem;
+  background: var(--slide-surface);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.slide pre code {
+  padding: 0;
+  background: none;
+  color: var(--slide-text);
+}
+
+.slide .subtitle {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--slide-muted);
+}
+
+.slide.title-slide {
+  text-align: center;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(59, 130, 246, 0.12), transparent),
+    var(--slide-bg);
+}
+
+.slide.title-slide h1 {
+  color: var(--slide-text);
+}
+
+/* Controls */
+.deck-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 20, 25, 0.85);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(45, 58, 79, 0.6);
+  z-index: 100;
+}
+
+.deck-controls button {
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--slide-text);
+  background: var(--slide-surface);
+  border: 1px solid rgba(45, 58, 79, 0.8);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.deck-controls button:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: var(--slide-accent);
+}
+
+.deck-controls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.progress {
+  flex: 1;
+  margin: 0 1rem;
+  height: 4px;
+  background: var(--slide-surface);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--slide-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.slide-counter {
+  font-size: 0.8rem;
+  color: var(--slide-muted);
+  min-width: 4rem;
+  text-align: center;
+}
+
+.home-link {
+  font-size: 0.8rem;
+  color: var(--slide-muted);
+  text-decoration: none;
+  margin-right: 0.75rem;
+}
+
+.home-link:hover {
+  color: var(--slide-accent);
+}
