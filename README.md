@@ -24,6 +24,34 @@ Thường do cấu hình Pages hoặc deploy bị kẹt. Thử lần lượt:
 
 Cảnh báo `punycode module is deprecated` chỉ là warning, không phải nguyên nhân lỗi.
 
+### Redirect sang `hoangnh.com` / trang không tìm thấy
+
+**Nguyên nhân:** Repo user site [`hoangnh2412.github.io`](https://github.com/hoangnh2412/hoangnh2412.github.io) có file `CNAME` chứa `hoangnh.com`. Domain này **không** nằm ở Verified domains (profile) hay Custom domain của repo `minipower-academy`.
+
+Khi user site dùng custom domain, GitHub redirect mọi Pages sang domain đó:
+
+| URL github.io | Redirect tới |
+|---------------|--------------|
+| `hoangnh2412.github.io/` | `hoangnh.com/` |
+| `hoangnh2412.github.io/minipower-academy/` | `hoangnh.com/minipower-academy/` |
+
+Site **đã deploy thành công** — `http://hoangnh.com/minipower-academy/` trả về nội dung đúng. Lỗi xảy ra vì redirect sang **HTTPS** nhưng GitHub chưa cấp chứng chỉ TLS cho `hoangnh.com` (cert hiện tại là `*.github.io`).
+
+**Cách A — Sửa HTTPS cho hoangnh.com (giữ domain riêng)**
+
+1. Vào [hoangnh2412.github.io → Settings → Pages](https://github.com/hoangnh2412/hoangnh2412.github.io/settings/pages)
+2. Nhập `hoangnh.com` vào **Custom domain** → **Save**
+3. Đợi DNS check thành công (A records đã trỏ GitHub: `185.199.108.153` …)
+4. Đợi GitHub cấp Let's Encrypt cert (vài phút – 24 giờ)
+5. Bật **Enforce HTTPS**
+6. Truy cập `https://hoangnh.com/minipower-academy/`
+
+**Cách B — Dùng github.io (không redirect)**
+
+1. Vào [hoangnh2412.github.io](https://github.com/hoangnh2412/hoangnh2412.github.io) → xóa file `CNAME` (hoặc gỡ Custom domain trong Settings → Pages)
+2. Commit & push
+3. Truy cập `https://hoangnh2412.github.io/minipower-academy/` — HTTPS hoạt động ngay
+
 ## Cấu trúc
 
 ```

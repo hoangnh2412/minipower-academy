@@ -5,10 +5,9 @@
 const WORKSHOPS = [
   {
     id: "01-gioi-thieu",
-    title: "Buổi 01 — Giới thiệu (mẫu)",
-    description: "Slide mẫu minh họa cấu trúc và cách trình bày nội dung workshop.",
+    title: "Buổi 01 — Workshop Minipower",
+    description: "Chia sẻ về quản lý dự án và cách AI Minipower thay đổi cuộc chơi.",
     date: "2026-07-04",
-    status: "mẫu",
     path: "workshops/01-gioi-thieu/",
   },
 ];

@@ -3,66 +3,1058 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buổi 01 — Giới thiệu — MiniPower Academy</title>
-  <link rel="stylesheet" href="../_shared/css/slides.css">
+  <title>Workshop AI — Minipower Story</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0e17;
+      --surface: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #f0f4fc;
+      --muted: #8b9cb8;
+      --accent: #4f8cff;
+      --accent-glow: rgba(79, 140, 255, 0.35);
+      --chapter: #f5a623;
+      --notes-bg: rgba(10, 14, 23, 0.92);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79, 140, 255, 0.08), transparent),
+        var(--bg);
+    }
+
+    .slide-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 2rem 5.5rem;
+    }
+
+    .slide-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.55),
+        0 0 0 1px var(--border);
+      opacity: 0;
+      transform: scale(0.97);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .slide-image.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .slide-image.leaving {
+      opacity: 0;
+      transform: scale(1.02);
+      transition-duration: 0.3s;
+    }
+
+    .slide-text {
+      width: min(920px, 92vw);
+      max-height: 100%;
+      overflow-y: auto;
+      padding: 2.5rem 3rem;
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transform: scale(0.97);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .slide-text.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .slide-text.leaving {
+      opacity: 0;
+      transform: scale(1.02);
+      transition-duration: 0.3s;
+    }
+
+    .slide-text .slide-badge {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(79, 140, 255, 0.15);
+      border: 1px solid rgba(79, 140, 255, 0.35);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .slide-text h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, #fff 20%, #a8c7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .slide-text .lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .slide-text ol.steps {
+      list-style: none;
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .slide-text ol.steps li {
+      counter-increment: step;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: #d4dff0;
+    }
+
+    .slide-text ol.steps li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(79, 140, 255, 0.2);
+      border: 1px solid rgba(79, 140, 255, 0.4);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .slide-text .prompt-block {
+      margin-top: 1.25rem;
+      padding: 1.1rem 1.25rem;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(79, 140, 255, 0.25);
+      font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #b8d4ff;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .slide-text .prompt-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-family: "Segoe UI", system-ui, sans-serif;
+    }
+
+    .slide-text .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .slide-text .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1rem;
+      color: #d4dff0;
+    }
+
+    .slide-text .checklist li::before {
+      content: "☐";
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .slide-text .callout {
+      margin-top: 1.25rem;
+      padding: 0.85rem 1.1rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--chapter);
+      background: rgba(245, 166, 35, 0.1);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #f0d9a8;
+    }
+
+    .slide-text .ide-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .slide-text .ide-tags span {
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .overview-item .text-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: linear-gradient(135deg, rgba(79, 140, 255, 0.12), rgba(10, 14, 23, 0.9));
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* HUD */
+    .hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .hud > * { pointer-events: auto; }
+
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(to bottom, rgba(10, 14, 23, 0.85), transparent);
+    }
+
+    .chapter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--chapter);
+    }
+
+    .chapter-badge span {
+      color: var(--muted);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .counter {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .counter strong {
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .progress-track {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #7eb3ff);
+      box-shadow: 0 0 12px var(--accent-glow);
+      transition: width 0.4s ease;
+    }
+
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.5rem 1.1rem;
+      background: linear-gradient(to top, rgba(10, 14, 23, 0.9), transparent);
+    }
+
+    .slide-title {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 60%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .controls-hint {
+      font-size: 0.72rem;
+      color: rgba(139, 156, 184, 0.7);
+      display: flex;
+      gap: 1rem;
+    }
+
+    .controls-hint kbd {
+      display: inline-block;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 0.68rem;
+      color: var(--text);
+      margin-right: 0.25rem;
+    }
+
+    /* Nav buttons */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 72px;
+      border: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.25s, background 0.2s;
+      backdrop-filter: blur(8px);
+      z-index: 11;
+    }
+
+    .deck:hover .nav-btn,
+    .nav-btn:focus-visible { opacity: 0.7; }
+    .nav-btn:hover { opacity: 1 !important; background: rgba(79, 140, 255, 0.15); }
+    .nav-btn:disabled { opacity: 0 !important; cursor: default; }
+
+    .nav-prev { left: 1rem; }
+    .nav-next { right: 1rem; }
+
+    /* Speaker notes */
+    .notes-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 38vh;
+      overflow-y: auto;
+      padding: 1.25rem 1.5rem 1.5rem;
+      background: var(--notes-bg);
+      border-top: 1px solid var(--border);
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+
+    .notes-panel.open { transform: translateY(0); }
+
+    .notes-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-content {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: #c8d4e8;
+      white-space: pre-wrap;
+    }
+
+    .notes-content em {
+      color: var(--chapter);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* Overview grid */
+    .overview {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 23, 0.96);
+      z-index: 30;
+      overflow-y: auto;
+      padding: 2rem;
+      display: none;
+    }
+
+    .overview.open { display: block; }
+
+    .overview h2 {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .overview-item {
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+      background: var(--surface);
+    }
+
+    .overview-item:hover { transform: scale(1.03); border-color: var(--accent); }
+    .overview-item.current { border-color: var(--chapter); }
+
+    .overview-item img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overview-item .label {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .overview-close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 31;
+      font-size: 0.85rem;
+    }
+
+    /* Start screen */
+    .start-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      text-align: center;
+      padding: 2rem;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+
+    .start-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .start-screen h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .start-screen .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .start-btn {
+      padding: 0.9rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #3a6fd4);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 8px 32px var(--accent-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px var(--accent-glow);
+    }
+
+    .start-hint {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: rgba(139, 156, 184, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      .slide-viewport { padding: 3.5rem 0.5rem 4.5rem; }
+      .controls-hint { display: none; }
+      .nav-btn { width: 40px; height: 56px; font-size: 1.1rem; }
+    }
+  </style>
 </head>
 <body>
-  <div id="deck" class="deck">
 
-    <section class="slide title-slide active">
-      <h1>MiniPower Academy</h1>
-      <p class="subtitle">Buổi 01 · Giới thiệu · 04/07/2026</p>
-    </section>
-
-    <section class="slide">
-      <h2>Về kho tri thức này</h2>
-      <ul>
-        <li>Lưu trữ slide và tài liệu workshop</li>
-        <li>Chia sẻ công khai qua GitHub Pages</li>
-        <li>Mỗi buổi học là một thư mục HTML/CSS/JS độc lập</li>
-      </ul>
-    </section>
-
-    <section class="slide">
-      <h2>Cấu trúc thư mục</h2>
-      <pre><code>docs/
-├── index.html          # Trang chủ
-├── css/site.css
-├── js/site.js
-└── workshops/
-    ├── _shared/        # CSS/JS dùng chung
-    ├── _template/      # Sao chép để tạo buổi mới
-    └── 01-gioi-thieu/  # Chỉ cần index.html</code></pre>
-    </section>
-
-    <section class="slide">
-      <h2>Điều hướng slide</h2>
-      <ul>
-        <li><code>→</code> / <code>Space</code> — slide tiếp theo</li>
-        <li><code>←</code> — slide trước</li>
-        <li><code>Home</code> / <code>End</code> — đầu / cuối</li>
-      </ul>
-    </section>
-
-    <section class="slide title-slide">
-      <h1>Cảm ơn!</h1>
-      <p class="subtitle">Bắt đầu tạo buổi workshop tiếp theo nhé</p>
-    </section>
-
+  <div class="start-screen" id="startScreen">
+    <h1>WORKSHOP - MINIPOWER</h1>
+    <p class="subtitle">
+      Chia sẻ về "Quản lý dự án" —<br>
+      và cách AI Minipower thay đổi cuộc chơi.
+    </p>
+    <button class="start-btn" id="startBtn">Bắt đầu trình chiếu</button>
+    <p class="start-hint">
+      <kbd>→</kbd> / <kbd>Space</kbd> tiếp &nbsp;·&nbsp;
+      <kbd>←</kbd> lùi &nbsp;·&nbsp;
+      <kbd>N</kbd> ghi chú &nbsp;·&nbsp;
+      <kbd>G</kbd> tổng quan &nbsp;·&nbsp;
+      <kbd>F</kbd> toàn màn hình
+    </p>
   </div>
 
-  <nav class="deck-controls" aria-label="Điều hướng slide">
-    <div>
-      <a class="home-link" href="../../index.html">← Trang chủ</a>
-      <button id="prev" type="button" aria-label="Slide trước">← Trước</button>
-    </div>
-    <div class="progress" aria-hidden="true">
-      <div id="progress-bar" class="progress-bar" style="width: 20%"></div>
-    </div>
-    <span id="counter" class="slide-counter">1 / 5</span>
-    <button id="next" type="button" aria-label="Slide tiếp">Tiếp →</button>
-  </nav>
+  <div class="deck" id="deck">
+    <div class="slide-viewport" id="viewport"></div>
 
-  <script src="../_shared/js/slides.js"></script>
+    <button class="nav-btn nav-prev" id="btnPrev" aria-label="Slide trước">‹</button>
+    <button class="nav-btn nav-next" id="btnNext" aria-label="Slide tiếp">›</button>
+
+    <div class="hud">
+      <div class="top-bar">
+        <div class="chapter-badge" id="chapterBadge">
+          <span id="chapterNum">Phần 0</span>
+          <span id="chapterName">—</span>
+        </div>
+        <div class="counter">
+          <strong id="currentNum">1</strong> / <span id="totalNum">28</span>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="bottom-bar">
+        <div class="slide-title" id="slideTitle"></div>
+        <div class="controls-hint">
+          <span><kbd>←</kbd><kbd>→</kbd> điều hướng</span>
+          <span><kbd>N</kbd> ghi chú</span>
+          <span><kbd>G</kbd> lướt nhanh</span>
+          <span><kbd>F</kbd> fullscreen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-panel" id="notesPanel">
+    <div class="notes-label">Gợi ý kể chuyện</div>
+    <div class="notes-content" id="notesContent"></div>
+  </div>
+
+  <div class="overview" id="overview">
+    <button class="overview-close" id="overviewClose">Đóng (Esc)</button>
+    <h2>Tổng quan slide — click để nhảy</h2>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <script>
+    const CHAPTERS = [
+      {
+        folder: "0-start",
+        name: "Mở đầu — Buổi họp định mệnh",
+        images: [1, 2],
+        notes: [
+          "Giới thiệu câu chuyện: Công ty ABC triển khai CRM. Kickoff meeting — 10 người, không khí hào hứng.\n\n<em>Hỏi lớp:</em> Theo anh chị, điều gì sẽ xảy ra tiếp theo?",
+          "Khách hàng nói liên tục 2 tiếng. Kết thúc họp.\n\nPM hỏi BA: \"Em ghi kịp không?\"\nBA: \"Chắc là kịp anh.\" 😅\n\n<em>Dừng lại — cho mọi người trả lời trước khi reveal.</em>"
+        ]
+      },
+      {
+        folder: "1-ghi-chep-cham",
+        name: "Nỗi đau #1 — Không ghi kịp nội dung họp",
+        images: [1, 2, 3, 4],
+        notes: [
+          "<em>Reveal:</em> Nỗi đau số 1 — Không ghi kịp nội dung họp.",
+          "Kết quả: Thiếu requirement, thiếu business rule, thiếu decision, thiếu action item.",
+          "<em>Hỏi lớp:</em> Ai từng về nghe lại recording? (Giơ tay tiếp.)",
+          "BA ngồi buổi tối muộn, tua recording hàng giờ — ly cà phê nguội, đồng hồ 22:30."
+        ]
+      },
+      {
+        folder: "2-mom-cham",
+        name: "Nỗi đau #2 — Biên bản họp ra quá muộn",
+        images: [1, 2],
+        notes: [
+          "Thực tế: T2 họp → T4 mới gửi MOM → T6 khách mới đọc → tuần sau họp tiếp.",
+          "<em>Hỏi lớp:</em> Lúc này khách hàng còn nhớ mình đã nói gì không?\nHầu hết: Không.\n\nKết quả: Requirement bị trôi, không ai xác nhận, không ai chịu trách nhiệm."
+        ]
+      },
+      {
+        folder: "3-trach-nhiem",
+        name: "Nỗi đau #3 — Không rõ ai làm gì",
+        images: [1],
+        notes: [
+          "PM, BA, SA, QA, DEV, CUSTOMER — ai approve FRD? Ai approve UAT? Ai approve Change Request?\n\nMỗi công ty trả lời khác nhau. Đó chính là vấn đề.\n\nHệ quả: Đùn đẩy trách nhiệm, không có owner, việc bị treo."
+        ]
+      },
+      {
+        folder: "4-nhieu-tai-lieu",
+        name: "Nỗi đau #4 — Quá nhiều tài liệu",
+        images: [1, 2, 3],
+        notes: [
+          "Một dự án có: BRD, FRD, SRS, Wireframe, Test Case, User Guide, Training Material, Release Note, CR...",
+          "<em>Hỏi lớp:</em> Anh chị có từng copy nội dung từ tài liệu này sang tài liệu khác không?\n100% có.",
+          "Một sự thật: Nhiều nơi lưu trữ → nguồn gốc của Outdate."
+        ]
+      },
+      {
+        folder: "5-ai-quyet-dinh",
+        name: "Nỗi đau #6 — Không biết ai quyết định",
+        images: [1],
+        notes: [
+          "Khách hàng: \"Tại sao hệ thống lại xử lý như thế này?\"\nCả team: ...\nPM: \"Em nhớ khách yêu cầu.\"\nCustomer: \"Tôi không nhớ.\" 😅\n\n<em>Hỏi lớp:</em> Có ai từng mất vài giờ chỉ để tìm email cũ không?"
+        ]
+      },
+      {
+        folder: "6-lien-ket-tai-lieu",
+        name: "Nỗi đau #5 — Tài liệu chết dần theo thời gian",
+        images: [1],
+        notes: [
+          "Timeline: T1 BRD → T2 FRD → T4 Dev → T6 UAT → T7 GoLive.\n\n<em>Hỏi lớp:</em> BRD tháng 1 có còn đúng 100% ở tháng 7 không? Không.\nFRD, Test Case, User Guide — cũng không còn đúng."
+        ]
+      },
+      {
+        folder: "7-nguoi-moi",
+        name: "Nỗi đau #8 — Người mới vào dự án",
+        images: [1],
+        notes: [
+          "BA cũ nghỉ việc. BA mới vào.\nPM: \"Đọc tài liệu nhé.\" — 500 trang.\n\n<em>Hỏi lớp:</em> Bao lâu để onboard? Thực tế: 2 tuần, 1 tháng, 2 tháng..."
+        ]
+      },
+      {
+        folder: "8-superman",
+        name: "Nỗi đau #9 — Phụ thuộc người nhớ nhiều nhất",
+        images: [1],
+        notes: [
+          "Một số người trở thành <em>Human Database</em> — nhớ requirement, customer, lịch sử, quyết định.\n\nNếu nghỉ việc → Mất trí nhớ dự án."
+        ]
+      },
+      {
+        folder: "9-scope-creep",
+        name: "Nỗi đau #10 — Scope creep",
+        images: [1],
+        notes: [
+          "Khách hàng: \"Tiện thể làm thêm giúp anh.\"\nKhông có CR, không approval, không estimate.\n\n3 tháng sau: Dự án trễ — không ai biết vì sao."
+        ]
+      },
+      {
+        folder: "10-meeting-nhieu",
+        name: "Nỗi đau #11 — Họp quá nhiều",
+        images: [1],
+        notes: [
+          "Kickoff, Clarification, Review, Daily, Weekly, UAT, CR...\n\n<em>Hỏi lớp:</em> Bao nhiêu % nội dung họp thực sự tạo ra giá trị?\n(Rất nhiều người sẽ cười.)"
+        ]
+      },
+      {
+        folder: "11-tim-history",
+        name: "Nỗi đau #12 — Tìm kiếm tri thức cực khó",
+        images: [1],
+        notes: [
+          "Thông tin nằm ở: Zalo, Teams, Email, Word, Excel, Jira, Confluence, Drive.\n\n\"Khách hàng A yêu cầu chức năng này khi nào?\"\nMất: 15 phút, 30 phút, 1 giờ..."
+        ]
+      },
+      {
+        folder: "12-summary",
+        name: "Cao trào — Đây có phải vấn đề của AI?",
+        images: [1, 2],
+        notes: [
+          "Sau khi liệt kê tất cả 12 nỗi đau...\n\n<em>Hỏi lớp:</em> Đây có phải vấn đề của AI không?\n\nCâu trả lời: <em>KHÔNG</em>",
+          "Đây là vấn đề của <em>tri thức dự án</em>.\nTri thức đang nằm rải rác, không liên kết, không cập nhật, không truy vết được."
+        ]
+      },
+      {
+        folder: "13-minipower",
+        name: "Reveal — Minipower",
+        images: [1, 2],
+        notes: [
+          "<em>Chuyển sang AI:</em> Nếu có một \"nhân viên\" tham gia mọi cuộc họp, ghi nhớ mọi quyết định, cập nhật mọi tài liệu, biết ai yêu cầu gì, biết vì sao thay đổi, biết test case nào liên quan requirement nào, hỗ trợ người mới onboard — thì sao?\n\nMọi người: \"Quá tuyệt!\"",
+          "<em>Reveal:</em> Đó chính là <strong>Minipower</strong>.\n\nKhông phải chatbot. Không phải prompt. Không phải ChatGPT.\n\nMà là:\n• AI Project Memory\n• AI Project Analyst\n• AI Project Assistant"
+        ]
+      },
+      {
+        folder: "14-huong-dan-minipower",
+        name: "Hands-on — Cài & dùng Minipower",
+        type: "text",
+        slides: [
+          {
+            id: "14-0",
+            title: "Bắt tay làm ngay",
+            html: `
+              <div class="slide-badge">Phần 14 · Hands-on</div>
+              <h2>Bắt tay làm ngay</h2>
+              <p class="lead">Câu chuyện xong rồi — giờ cài Minipower và dùng thử trên máy của anh chị.</p>
+              <p class="lead">5 bước đơn giản. Copy prompt, paste vào AI, làm theo từng bước.</p>
+            `,
+            note: "<em>Chuyển phần:</em> \"Reveal xong Minipower rồi. Giờ không nói nữa — bắt tay làm. Ai chưa mở laptop thì mở luôn nhé.\""
+          },
+          {
+            id: "14-1",
+            title: "Bước 1–2: Chuẩn bị môi trường",
+            html: `
+              <div class="slide-badge">Bước 1–2</div>
+              <h2>Chuẩn bị môi trường</h2>
+              <ol class="steps">
+                <li>Tạo <strong>folder trống</strong> trên máy (ví dụ: <code>~/projects/my-crm</code>)</li>
+                <li>Mở IDE tại folder vừa tạo
+                  <div class="ide-tags">
+                    <span>Cursor</span>
+                    <span>Claude Code</span>
+                    <span>OpenCode</span>
+                  </div>
+                </li>
+              </ol>
+            `,
+            note: "Bước 1: Tạo folder trống — đây sẽ là workspace dự án.\nBước 2: Mở Cursor, Claude Code hoặc OpenCode tại folder đó. Quan trọng: AI phải chạy ĐÚNG folder, không phải folder khác."
+          },
+          {
+            id: "14-2",
+            title: "Bước 3: Pull code & cài đặt",
+            html: `
+              <div class="slide-badge">Bước 3</div>
+              <h2>Pull code & cài đặt</h2>
+              <div class="prompt-label">Prompt</div>
+              <div class="prompt-block">Pull code https://github.com/hoangnh2412/ai-skills và cài đặt minipower</div>
+            `,
+            note: "Prompt: \"Pull code https://github.com/hoangnh2412/ai-skills và cài đặt minipower\"\n\nChờ AI clone repo và chạy setup. Đừng làm bước tiếp khi chưa xong bước này."
+          },
+          {
+            id: "14-3",
+            title: "Bước 4: Kiểm tra đã cài đủ",
+            html: `
+              <div class="slide-badge">Bước 4</div>
+              <h2>Kiểm tra đã cài đủ</h2>
+              <p class="lead">Sau khi AI cài xong, hỏi để xác nhận:</p>
+              <div class="prompt-label">Prompt kiểm tra</div>
+              <div class="prompt-block">Làm thế nào để biết đã cài: Skill minipower, rules, hook guardrails</div>
+              <ul class="checklist">
+                <li>Skill minipower</li>
+                <li>rules</li>
+                <li>hook guardrails</li>
+              </ul>
+              <div class="callout">⚠️ Kiểm tra <strong>thủ công</strong> — đừng tin AI 100%. Không cài đủ = 1 ngày bay $20+ 😅</div>
+            `,
+            note: "Prompt: \"Làm thế nào để biết đã cài: Skill minipower, rules, hook guardrails\"\n\nAI sẽ hướng dẫn kiểm tra. Nhưng ae nên tự mở folder xem — tránh tốn token vì cài thiếu.\n\n<em>Punchline:</em> Không cài đủ là 1 ngày bay $20 hoặc có thể nhiều hơn."
+          },
+          {
+            id: "14-5",
+            title: "Bước 5: Bắt đầu dùng Minipower",
+            html: `
+              <div class="slide-badge">Bước 5</div>
+              <h2>Bắt đầu dùng Minipower</h2>
+              <p class="lead">Cài xong rồi — hỏi AI dẫn dắt bước đầu tiên:</p>
+              <div class="prompt-label">Prompt khởi động</div>
+              <div class="prompt-block">/minipower Để bắt đầu, tôi cần làm những gì?</div>
+              <p class="lead" style="margin-top:1.25rem">AI sẽ hướng dẫn upload tài liệu vào folder nào, đọc file gì trước.</p>
+              <div class="callout">Quá nhiều thông tin? Prompt tiếp:<br><strong>/minipower bước tiếp theo cần làm gì? Ko cần cả quá trình, dẫn dắt tao làm từng bước</strong></div>
+            `,
+            note: "Prompt: \"/minipower Để bắt đầu, tôi cần làm những gì?\"\n\nAI hướng dẫn upload tài liệu, đọc file nào trước để hiểu luồng.\n\nNếu quá tải → \"/minipower bước tiếp theo cần làm gì? Ko cần cả quá trình, dẫn dắt tao làm từng bước\""
+          }
+        ]
+      }
+    ];
+
+    const SLIDES = CHAPTERS.flatMap((ch, ci) => {
+      if (ch.type === "text") {
+        return ch.slides.map((s, ii) => ({
+          type: "text",
+          html: s.html,
+          slideId: s.id,
+          chapterIndex: ci,
+          chapterName: ch.name,
+          chapterNum: ci,
+          imageIndex: ii,
+          title: `${s.id} — ${s.title}`,
+          note: s.note || ""
+        }));
+      }
+      return ch.images.map((num, ii) => ({
+        type: "image",
+        src: `slides/${ch.folder}/${num}.webp`,
+        chapterIndex: ci,
+        chapterName: ch.name,
+        chapterNum: ci,
+        imageIndex: ii,
+        title: `${ch.name} — ${num}`,
+        note: ch.notes[ii] || ch.notes[ch.notes.length - 1] || ""
+      }));
+    });
+
+    let current = 0;
+    let notesOpen = false;
+    let overviewOpen = false;
+    let touchStartX = 0;
+
+    const viewport = document.getElementById("viewport");
+    const startScreen = document.getElementById("startScreen");
+    const notesPanel = document.getElementById("notesPanel");
+    const notesContent = document.getElementById("notesContent");
+    const overview = document.getElementById("overview");
+    const overviewGrid = document.getElementById("overviewGrid");
+    const progressFill = document.getElementById("progressFill");
+    const currentNum = document.getElementById("currentNum");
+    const totalNum = document.getElementById("totalNum");
+    const chapterNum = document.getElementById("chapterNum");
+    const chapterName = document.getElementById("chapterName");
+    const slideTitle = document.getElementById("slideTitle");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+
+    totalNum.textContent = SLIDES.length;
+
+    let slideEl = null;
+
+    function renderSlide(index) {
+      const slide = SLIDES[index];
+      let newEl;
+
+      if (slide.type === "text") {
+        newEl = document.createElement("div");
+        newEl.className = "slide-text";
+        newEl.innerHTML = slide.html;
+      } else {
+        newEl = document.createElement("img");
+        newEl.className = "slide-image";
+        newEl.src = slide.src;
+        newEl.alt = slide.title;
+        newEl.draggable = false;
+      }
+
+      if (slideEl) {
+        slideEl.classList.remove("active");
+        slideEl.classList.add("leaving");
+        const old = slideEl;
+        setTimeout(() => old.remove(), 300);
+      }
+
+      viewport.appendChild(newEl);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => newEl.classList.add("active"));
+      });
+      slideEl = newEl;
+
+      currentNum.textContent = index + 1;
+      chapterNum.textContent = `Phần ${slide.chapterNum}`;
+      chapterName.textContent = slide.chapterName;
+      slideTitle.textContent = slide.title;
+      progressFill.style.width = `${((index + 1) / SLIDES.length) * 100}%`;
+      notesContent.innerHTML = slide.note;
+
+      btnPrev.disabled = index === 0;
+      btnNext.disabled = index === SLIDES.length - 1;
+
+      document.querySelectorAll(".overview-item").forEach((el, i) => {
+        el.classList.toggle("current", i === index);
+      });
+    }
+
+    function goTo(index) {
+      if (index < 0 || index >= SLIDES.length || index === current) return;
+      current = index;
+      renderSlide(current);
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function toggleNotes() {
+      notesOpen = !notesOpen;
+      notesPanel.classList.toggle("open", notesOpen);
+    }
+
+    function toggleOverview() {
+      overviewOpen = !overviewOpen;
+      overview.classList.toggle("open", overviewOpen);
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function buildOverview() {
+      SLIDES.forEach((slide, i) => {
+        const item = document.createElement("div");
+        item.className = "overview-item" + (i === 0 ? " current" : "");
+        const thumb = slide.type === "text"
+          ? `<div class="text-thumb">${slide.slideId || slide.title}</div>`
+          : `<img src="${slide.src}" alt="${slide.title}" loading="lazy">`;
+        item.innerHTML = `
+          ${thumb}
+          <div class="label">${i + 1}. ${slide.title}</div>
+        `;
+        item.addEventListener("click", () => {
+          goTo(i);
+          toggleOverview();
+        });
+        overviewGrid.appendChild(item);
+      });
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      startScreen.classList.add("hidden");
+      renderSlide(0);
+    });
+
+    btnPrev.addEventListener("click", prev);
+    btnNext.addEventListener("click", next);
+    document.getElementById("overviewClose").addEventListener("click", toggleOverview);
+
+    document.addEventListener("keydown", (e) => {
+      if (startScreen.classList.contains("hidden") === false) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          startScreen.classList.add("hidden");
+          renderSlide(0);
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case "ArrowRight":
+        case " ":
+        case "PageDown":
+          e.preventDefault();
+          if (overviewOpen) break;
+          next();
+          break;
+        case "ArrowLeft":
+        case "PageUp":
+          e.preventDefault();
+          if (overviewOpen) break;
+          prev();
+          break;
+        case "Home":
+          e.preventDefault();
+          goTo(0);
+          break;
+        case "End":
+          e.preventDefault();
+          goTo(SLIDES.length - 1);
+          break;
+        case "n":
+        case "N":
+          toggleNotes();
+          break;
+        case "g":
+        case "G":
+          toggleOverview();
+          break;
+        case "f":
+        case "F":
+          toggleFullscreen();
+          break;
+        case "Escape":
+          if (overviewOpen) toggleOverview();
+          else if (notesOpen) toggleNotes();
+          break;
+      }
+    });
+
+    viewport.addEventListener("click", (e) => {
+      if (!startScreen.classList.contains("hidden")) return;
+      const rect = viewport.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      if (x < rect.width * 0.3) prev();
+      else if (x > rect.width * 0.7) next();
+    });
+
+    viewport.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    viewport.addEventListener("touchend", (e) => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? next() : prev();
+      }
+    }, { passive: true });
+
+    buildOverview();
+  </script>
 </body>
 </html>

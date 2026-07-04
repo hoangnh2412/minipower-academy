@@ -1,0 +1,12 @@
+{
+  "name": "minipower-academy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "compress:slides": "node scripts/compress-slides.mjs",
+    "convert:slides:webp": "node scripts/convert-slides-webp.mjs --update-html"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}
