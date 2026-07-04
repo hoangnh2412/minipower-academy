@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập về nhà — Workshop Minipower</title>
+  <link rel="stylesheet" href="../../css/site.css">
+  <style>
+    :root {
+      --hw-accent: #4f8cff;
+      --hw-accent-glow: rgba(79, 140, 255, 0.2);
+      --hw-chapter: #f5a623;
+      --hw-surface: rgba(255, 255, 255, 0.06);
+      --hw-border: rgba(255, 255, 255, 0.12);
+    }
+
+    body {
+      overflow-y: auto;
+    }
+
+    .hw-header {
+      padding: 2.5rem 0 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hw-header .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+    }
+
+    .hw-header .breadcrumb a {
+      color: var(--color-muted);
+    }
+
+    .hw-header .breadcrumb a:hover {
+      color: var(--color-accent);
+    }
+
+    .hw-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .hw-header .intro {
+      margin: 0;
+      max-width: 58ch;
+      color: var(--color-muted);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+
+    .hw-main {
+      padding: 2rem 0 4rem;
+    }
+
+    .task-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .task-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      box-shadow: var(--shadow);
+    }
+
+    .task-card .task-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--hw-accent-glow);
+      border: 1px solid rgba(79, 140, 255, 0.4);
+      color: var(--hw-accent);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .task-card h2 {
+      margin: 0 0 0.65rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .task-card .task-desc {
+      margin: 0 0 1rem;
+      color: var(--color-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .prompt-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--hw-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .prompt-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    @media (min-width: 640px) {
+      .prompt-row {
+        flex-direction: row;
+        align-items: stretch;
+      }
+    }
+
+    .prompt-block {
+      flex: 1;
+      padding: 1rem 1.15rem;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(79, 140, 255, 0.25);
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #b8d4ff;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      align-self: flex-start;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--hw-border);
+      background: var(--hw-surface);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--hw-accent);
+      background: var(--hw-accent-glow);
+    }
+
+    .copy-btn.copied {
+      border-color: #34d399;
+      color: #34d399;
+    }
+
+    .callout {
+      margin-top: 1rem;
+      padding: 0.85rem 1.1rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--hw-chapter);
+      background: rgba(245, 166, 35, 0.1);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #f0d9a8;
+    }
+
+    .upload-zone {
+      margin-top: 0.5rem;
+      border: 2px dashed var(--color-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      position: relative;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+      border-color: var(--hw-accent);
+      background: var(--hw-accent-glow);
+    }
+
+    .upload-zone.has-image {
+      padding: 0.75rem;
+      cursor: default;
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-zone.has-image input[type="file"] {
+      display: none;
+    }
+
+    .upload-zone .upload-hint {
+      color: var(--color-muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    .upload-zone .upload-hint strong {
+      color: var(--hw-accent);
+    }
+
+    .upload-preview {
+      max-width: 100%;
+      max-height: 420px;
+      border-radius: 6px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      display: none;
+    }
+
+    .upload-zone.has-image .upload-preview {
+      display: block;
+    }
+
+    .upload-zone.has-image .upload-hint {
+      display: none;
+    }
+
+    .upload-actions {
+      display: none;
+      margin-top: 0.65rem;
+      gap: 0.5rem;
+    }
+
+    .upload-zone.has-image + .upload-actions {
+      display: flex;
+    }
+
+    .upload-actions button {
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      border: 1px solid var(--hw-border);
+      background: var(--hw-surface);
+      color: var(--color-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+
+    .upload-actions button:hover {
+      border-color: var(--hw-accent);
+      color: var(--color-text);
+    }
+
+    .answer-area {
+      width: 100%;
+      min-height: 140px;
+      margin-top: 0.5rem;
+      padding: 1rem 1.15rem;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      background: rgba(0, 0, 0, 0.25);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      resize: vertical;
+    }
+
+    .answer-area:focus {
+      outline: none;
+      border-color: var(--hw-accent);
+      box-shadow: 0 0 0 3px var(--hw-accent-glow);
+    }
+
+    .answer-area::placeholder {
+      color: var(--color-muted);
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.92rem;
+      color: var(--color-muted);
+    }
+
+    .checklist li::before {
+      content: "☐";
+      color: var(--hw-accent);
+    }
+
+    .submit-note {
+      margin-top: 2rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius);
+      background: var(--hw-accent-glow);
+      border: 1px solid rgba(79, 140, 255, 0.3);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #c8dcff;
+    }
+
+    .submit-note strong {
+      color: var(--color-text);
+    }
+  </style>
+</head>
+<body>
+  <header class="hw-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Điều hướng">
+        <a href="../../index.html">Trang chủ</a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html">Workshop 01</a>
+        <span aria-hidden="true">/</span>
+        <span>Bài tập về nhà</span>
+      </nav>
+      <h1>Bài tập về nhà</h1>
+      <p class="intro">
+        Hoàn thành 5 mục dưới đây sau buổi workshop. Copy prompt, chạy trên IDE
+        (Cursor / Claude Code / OpenCode), chụp màn hình kết quả và trả lời câu hỏi cuối.
+      </p>
+    </div>
+  </header>
+
+  <main class="hw-main">
+    <div class="container">
+      <ol class="task-list">
+
+        <!-- Bài 1 -->
+        <li class="task-card">
+          <div class="task-num">1</div>
+          <h2>Cài đặt Minipower</h2>
+          <p class="task-desc">
+            Mở folder dự án trống trên IDE, paste prompt bên dưới và chờ AI clone repo
+            cùng chạy setup. Không chuyển sang bài tiếp theo khi chưa xong bước này.
+          </p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="prompt-install">Pull code https://github.com/hoangnh2412/ai-skills và cài đặt minipower</div>
+            <button type="button" class="copy-btn" data-copy="prompt-install">Copy</button>
+          </div>
+        </li>
+
+        <!-- Bài 2 -->
+        <li class="task-card">
+          <div class="task-num">2</div>
+          <h2>Chụp kết quả AI thông báo thành công</h2>
+          <p class="task-desc">
+            Sau khi AI cài xong, chụp màn hình thông báo thành công từ AI
+            (ví dụ: đã clone repo, đã cài skill, setup hoàn tất…).
+          </p>
+          <div class="upload-zone" data-task="2" tabindex="0" role="button" aria-label="Tải ảnh chụp màn hình bài 2">
+            <input type="file" accept="image/*" aria-label="Chọn ảnh bài 2">
+            <p class="upload-hint"><strong>Click hoặc kéo thả</strong> ảnh chụp màn hình vào đây</p>
+            <img class="upload-preview" alt="Ảnh chụp màn hình bài 2">
+          </div>
+          <div class="upload-actions">
+            <button type="button" data-change="2">Đổi ảnh</button>
+            <button type="button" data-remove="2">Xóa ảnh</button>
+          </div>
+        </li>
+
+        <!-- Bài 3 -->
+        <li class="task-card">
+          <div class="task-num">3</div>
+          <h2>Chụp kết quả hook &amp; rules sau khi kiểm tra</h2>
+          <p class="task-desc">
+            Dùng prompt kiểm tra bên dưới, xác nhận đã cài đủ skill, rules và hook guardrails.
+            Chụp màn hình kết quả kiểm tra (hoặc folder cấu hình nếu tự mở thủ công).
+          </p>
+          <div class="prompt-label">Prompt kiểm tra</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="prompt-check">Làm thế nào để biết đã cài: Skill minipower, rules, hook guardrails</div>
+            <button type="button" class="copy-btn" data-copy="prompt-check">Copy</button>
+          </div>
+          <ul class="checklist">
+            <li>Skill minipower</li>
+            <li>rules</li>
+            <li>hook guardrails</li>
+          </ul>
+          <div class="callout">Kiểm tra thủ công — đừng tin AI 100%. Không cài đủ có thể tốn rất nhiều token.</div>
+          <div class="upload-zone" data-task="3" tabindex="0" role="button" aria-label="Tải ảnh chụp màn hình bài 3" style="margin-top: 1rem">
+            <input type="file" accept="image/*" aria-label="Chọn ảnh bài 3">
+            <p class="upload-hint"><strong>Click hoặc kéo thả</strong> ảnh chụp màn hình vào đây</p>
+            <img class="upload-preview" alt="Ảnh chụp màn hình bài 3">
+          </div>
+          <div class="upload-actions">
+            <button type="button" data-change="3">Đổi ảnh</button>
+            <button type="button" data-remove="3">Xóa ảnh</button>
+          </div>
+        </li>
+
+        <!-- Bài 4 -->
+        <li class="task-card">
+          <div class="task-num">4</div>
+          <h2>Chụp kết quả prompt &ldquo;/minipower bước tiếp theo&rdquo;</h2>
+          <p class="task-desc">
+            Sau khi cài xong, chạy prompt dưới đây và chụp màn hình phản hồi của AI.
+          </p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="prompt-next">/minipower bước tiếp theo cần làm gì? Ko cần cả quá trình, dẫn dắt tôi làm từng bước</div>
+            <button type="button" class="copy-btn" data-copy="prompt-next">Copy</button>
+          </div>
+          <div class="upload-zone" data-task="4" tabindex="0" role="button" aria-label="Tải ảnh chụp màn hình bài 4" style="margin-top: 1rem">
+            <input type="file" accept="image/*" aria-label="Chọn ảnh bài 4">
+            <p class="upload-hint"><strong>Click hoặc kéo thả</strong> ảnh chụp màn hình vào đây</p>
+            <img class="upload-preview" alt="Ảnh chụp màn hình bài 4">
+          </div>
+          <div class="upload-actions">
+            <button type="button" data-change="4">Đổi ảnh</button>
+            <button type="button" data-remove="4">Xóa ảnh</button>
+          </div>
+        </li>
+
+        <!-- Bài 5 -->
+        <li class="task-card">
+          <div class="task-num">5</div>
+          <h2>Trả lời câu hỏi</h2>
+          <p class="task-desc">
+            <strong style="color: var(--color-text)">Bạn mong muốn Minipower giải quyết vấn đề gì của bạn?</strong>
+            Viết ngắn gọn, cụ thể — nêu bối cảnh dự án hoặc nỗi đau thực tế bạn đang gặp.
+          </p>
+          <textarea
+            class="answer-area"
+            id="answer-q5"
+            placeholder="Ví dụ: Dự án CRM có 20+ tài liệu rải rác, mỗi lần onboard dev mới mất 2 tuần mới nắm được luồng nghiệp vụ…"
+            aria-label="Câu trả lời bài 5"
+          ></textarea>
+        </li>
+
+      </ol>
+
+      <div class="submit-note">
+        <strong>Nộp bài:</strong> Gửi link hoặc file ảnh chụp màn hình + câu trả lời bài 5
+        cho giảng viên qua kênh đã thông báo trong buổi học.
+        Trang này lưu tạm ảnh và câu trả lời trên trình duyệt của bạn (localStorage).
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="index.html">← Quay lại slide workshop</a>
+        · MiniPower Academy
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "minipower-hw-01";
+
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const el = document.getElementById(btn.dataset.copy);
+        const text = el.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = "Đã copy!";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "Copy";
+            btn.classList.remove("copied");
+          }, 1800);
+        } catch {
+          btn.textContent = "Lỗi copy";
+        }
+      });
+    });
+
+    function setPreview(task, dataUrl) {
+      const zone = document.querySelector(`.upload-zone[data-task="${task}"]`);
+      const img = zone.querySelector(".upload-preview");
+      if (dataUrl) {
+        img.src = dataUrl;
+        zone.classList.add("has-image");
+        state["img" + task] = dataUrl;
+      } else {
+        img.removeAttribute("src");
+        zone.classList.remove("has-image");
+        delete state["img" + task];
+      }
+      saveState(state);
+    }
+
+    function handleFile(task, file) {
+      if (!file || !file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = () => setPreview(task, reader.result);
+      reader.readAsDataURL(file);
+    }
+
+    document.querySelectorAll(".upload-zone").forEach((zone) => {
+      const task = zone.dataset.task;
+      const input = zone.querySelector('input[type="file"]');
+
+      input.addEventListener("change", () => {
+        if (input.files[0]) handleFile(task, input.files[0]);
+      });
+
+      zone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        zone.classList.add("dragover");
+      });
+
+      zone.addEventListener("dragleave", () => {
+        zone.classList.remove("dragover");
+      });
+
+      zone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        zone.classList.remove("dragover");
+        const file = e.dataTransfer.files[0];
+        handleFile(task, file);
+      });
+
+      zone.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          input.click();
+        }
+      });
+
+      if (state["img" + task]) {
+        setPreview(task, state["img" + task]);
+      }
+    });
+
+    document.querySelectorAll("[data-change]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const task = btn.dataset.change;
+        const input = document.querySelector(`.upload-zone[data-task="${task}"] input`);
+        input.click();
+      });
+    });
+
+    document.querySelectorAll("[data-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setPreview(btn.dataset.remove, null);
+      });
+    });
+
+    const answerEl = document.getElementById("answer-q5");
+    if (state.answer) answerEl.value = state.answer;
+    answerEl.addEventListener("input", () => {
+      state.answer = answerEl.value;
+      saveState(state);
+    });
+  </script>
+</body>
+</html>
