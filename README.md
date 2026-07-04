@@ -4,12 +4,25 @@ Kho tri thức chính thức của MiniPower, lưu trữ tài liệu đào tạo
 
 ## GitHub Pages
 
-Site tĩnh nằm trong thư mục `docs/`. Bật GitHub Pages:
+Site tĩnh nằm trong thư mục `docs/`. Workflow deploy: `.github/workflows/deploy-pages.yml`.
 
-1. **Settings → Pages**
-2. **Build and deployment → Source:** Deploy from a branch
-3. **Branch:** `main` · **Folder:** `/docs`
-4. Lưu — site sẽ có tại `https://<username>.github.io/minipower-academy/`
+### Cài đặt (lần đầu)
+
+1. Push code lên nhánh `main`
+2. **Settings → Pages → Build and deployment → Source:** chọn **GitHub Actions** (không dùng "Deploy from a branch")
+3. Vào tab **Actions**, chạy workflow **Deploy GitHub Pages** (hoặc đợi push tự kích hoạt)
+4. Site sẽ có tại `https://hoangnh2412.github.io/minipower-academy/`
+
+### Lỗi `Deployment failed, try again later`
+
+Thường do cấu hình Pages hoặc deploy bị kẹt. Thử lần lượt:
+
+1. **Đổi Source sang GitHub Actions** — nếu đang chọn "Deploy from a branch", hai cơ chế có thể xung đột
+2. **Re-run workflow** — tab Actions → run thất bại → **Re-run all jobs**
+3. **Kiểm tra environment** — Settings → Environments → `github-pages` phải tồn tại (tự tạo khi deploy lần đầu)
+4. **Repo public** — GitHub Pages miễn phí yêu cầu repo public (hoặc gói Pro cho repo private)
+
+Cảnh báo `punycode module is deprecated` chỉ là warning, không phải nguyên nhân lỗi.
 
 ## Cấu trúc
 
