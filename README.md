@@ -2,6 +2,8 @@
 
 Kho tri thức chính thức của [MiniPower](https://github.com/hoangnh2412/minipower-academy) — nơi lưu trữ và chia sẻ mọi thứ team cần để học, dạy và làm việc hiệu quả hơn với AI.
 
+> 🌐 **Xem trực tuyến:** https://hoangnh2412.github.io/minipower-academy/
+
 ## Giới thiệu
 
 MiniPower Academy tập trung các tài liệu đào tạo nội bộ thành một nguồn duy nhất, dễ tra cứu và dễ cập nhật. Thay vì rải rác slide, ghi chú hay hướng dẫn ở nhiều nơi, mọi nội dung được tổ chức theo từng buổi workshop và có thể xem trực tiếp trên trình duyệt.
