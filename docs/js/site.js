@@ -16,7 +16,9 @@ const WORKSHOPS = [
     title: "Buổi 02 — Minipower là ai?",
     description:
       "Đi hết 17 chặng vòng đời một dự án để nhận ra Minipower là ai — đồng nghiệp AI nhớ và hỗ trợ ở mọi chặng.",
+    date: "2026-07-25",
     path: "workshops/02-ai-dong-nghiep/",
+    homework: "workshops/02-ai-dong-nghiep/homework.html",
   },
 ];
 

@@ -34,7 +34,7 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 | # | Tên buổi | Thời lượng | Học viên rời phòng với |
 |---|----------|-----------|------------------------|
 | 01 | **Giới thiệu — 12 nỗi đau & Minipower** *(đã chạy)* | 90' | Minipower đã cài trên máy |
-| 02 | **Từ AI Tool → AI Đồng nghiệp** *(đã soạn)* | 90–120' | Hiểu AI tham gia cả vòng đời, không chỉ hỏi–đáp |
+| 02 | **Minipower là ai?** — toàn cảnh 17 chặng *(đã chốt)* | 90–120' | Hiểu AI tham gia cả vòng đời, không chỉ hỏi–đáp |
 | 03 | **AI-Native Software Development — bản đồ đường đi** | 120' | Dự án thật đã `init`, đúng 4 nhánh thư mục |
 | 04 | **Discovery & Cổng 0 — "Có đáng làm không?"** | 120' | DOC-01→03 + verdict Premise Check + DEC chốt BRD |
 | 05 | **Requirements & Fan-out — 1 người chạy 8 module** | 120' | BR → Prototype → SRS → AC cho ≥1 module + trace matrix |
