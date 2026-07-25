@@ -1,0 +1,2 @@
+Tôi đang chuẩn bị nội dung workshop chia sẻ về AI. Tôi muốn sử dụng cách kể chuyện để khiến người nghe thích thú và hứng thú.
+Viết cho tôi từng prompt mẫu để tạo ảnh cho từng khung slide trong workshop.

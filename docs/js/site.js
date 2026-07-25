@@ -11,6 +11,13 @@ const WORKSHOPS = [
     path: "workshops/01-gioi-thieu/",
     homework: "workshops/01-gioi-thieu/homework.html",
   },
+  {
+    id: "02-ai-dong-nghiep",
+    title: "Buổi 02 — Minipower là ai?",
+    description:
+      "Đi hết 17 chặng vòng đời một dự án để nhận ra Minipower là ai — đồng nghiệp AI nhớ và hỗ trợ ở mọi chặng.",
+    path: "workshops/02-ai-dong-nghiep/",
+  },
 ];
 
 function renderWorkshops() {
