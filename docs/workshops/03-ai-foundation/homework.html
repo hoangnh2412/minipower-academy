@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập về nhà — Workshop 03 · AI Foundation</title>
+  <link rel="stylesheet" href="../../css/site.css">
+  <style>
+    :root {
+      --hw-accent: #4f8cff;
+      --hw-accent-glow: rgba(79, 140, 255, 0.2);
+      --hw-chapter: #f5a623;
+      --hw-surface: rgba(255, 255, 255, 0.06);
+      --hw-border: rgba(255, 255, 255, 0.12);
+    }
+
+    body { overflow-y: auto; }
+
+    .hw-header {
+      padding: 2.5rem 0 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hw-header .breadcrumb {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+      font-size: 0.85rem; color: var(--color-muted); margin-bottom: 1rem;
+    }
+
+    .hw-header .breadcrumb a { color: var(--color-muted); }
+    .hw-header .breadcrumb a:hover { color: var(--color-accent); }
+
+    .hw-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700; letter-spacing: -0.02em;
+    }
+
+    .hw-header .intro {
+      margin: 0; max-width: 62ch; color: var(--color-muted);
+      font-size: 1.05rem; line-height: 1.65;
+    }
+
+    .hw-main { padding: 2rem 0 4rem; }
+
+    .task-list {
+      list-style: none; margin: 0; padding: 0;
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+
+    .task-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem; box-shadow: var(--shadow);
+    }
+
+    .task-card .task-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--hw-accent-glow); border: 1px solid rgba(79, 140, 255, 0.4);
+      color: var(--hw-accent); font-weight: 700; font-size: 0.9rem; margin-bottom: 0.85rem;
+    }
+
+    .task-card h2 {
+      margin: 0 0 0.65rem; font-size: 1.2rem; font-weight: 600; color: var(--color-text);
+    }
+
+    .task-card .task-desc {
+      margin: 0 0 1rem; color: var(--color-muted); font-size: 0.95rem; line-height: 1.6;
+    }
+
+    .prompt-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--hw-accent); margin-bottom: 0.5rem;
+    }
+
+    .prompt-row { display: flex; flex-direction: column; gap: 0.65rem; }
+
+    @media (min-width: 640px) {
+      .prompt-row { flex-direction: row; align-items: stretch; }
+    }
+
+    .prompt-block {
+      flex: 1; padding: 1rem 1.15rem; border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(79, 140, 255, 0.25);
+      font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6;
+      color: #b8d4ff; white-space: pre-wrap; word-break: break-word;
+    }
+
+    .copy-btn {
+      flex-shrink: 0; align-self: flex-start; padding: 0.55rem 1rem; border-radius: 8px;
+      border: 1px solid var(--hw-border); background: var(--hw-surface); color: var(--color-text);
+      font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .copy-btn:hover { border-color: var(--hw-accent); background: var(--hw-accent-glow); }
+    .copy-btn.copied { border-color: #34d399; color: #34d399; }
+
+    .callout {
+      margin-top: 1rem; padding: 0.85rem 1.1rem; border-radius: 8px;
+      border-left: 3px solid var(--hw-chapter); background: rgba(245, 166, 35, 0.1);
+      font-size: 0.92rem; line-height: 1.55; color: #f0d9a8;
+    }
+
+    .upload-zone {
+      margin-top: 0.5rem; border: 2px dashed var(--color-border); border-radius: 10px;
+      padding: 1.5rem; text-align: center; cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease; position: relative;
+      min-height: 140px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.5rem;
+    }
+
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--hw-accent); background: var(--hw-accent-glow); }
+    .upload-zone.has-image { padding: 0.75rem; cursor: default; }
+
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-zone.has-image input[type="file"] { display: none; }
+
+    .upload-zone .upload-hint { color: var(--color-muted); font-size: 0.9rem; pointer-events: none; }
+    .upload-zone .upload-hint strong { color: var(--hw-accent); }
+
+    .upload-preview {
+      max-width: 100%; max-height: 420px; border-radius: 6px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); display: none;
+    }
+
+    .upload-zone.has-image .upload-preview { display: block; }
+    .upload-zone.has-image .upload-hint { display: none; }
+
+    .upload-actions { display: none; margin-top: 0.65rem; gap: 0.5rem; }
+    .upload-zone.has-image + .upload-actions { display: flex; }
+
+    .upload-actions button {
+      padding: 0.4rem 0.85rem; border-radius: 6px; border: 1px solid var(--hw-border);
+      background: var(--hw-surface); color: var(--color-muted); font-size: 0.82rem;
+      cursor: pointer; font-family: var(--font-sans);
+    }
+
+    .upload-actions button:hover { border-color: var(--hw-accent); color: var(--color-text); }
+
+    .answer-area {
+      width: 100%; min-height: 130px; margin-top: 0.5rem; padding: 1rem 1.15rem;
+      border-radius: 8px; border: 1px solid var(--color-border); background: rgba(0, 0, 0, 0.25);
+      color: var(--color-text); font-family: var(--font-sans); font-size: 0.95rem;
+      line-height: 1.65; resize: vertical;
+    }
+
+    .answer-area:focus { outline: none; border-color: var(--hw-accent); box-shadow: 0 0 0 3px var(--hw-accent-glow); }
+    .answer-area::placeholder { color: var(--color-muted); }
+
+    .submit-note {
+      margin-top: 2rem; padding: 1.25rem 1.5rem; border-radius: var(--radius);
+      background: var(--hw-accent-glow); border: 1px solid rgba(79, 140, 255, 0.3);
+      font-size: 0.95rem; line-height: 1.6; color: #c8dcff;
+    }
+
+    .submit-note strong { color: var(--color-text); }
+
+    .brief-lead {
+      margin: 0 0 1.35rem; color: var(--color-muted);
+      font-size: 0.98rem; line-height: 1.65;
+    }
+
+    .req-list {
+      list-style: none; margin: 0; padding: 0; counter-reset: req;
+      display: flex; flex-direction: column; gap: 0.85rem;
+    }
+
+    .req-list li {
+      position: relative; padding-left: 2.75rem;
+      color: var(--color-muted); font-size: 0.98rem; line-height: 1.6;
+    }
+
+    .req-list li::before {
+      counter-increment: req; content: counter(req);
+      position: absolute; left: 0; top: 0.05rem;
+      width: 1.85rem; height: 1.85rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--hw-accent-glow); border: 1px solid rgba(79, 140, 255, 0.4);
+      color: var(--hw-accent); font-weight: 700; font-size: 0.85rem;
+    }
+
+    .req-list li strong { color: var(--color-text); font-weight: 600; }
+
+    .note-rule {
+      margin-top: 1.5rem; padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border);
+      color: var(--color-muted); font-size: 0.92rem; line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header class="hw-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Điều hướng">
+        <a href="../../index.html">Trang chủ</a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html">Workshop 03 · AI Foundation</a>
+        <span aria-hidden="true">/</span>
+        <span>Bài tập về nhà</span>
+      </nav>
+      <h1>Bài tập về nhà</h1>
+      <p class="intro">
+        Buổi 3 cho thấy AI chỉ thực sự hữu ích khi được cung cấp đủ ngữ cảnh. Bài tập này để bạn
+        tự tay làm điều đó: dùng <strong style="color: var(--color-text)">Minipower</strong> biến một mô tả sơ sài
+        về hệ thống HRM thành bộ tài liệu yêu cầu bài bản. Làm trên IDE quen thuộc
+        (Cursor, Claude Code hoặc OpenCode); và đừng quên —
+        <strong style="color: var(--color-text)">AI chuẩn bị, còn bạn mới là người chốt.</strong>
+      </p>
+    </div>
+  </header>
+
+  <main class="hw-main">
+    <div class="container">
+      <!-- Đề bài -->
+      <div class="task-card" style="margin-bottom: 1.75rem">
+        <div class="task-num" style="background: rgba(245, 166, 35, 0.15); border-color: rgba(245, 166, 35, 0.4); color: var(--hw-chapter)">HRM</div>
+        <h2>Đề bài — Hệ thống quản lý nhân sự (HRM)</h2>
+        <p class="brief-lead">
+          Một khách hàng mô tả hệ thống HRM họ cần, gồm 8 nhóm chức năng dưới đây. Nhiệm vụ của bạn
+          là dùng <strong style="color: var(--color-text)">Minipower</strong> phân tích và viết thành bộ tài liệu yêu cầu.
+        </p>
+        <ol class="req-list">
+          <li><strong>Hồ sơ nhân sự</strong> — quản lý danh sách nhân viên: thông tin cá nhân, vị trí công việc, thời gian làm việc.</li>
+          <li><strong>Đơn nghỉ phép</strong> — nhân viên xin nghỉ phải được HR và quản lý trực tiếp phê duyệt trước khi nghỉ.</li>
+          <li><strong>Chấm công</strong> — nhập dữ liệu chấm công từ file Excel.</li>
+          <li><strong>Bảng lương</strong> — tính theo công thức: ngày công − ngày nghỉ phép + lương tăng ca.</li>
+          <li><strong>Cảnh báo thử việc</strong> — nhắc khi nhân sự sắp hết thời gian thử việc.</li>
+          <li><strong>Cảnh báo sự kiện</strong> — nhắc ngày sinh nhật và ngày lễ.</li>
+          <li><strong>Onboarding / Offboarding</strong> — cấp và thu hồi tài khoản, thiết bị, chấm công khi nhân sự vào hoặc rời công ty.</li>
+          <li><strong>Báo cáo</strong> — thống kê tình hình biến động nhân sự.</li>
+        </ol>
+        <p class="note-rule">
+          Trong tài liệu, mỗi yêu cầu nên ghi rõ nguồn từ mô tả gốc và đánh dấu những điểm còn chưa rõ
+          để hỏi lại khách — đừng để AI tự suy diễn thêm.
+        </p>
+      </div>
+
+      <div class="submit-note">
+        <strong>Nộp bài:</strong> Hoàn thành và gửi 3 tài liệu
+        <strong>DOC-01</strong>, <strong>DOC-02</strong>, <strong>DOC-03</strong>
+        cho giảng viên qua kênh đã thông báo trong buổi học.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="index.html">← Quay lại slide workshop</a>
+        · MiniPower Academy
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "minipower-hw-03";
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+
+    function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+    let state = loadState();
+
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const el = document.getElementById(btn.dataset.copy);
+        const text = el.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = "Đã copy!";
+          btn.classList.add("copied");
+          setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1800);
+        } catch { btn.textContent = "Lỗi copy"; }
+      });
+    });
+
+    function setPreview(task, dataUrl) {
+      const zone = document.querySelector(`.upload-zone[data-task="${task}"]`);
+      const img = zone.querySelector(".upload-preview");
+      if (dataUrl) {
+        img.src = dataUrl;
+        zone.classList.add("has-image");
+        state["img" + task] = dataUrl;
+      } else {
+        img.removeAttribute("src");
+        zone.classList.remove("has-image");
+        delete state["img" + task];
+      }
+      saveState(state);
+    }
+
+    function handleFile(task, file) {
+      if (!file || !file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = () => setPreview(task, reader.result);
+      reader.readAsDataURL(file);
+    }
+
+    document.querySelectorAll(".upload-zone").forEach((zone) => {
+      const task = zone.dataset.task;
+      const input = zone.querySelector('input[type="file"]');
+
+      input.addEventListener("change", () => {
+        if (input.files[0]) handleFile(task, input.files[0]);
+      });
+
+      zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("dragover"); });
+      zone.addEventListener("dragleave", () => { zone.classList.remove("dragover"); });
+      zone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        zone.classList.remove("dragover");
+        handleFile(task, e.dataTransfer.files[0]);
+      });
+      zone.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+      });
+
+      if (state["img" + task]) setPreview(task, state["img" + task]);
+    });
+
+    document.querySelectorAll("[data-change]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelector(`.upload-zone[data-task="${btn.dataset.change}"] input`).click();
+      });
+    });
+
+    document.querySelectorAll("[data-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => setPreview(btn.dataset.remove, null));
+    });
+
+    document.querySelectorAll(".answer-area[data-answer]").forEach((el) => {
+      const key = "answer-" + el.dataset.answer;
+      if (state[key]) el.value = state[key];
+      el.addEventListener("input", () => { state[key] = el.value; saveState(state); });
+    });
+  </script>
+</body>
+</html>

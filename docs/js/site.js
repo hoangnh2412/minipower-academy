@@ -12,13 +12,22 @@ const WORKSHOPS = [
     homework: "workshops/01-gioi-thieu/homework.html",
   },
   {
-    id: "02-ai-dong-nghiep",
+    id: "02-minipower-la-ai",
     title: "Buổi 02 — Minipower là ai?",
     description:
       "Đi hết 17 chặng vòng đời một dự án để nhận ra Minipower là ai — đồng nghiệp AI nhớ và hỗ trợ ở mọi chặng.",
     date: "2026-07-25",
-    path: "workshops/02-ai-dong-nghiep/",
-    homework: "workshops/02-ai-dong-nghiep/homework.html",
+    path: "workshops/02-minipower-la-ai/",
+    homework: "workshops/02-minipower-la-ai/homework.html",
+  },
+  {
+    id: "03-ai-foundation",
+    title: "Buổi 03 — AI Foundation",
+    description:
+      "LLM, Prompt & Context Engineering — vì sao AI lúc trả lời cực hay, lúc bịa chuyện, và cách cho đủ ngữ cảnh để nó thành trợ lý đáng tin.",
+    date: "2026-08-15",
+    path: "workshops/03-ai-foundation/",
+    homework: "workshops/03-ai-foundation/homework.html",
   },
 ];
 

@@ -19,7 +19,8 @@ MiniPower Academy tập trung các tài liệu đào tạo nội bộ thành m�
 | Buổi | Nội dung |
 |------|----------|
 | [01 — Giới thiệu](docs/workshops/01-gioi-thieu/) | Quản lý dự án và cách AI MiniPower thay đổi cuộc chơi |
-| [02 — Minipower là ai?](docs/workshops/02-ai-dong-nghiep/) | Toàn cảnh 17 chặng vòng đời dự án — AI đồng hành ở mọi chặng |
+| [02 — Minipower là ai?](docs/workshops/02-minipower-la-ai/) | Toàn cảnh 17 chặng vòng đời dự án — AI đồng hành ở mọi chặng |
+| [03 — AI Foundation](docs/workshops/03-ai-foundation/) | LLM, Prompt & Context Engineering — cho đủ ngữ cảnh để AI không bịa |
 
 ## Phát triển
 
