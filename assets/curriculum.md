@@ -2,7 +2,7 @@
 
 > Bản đồ toàn khoá **Vibe Coding với Minipower** — mức khởi đầu. Mỗi buổi có thư mục riêng theo
 > 5 giai đoạn pipeline: `assets/workshops/NN-slug/`.
-> Đi cùng `assets/curriculum-v1.md` (lộ trình AI Software Engineering — 16 buổi) dành cho học viên
+> Đi cùng `assets/lo-trinh-tham-khao/curriculum-v1.md` (lộ trình AI Software Engineering — 16 buổi) dành cho học viên
 > muốn đi sâu sau khi qua khoá này. Hai khoá dùng chung **buổi 01–02 đã chạy** làm cửa ngõ.
 
 ---
@@ -49,21 +49,21 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 | 01 | **Giới thiệu — 12 nỗi đau & Minipower** *(đã chạy)* | 90' | Minipower cài trên máy; hiểu 12 nỗi đau = vấn đề tri thức dự án |
 | 02 | **Minipower là ai?** — vòng đời dự án *(đã chạy)* | 90–120' | Hiểu AI ở cả 17 chặng; biết pipeline 6 phase × skill × 19 DOC |
 | 03 | **AI Foundation — LLM, Prompt & Context Engineering** | 120' | Prompt có context từ một biên bản họp thật + biết khi nào không tin AI |
+| 04 | **AI Deployment** — deploy sớm để buổi nào cũng thấy kết quả | 120' | App lên **domain thật, HTTPS** qua Docker / Vercel / Railway / Render |
 
 ### Màn 2 — Vibe code & Xây thật
 
 | # | Tên buổi | Thời lượng | Học viên rời phòng với |
 |---|----------|-----------|------------------------|
-| 04 | **AI Coding Tools** — Cursor · Claude Code · OpenCode | 120' | Thành thạo 5 thao tác (sinh code · explain · debug · refactor · doc) |
-| 05 | **Vibe Coding Workflow** | 120' | Landing Page / Todo App chạy thật theo flow có **cổng người-chốt** |
-| 06 | **Fullstack cơ bản** | 120' | CRUD + đăng nhập chạy được, không đào sâu kiến trúc |
-| 07 | **AI Debugging** | 120' | Sửa bug bằng AI; mỗi bug ghi bài học vào Minipower |
+| 05 | **AI Coding Tools** — Cursor · Claude Code · OpenCode | 120' | Thành thạo 5 thao tác (sinh code · explain · debug · refactor · doc) |
+| 06 | **Vibe Coding Workflow** | 120' | Landing Page / Todo App chạy thật theo flow có **cổng người-chốt** |
+| 07 | **Fullstack cơ bản** | 120' | CRUD + đăng nhập chạy được, không đào sâu kiến trúc |
+| 08 | **AI Debugging** | 120' | Sửa bug bằng AI; mỗi bug ghi bài học vào Minipower |
 
 ### Màn 3 — Ship & Demo
 
 | # | Tên buổi | Thời lượng | Học viên rời phòng với |
 |---|----------|-----------|------------------------|
-| 08 | **AI Deployment** | 120' | App cá nhân lên **domain thật, HTTPS** qua Docker / Vercel / Railway / Render |
 | 09 | **Demo Day — Capstone** | 150' | MVP chạy thật + bộ nhớ dự án trong Minipower + lộ trình 30/60/90 |
 
 ---
@@ -84,13 +84,22 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 - **Thực hành:** lấy một biên bản họp thật → viết prompt có context → AI phản biện, đối chiếu với
   nguồn → **chốt**: yêu cầu nào đúng/đủ, ghi vào Minipower.
 
-### Buổi 04 — AI Coding Tools
+### Buổi 04 — AI Deployment *(deploy sớm)*
+- **Nội dung:** Docker · Vercel · Railway · Render.
+- **Vì sao dạy sớm:** đưa "cái chạy được" đầu tiên lên **domain thật** ngay từ đầu, để **buổi nào**
+  học viên xây xong cũng deploy được và **nhìn thấy kết quả thật** — không đợi tới cuối khoá.
+- **Bám buổi 01–02:** chặng **Triển khai & Vận hành** trong 17 chặng; AI chuẩn bị checklist,
+  **người bấm nút và chốt**.
+- **Thực hành:** app mẫu lên domain thật; checklist deploy + màn hình "đã chốt" ghi trong Minipower.
+  Từ đây mỗi buổi sau kết thúc bằng một lần deploy.
+
+### Buổi 05 — AI Coding Tools
 - **Nội dung:** Cursor · Claude Code · OpenCode · (Copilot, Gemini CLI nếu có); 5 thao tác cốt lõi.
 - **Bám buổi 01–02:** công cụ là "đôi tay", Minipower là "bộ nhớ" — giải nỗi đau #12 (tìm tri thức cực khó).
 - **Thực hành:** mỗi học viên `init` một dự án đúng 4 nhánh thư mục + có "cái chạy được" đầu tiên;
   hỏi AI theo từng chặng trong 17 chặng để nhận ra chỗ AI mạnh/yếu.
 
-### Buổi 05 — Vibe Coding Workflow
+### Buổi 06 — Vibe Coding Workflow
 - **Flow (có cổng người-chốt nhẹ):**
 
   ```text
@@ -103,24 +112,18 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
   có người, ghi `decision-log`** trong Minipower.
 - **Thực hành:** Landing Page + Todo App.
 
-### Buổi 06 — Fullstack cơ bản
+### Buổi 07 — Fullstack cơ bản
 - **Nội dung:** frontend · backend · database · authentication — đủ để chạy, **không** đào sâu kiến trúc.
 - **Bám buổi 01–02:** nối tiếp câu chuyện CRM công ty ABC (case chung từ buổi 01) → học viên làm bản
   "CRM Mini" của mình.
 - **Thực hành:** CRUD + đăng nhập; Minipower ghi requirement/AC từng màn hình, trace yêu cầu → code.
 
-### Buổi 07 — AI Debugging
+### Buổi 08 — AI Debugging
 - **Nội dung:** debug bằng AI · fix bug · refactor · review code.
 - **Bám buổi 01–02:** nỗi đau #7 (test không trace requirement) — ghi "bug nào do yêu cầu nào"
   để không sửa sai gốc.
 - **Thực hành:** giảng viên **cố tình cài một lỗi** trong code; học viên tìm bằng AI; mỗi bug xong
   ghi bài học vào Minipower.
-
-### Buổi 08 — AI Deployment
-- **Nội dung:** Docker · Vercel · Railway · Render.
-- **Bám buổi 01–02:** chặng cuối của 17 chặng — **Triển khai & Vận hành**; AI chuẩn bị checklist,
-  **người bấm nút và chốt**.
-- **Thực hành:** app cá nhân lên domain thật; checklist deploy + màn hình "đã chốt" ghi trong Minipower.
 
 ### Buổi 09 — Demo Day · Capstone
 - **Yêu cầu:** MVP (CRM Mini · HRM Mini · POS Mini · Chat AI · CMS) chạy thật trên internet;
@@ -190,9 +193,11 @@ Tổng 8 điểm. Dưới 60% → làm lại trước buổi kế.
 
 ```
 assets/
-├── curriculum.md                  ← file này (v2 · Vibe Coding)
-├── curriculum-v1.md               ← lộ trình SE 16 buổi (lưu trữ)
-├── lotrinh-tham-khao.md           ← lộ trình tham khảo trên internet
+├── curriculum.md                  ← file này (v2 · Vibe Coding) — LỘ TRÌNH CHÍNH THỨC
+├── lo-trinh-tham-khao/            ← các lộ trình cũ/nháp/tham khảo (không dùng để tra cứu chính)
+│   ├── curriculum-v1.md           ← lộ trình SE 16 buổi (lưu trữ)
+│   ├── lotrinh-tham-khao.md       ← lộ trình tham khảo trên internet
+│   └── lotrinh-vibe-coding-minipower.md  ← bản nháp chưa chốt
 ├── _shared/                       ← tài sản dùng chung mọi buổi
 ├── _template/                     ← khung 5 file giai đoạn
 └── workshops/NN-slug/             ← nội dung buổi theo 5 giai đoạn pipeline
@@ -215,9 +220,9 @@ từ `_template/` và đăng ký trong `docs/js/site.js`.
 | # | Slug thư mục | Ghi chú |
 |---|--------------|---------|
 | 03 | `03-ai-foundation` | **mới** |
-| 04 | `04-ai-coding-tools` | **mới** |
-| 05 | `05-vibe-coding-workflow` | **mới** |
-| 06 | `06-fullstack-co-ban` | **mới** |
-| 07 | `07-ai-debugging` | **mới** |
-| 08 | `08-ai-deployment` | **mới** |
+| 04 | `04-ai-deployment` | **mới** · deploy sớm |
+| 05 | `05-ai-coding-tools` | **mới** |
+| 06 | `06-vibe-coding-workflow` | **mới** |
+| 07 | `07-fullstack-co-ban` | **mới** |
+| 08 | `08-ai-debugging` | **mới** |
 | 09 | `09-demo-day-capstone` | **mới** |

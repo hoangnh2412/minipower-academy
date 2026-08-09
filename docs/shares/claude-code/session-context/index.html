@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code — Quản lý Session & Context · MiniPower Academy</title>
+  <link rel="stylesheet" href="../../../workshops/_shared/css/slides.css">
+  <style>
+    /* ===== Căn giữa mọi slide: trên–dưới (đã có justify-content) + trái–phải ===== */
+    .slide { align-items: center; text-align: center; }
+    .slide ul, .slide ol { text-align: left; display: inline-block; margin-left: auto; margin-right: auto; }
+    .slide table.summary { margin-left: auto; margin-right: auto; }
+    .tiers { margin-left: auto; margin-right: auto; }
+    .tier { text-align: left; }
+    .cmd-head { justify-content: center; }
+
+    /* ===== Slide tiêu đề (hero) ===== */
+    .hero { gap: 0.2rem; }
+    .hero .eyebrow {
+      margin: 0 0 1.4rem; text-transform: uppercase; letter-spacing: 0.22em;
+      font-size: clamp(0.8rem, 1.6vw, 1rem); font-weight: 600; color: var(--slide-accent);
+    }
+    .hero-cc {
+      margin: 0; font-size: clamp(3rem, 9vw, 6rem); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1;
+      background: linear-gradient(120deg, #93c5fd, #3b82f6 55%, #8b5cf6);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero-sub { margin: 0.9rem 0 0; font-size: clamp(1.3rem, 3.2vw, 2.1rem); font-weight: 600; color: var(--slide-text); }
+    .hero .badge-share { margin-top: 1.8rem; }
+
+    /* ===== Tiện ích chung ===== */
+    .lead { color: var(--slide-text); font-size: clamp(1.15rem, 2.4vw, 1.6rem); }
+    .badge-share {
+      display: inline-block; padding: 0.4rem 1rem;
+      font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--slide-accent); background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.4); border-radius: 999px;
+    }
+    .q { color: var(--slide-text); font-weight: 600; }
+    .cmd { font-family: var(--slide-mono); color: var(--slide-accent); font-weight: 600; }
+
+    /* Sơ đồ 3 tầng nhớ */
+    .tiers { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; max-width: 760px; }
+    .tier {
+      padding: 1rem 1.25rem; background: var(--slide-surface);
+      border: 1px solid rgba(45,58,79,0.8); border-left: 3px solid var(--slide-accent);
+      border-radius: 8px;
+    }
+    .tier .t-label { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slide-accent); }
+    .tier .t-title { color: var(--slide-text); font-size: clamp(1.05rem, 2vw, 1.3rem); font-weight: 600; margin: 0.15rem 0; }
+    .tier .t-desc { color: var(--slide-muted); font-size: clamp(0.9rem, 1.7vw, 1.05rem); }
+
+    /* Thẻ command */
+    .cmd-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+    .cmd-head .big { font-family: var(--slide-mono); color: var(--slide-accent); font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 700; }
+    .cmd-head .tag { color: var(--slide-muted); font-size: clamp(0.95rem, 2vw, 1.2rem); }
+    .slide-cmd p { margin: 0.75rem auto 0; max-width: 760px; }
+    .when { margin-top: 1rem; }
+    .when li { color: var(--slide-muted); }
+
+    /* ===== Hình minh hoạ ===== */
+    .illus { margin: 1.4rem auto 0.4rem; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+    .illus-cap { color: var(--slide-muted); font-size: 0.95rem; }
+    .ctx-row { display: flex; align-items: center; gap: 0.75rem; }
+    .ctx-label { width: 62px; text-align: right; color: var(--slide-muted); font-size: 0.9rem; font-family: var(--slide-mono); }
+    .ctx-track { width: min(420px, 60vw); height: 26px; background: var(--slide-surface); border: 1px solid rgba(45,58,79,0.8); border-radius: 8px; overflow: hidden; }
+    .ctx-fill { height: 100%; border-radius: 7px; }
+
+    /* /clear — context đầy (đỏ) rồi tụt dần về trống */
+    @keyframes drain { 0%, 12% { width: 92%; } 68%, 100% { width: 0; } }
+    .anim-drain { width: 92%; background: #ef4444; animation: drain 3.2s ease-in-out infinite; }
+
+    /* /compact — đỏ đầy nén xuống còn ít (xanh) */
+    @keyframes compact { 0%, 12% { width: 88%; background: #ef4444; } 60%, 100% { width: 34%; background: #22c55e; } }
+    .anim-compact { width: 88%; background: #ef4444; animation: compact 3.2s ease-in-out infinite; }
+    .cmp-mid { color: var(--slide-accent); font-family: var(--slide-mono); font-size: 0.95rem; }
+
+    /* /resume — mốc thời gian: chạy → ngắt → /resume → chạy tiếp */
+    .resume-illus { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0; }
+    .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--slide-accent); }
+    .tl-line { width: 34px; height: 3px; background: var(--slide-accent); }
+    .tl-dashed { background: repeating-linear-gradient(90deg, var(--slide-muted) 0 6px, transparent 6px 12px); }
+    .tl-badge { padding: 0.35rem 0.7rem; border-radius: 999px; font-size: 0.85rem; font-family: var(--slide-mono); margin: 0 0.4rem; }
+    .tl-pause { color: #f59e0b; border: 1px solid rgba(245,158,11,0.5); background: rgba(245,158,11,0.1); }
+    .tl-play { color: #22c55e; border: 1px solid rgba(34,197,94,0.5); background: rgba(34,197,94,0.1); }
+
+    /* /memory — nhiều session cùng trỏ về một CLAUDE.md */
+    .memory-illus { gap: 0.45rem; }
+    .mem-sessions { display: flex; gap: 0.6rem; }
+    .sess-chip { padding: 0.4rem 0.8rem; border-radius: 8px; background: var(--slide-surface); border: 1px solid rgba(45,58,79,0.8); font-size: 0.85rem; color: var(--slide-muted); }
+    .mem-arrows { display: flex; gap: 3.2rem; color: var(--slide-accent); font-size: 1.1rem; line-height: 1; }
+    .mem-doc { display: inline-flex; flex-direction: column; padding: 0.6rem 1.3rem; border-radius: 10px; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.5); }
+    .mem-doc-name { color: var(--slide-text); font-weight: 600; font-family: var(--slide-mono); }
+    .mem-doc-tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--slide-accent); }
+
+    /* /cost — token tích luỹ dần (xanh → vàng → đỏ) */
+    @keyframes grow { 0% { width: 6%; } 80%, 100% { width: 80%; } }
+    .anim-grow { width: 80%; background: linear-gradient(90deg, #22c55e, #f59e0b 70%, #ef4444); animation: grow 3s ease-out infinite; }
+
+    /* Bảng tóm tắt */
+    table.summary { width: 100%; max-width: 900px; margin-top: 1.25rem; border-collapse: collapse; }
+    table.summary th, table.summary td {
+      text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid rgba(45,58,79,0.7);
+      font-size: clamp(0.85rem, 1.7vw, 1.05rem);
+    }
+    table.summary th { color: var(--slide-accent); font-weight: 600; }
+    table.summary td { color: var(--slide-muted); }
+    table.summary td:first-child { font-family: var(--slide-mono); color: var(--slide-text); white-space: nowrap; }
+    .note { margin-top: 1rem; color: var(--slide-muted); font-size: clamp(0.85rem, 1.7vw, 1rem); }
+  </style>
+</head>
+<body>
+  <!-- Deck rỗng — các slide được ghép vào từ thư mục slides/ (mỗi file 1 trang) -->
+  <div id="deck" class="deck"></div>
+
+  <nav class="deck-controls" aria-label="Điều hướng slide">
+    <div>
+      <a class="home-link" href="../../../index.html">← Trang chủ</a>
+      <button id="prev" type="button" aria-label="Slide trước">← Trước</button>
+    </div>
+    <div class="progress" aria-hidden="true">
+      <div id="progress-bar" class="progress-bar" style="width: 10%"></div>
+    </div>
+    <span id="counter" class="slide-counter">1 / 10</span>
+    <button id="next" type="button" aria-label="Slide tiếp">Tiếp →</button>
+  </nav>
+
+  <!-- Mỗi slide là một file riêng, nạp theo đúng thứ tự trình chiếu -->
+  <script src="slides/01-title.js?v=2"></script>
+  <script src="slides/02-question.js?v=2"></script>
+  <script src="slides/03-tiers.js?v=2"></script>
+  <script src="slides/04-clear.js?v=2"></script>
+  <script src="slides/05-compact.js?v=2"></script>
+  <script src="slides/06-resume.js?v=2"></script>
+  <script src="slides/07-memory.js?v=2"></script>
+  <script src="slides/08-cost.js?v=2"></script>
+  <script src="slides/09-summary.js?v=2"></script>
+  <script src="slides/10-workflow.js?v=2"></script>
+
+  <!-- Ghép các slide vào deck TRƯỚC khi nạp bộ điều khiển, để hiệu ứng giữ nguyên -->
+  <script>
+    document.getElementById("deck").innerHTML = (window.__SLIDES || []).join("\n");
+  </script>
+
+  <!-- Bộ điều khiển dùng chung: điều hướng bằng nút / phím / progress bar -->
+  <script src="../../../workshops/_shared/js/slides.js"></script>
+</body>
+</html>

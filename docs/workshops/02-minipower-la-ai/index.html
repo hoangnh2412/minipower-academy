@@ -596,6 +596,14 @@
   <div class="row" id="trayRow"></div>
 </div>
 
+<!-- Dữ liệu mỗi nhóm là một file riêng trong groups/ (nạp trước script chính) -->
+  <script src="groups/1-ban-hang.js?v=1"></script>
+  <script src="groups/2-khoi-dong.js?v=1"></script>
+  <script src="groups/3-phan-tich-thiet-ke.js?v=1"></script>
+  <script src="groups/4-xay-dung-kiem-thu.js?v=1"></script>
+  <script src="groups/5-trien-khai-van-hanh.js?v=1"></script>
+  <script src="groups/6-nghiem-thu-ban-giao.js?v=1"></script>
+
 <script>
 /* ============================ DỮ LIỆU CHUNG ============================ */
 const KEYS=["q","w","e","r","t","y","u","i","o","p","z","x","c","v","b","n","m"];
@@ -621,101 +629,7 @@ const GROUPS=[
 const SEQICON={Sale:"🤵",PM:"🧑‍💼",BA:"🕵️",SA:"👷",Customer:"🙋",Dev:"🧑‍💻",QA:"🧑‍🔬",DevOps:"🧑‍🔧",Support:"🛟"};
 
 /* ============================ DỮ LIỆU 6 NHÓM ============================ */
-const GDATA={
- 1:{title:"Bán hàng",color:"var(--g1)",diag:"timeline",
-   lanes:[{cls:"comp",ic:"🏢",t:"Công ty"},{cls:"cust",ic:"🏛️",t:"Khách hàng"}],
-   cap:"Từ một ý tưởng đến chữ ký hợp đồng — Sale và khách hàng đi lại nhiều vòng, mỗi vòng để lại một tài liệu.",
-   steps:[
-     {side:"right",node:"💡",sc:"var(--g3)",sn:"Khách hàng có nhu cầu",actors:["Customer"],act:"Có nhu cầu / dự án, tìm đơn vị thực hiện",doc:"Nhu cầu ban đầu"},
-     {side:"right",node:"→",sc:"var(--g1)",sn:"Sale demo",actors:["Sale"],act:"Sang khách hàng demo, trao đổi nhu cầu",doc:"Demo"},
-     {side:"left",node:"←",sc:"var(--g2)",sn:"Mang ý tưởng về",actors:["Sale"],act:"Mang ý tưởng thô về công ty",doc:"Ý tưởng thô"},
-     {side:"left",node:"↻",sc:"var(--g4)",sn:"Chuẩn bị khảo sát",actors:["Sale","PM"],act:"Họp chuẩn bị câu hỏi khảo sát",doc:"Câu hỏi khảo sát"},
-     {side:"right",node:"→",sc:"var(--g1)",sn:"Khảo sát",actors:["PM","BA"],act:"Sang khách hàng khảo sát",doc:"Câu hỏi khảo sát"},
-     {side:"left",node:"←",sc:"var(--g2)",sn:"Yêu cầu nghiệp vụ",actors:["PM","BA"],act:"Mang yêu cầu nghiệp vụ về công ty",doc:"Yêu cầu nghiệp vụ"},
-     {side:"left",node:"↻",sc:"var(--g4)",sn:"Đóng gói proposal",actors:["BA","SA","PM"],act:"Phân tích & đóng gói proposal",doc:"Đề xuất · Báo giá · Kế hoạch"},
-     {side:"right",node:"→",sc:"var(--g1)",sn:"Đàm phán proposal",actors:["PM","Sale"],act:"Trình proposal, đàm phán & phê duyệt",doc:"Đề xuất · Báo giá · Kế hoạch"},
-     {side:"right",node:"✍️",sc:"var(--g5)",sn:"Ký hợp đồng",actors:["Customer"],act:"Khách hàng ký hợp đồng",doc:"Hợp đồng đã ký"},
-     {side:"left",node:"←",sc:"var(--g2)",sn:"Mang hợp đồng về",actors:["Sale"],act:"Mang hợp đồng về công ty",doc:"Hợp đồng · SoW"}
-   ],
-   cmp:{rows:[
-     {feat:"Đánh giá cơ hội",note:"(chỉ dự án nội bộ)",before:"Khảo sát, đánh giá thủ công, chậm",after:'Khảo sát <b>nhanh hơn</b> — hỏi đáp trực tiếp với AI ngay trên ý tưởng sơ khai'},
-     {feat:"Đề xuất giải pháp",before:'<ul><li>Tốn <b>nhiều ngày</b>, qua nhiều vòng rà soát</li><li>Yêu cầu không định danh, khó truy vết</li><li>Tài liệu rời rạc (Drive, Draw.io…)</li></ul>',after:'<ul><li>Dựng <b>nhanh</b>, AI rà soát cùng</li><li>Truy vết "đáp ứng <b>FR/NFR</b> nào" bằng sơ đồ, định danh yêu cầu</li><li>Tập trung một nơi, liên kết bằng mã số</li></ul>'},
-     {feat:"Báo giá",before:'<ul><li>Copy-paste / viết lại từ khảo sát</li><li>Qua nhiều vòng rà soát</li><li>Đổi nhiều phiên bản, <b>không ghi lý do</b> đổi giá</li></ul>',after:'<ul><li>Tự tổng hợp, <b>không chép tay</b></li><li>Chấm <b>độ phức tạp</b> đa góc nhìn</li><li>Lưu <b>lịch sử giá + lý do</b> đổi</li><li>Truy vết "vì sao giá cao"</li></ul>'},
-     {feat:"Kế hoạch triển khai",before:'<ul><li>Copy-paste, viết lại từ khảo sát</li><li>Chỉnh sửa nhiều lần trên Excel, <b>không có sự liên kết</b></li></ul>',after:'<ul><li>Tự tổng hợp, <b>không chép tay</b></li><li>Truy vết "phát triển <b>FR/NFR</b> nào" bằng <b>ma trận định danh</b></li></ul>'}
-   ],prompts:[
-     {tag:"Phase: discovery",text:'"Từ ý tưởng CRM chăm sóc khách hàng, đặt 10 câu hỏi khảo sát làm rõ nhu cầu và tính khả thi." (Idea nội bộ: chạy Phase: deliberation trước)'},
-     {tag:"Phase: planning",text:'"Chấm độ phức tạp và phân loại các chức năng đã khảo sát; lập ma trận ước lượng (DOC-14)."'}
-   ]}},
-
- 2:{title:"Khởi động",color:"var(--g2)",diag:"circle",
-   cmp:{rows:[
-     {feat:"Biên bản kickoff",before:'Biên bản kickoff (với khách & nội bộ) <b>chưa đạt chuẩn RACI</b>, ghi chung chung — ai cũng "có liên quan" nhưng không rõ ai chịu',after:'Soạn biên bản kickoff <b>theo chuẩn RACI</b> — mỗi hạng mục rõ ai <b>R</b>esponsible / <b>A</b>ccountable / <b>C</b>onsulted / <b>I</b>nformed'},
-     {feat:"Vai trò & trách nhiệm",before:"Vai trò từng bên (khách, PM, BA, SA, Dev, QA) mờ nhạt → đùn đẩy, việc treo, đổ lỗi",after:'Làm rõ <b>vai trò & trách nhiệm</b> từng stakeholder ngay ở kickoff, chốt trước khi sang phân tích'},
-     {feat:"Tài liệu",before:"Lưu rải rác trên Drive, kênh chat, nhét trong Google Sheet; tên file không thể hiện nội dung nên khó tìm, quên nằm ở folder nào",after:'<b>Trợ lý tài liệu</b> toàn dự án — tập trung một nơi, tìm bằng nội dung thay vì nhớ tên file / folder'}
-   ],prompts:[
-     {tag:"Phase: planning",text:'"Soạn biên bản kickoff dự án CRM theo chuẩn RACI (DOC-15), gán R / A / C / I cho từng hạng mục và stakeholder."'},
-     {tag:"Phase: planning",text:'"Lập bảng RACI cho khách, PM, BA, SA, Dev, QA (DOC-02) — chỉ rõ ai chịu trách nhiệm cuối cho mỗi đầu việc."'},
-     {tag:"/minipower",text:'"Tìm giúp tôi biên bản kickoff và tài liệu cam kết phạm vi mới nhất (đọc 📄 doc-registry)."'}
-   ]}},
-
- 3:{title:"Phân tích & Thiết kế",color:"var(--g3)",diag:"timeline",
-   lanes:[{ic:"🕵️",t:"BA · Nghiệp vụ",col:"var(--g3)"},{ic:"👷",t:"SA · Kỹ thuật",col:"var(--g3)"}],
-   cap:"Hiểu yêu cầu trước, rồi thiết kế hai tầng: nghiệp vụ (khách đọc được) trước, kỹ thuật (dev đọc) sau.",
-   steps:[
-     {side:"left",node:"🔎",sc:"var(--g3)",sn:"Phân tích yêu cầu",badge:"Chặng 6",name:"Requirement Analysis",actors:["BA"],act:"Đào sâu yêu cầu, business rule, use case",doc:"BRD · Use Case · Business Rule"},
-     {side:"left",node:"🧩",sc:"var(--g3)",sn:"Thiết kế giải pháp",badge:"Chặng 7",name:"Solution Design",actors:["BA","SA"],act:"Thiết kế giải pháp nghiệp vụ: luồng, màn hình, đặc tả chức năng",doc:"Prototype · SRS · AC"},
-     {side:"right",node:"🏛️",sc:"var(--g3)",sn:"Thiết kế kỹ thuật",badge:"Chặng 8",name:"Technical Design",actors:["SA"],act:"Thiết kế kỹ thuật: kiến trúc, data model, API",doc:"SAD · ADR · Data Model · API"}
-   ],
-   cmp:{rows:[
-     {feat:"Ghi chép cuộc họp",before:"BA ghi tay không kịp, sót requirement / BR / decision, tối về tua lại recording",after:'Ghi trọn nội dung, tự phân loại: <i>"đơn &gt; 10 triệu phải trưởng phòng duyệt"</i> → <b>Business Rule</b>; <i>"quý sau thêm cấp vùng"</i> → <b>Scope Change</b>'},
-     {feat:"Câu hỏi làm rõ",before:"Hỏi nhỏ giọt nhiều vòng, họp đi họp lại, MoM ra muộn",after:'Bộ câu hỏi khảo sát <b>gửi một lượt</b>'},
-     {feat:"Ai duyệt tài liệu",before:"Không rõ ai duyệt FRD / UAT / CR → đùn đẩy, việc treo",after:'Gắn <b>người duyệt (RACI cấp tài liệu)</b> vào từng FRD / UAT / CR'},
-     {feat:"Làm rõ yêu cầu mơ hồ",before:'<i>"Giảm giá VIP 10%"</i> mỗi người hiểu một kiểu, phát hiện sai tận lúc UAT',after:"AI phản biện: VIP là ai? Cố định hay thay đổi? Sản phẩm nào? Có hạn dùng không?"},
-     {feat:"Quản lý bộ tài liệu",before:"Copy nội dung giữa BRD / FRD / Test → sửa một chỗ, quên chỗ khác → outdate",after:'Nối bằng <b>mã số</b>, sửa một chỗ cả dây biết (không copy)'},
-     {feat:"Lưu lý do quyết định",before:'6 tháng sau khách hỏi "sao làm thế này", cả team im lặng',after:'<b>ADR</b> ghi bối cảnh + phương án + vì sao loại phương án khác'}
-   ],prompts:[
-     {tag:"Phase: requirements",text:'"Từ bản ghi cuộc họp này, trích và phân loại thành Requirement, Business Rule, Decision, Scope Change."'},
-     {tag:"Phase: requirements",text:'"Yêu cầu \'giảm giá VIP 10%\' mơ hồ chỗ nào? Liệt kê câu hỏi cần làm rõ, gộp thành một phiếu gửi khách một lượt."'},
-     {tag:"Phase: architecture",text:'"Requirement CRM-FR-012 nối tới business rule, use case và test case nào? Viết ADR (DOC-09) cho quyết định thiết kế liên quan."'}
-   ]}},
-
- 4:{title:"Xây dựng & Kiểm thử",color:"var(--g4)",diag:"timeline",
-   lanes:[{ic:"🧑‍💻",t:"Dev · Xây dựng",col:"var(--g4)"},{ic:"🧑‍🔬",t:"QA · Khách · Kiểm thử",col:"var(--g4)"}],
-   cap:"Code xong không lên thẳng khách: SIT (đội mình tự ghép & soi lỗi) trước, UAT (khách nghiệm thu) sau. Lỗi thì quay lại Development.",
-   steps:[
-     {side:"left",node:"💻",sc:"var(--g4)",sn:"Lập trình",badge:"Chặng 9",name:"Development",actors:["Dev"],act:"Hiện thực module, viết unit test",doc:"Code · Unit test"},
-     {side:"right",node:"🧪",sc:"var(--g4)",sn:"SIT",badge:"Chặng 10",name:"SIT",actors:["QA","Dev"],act:"Ghép module + hệ ngoài, test tích hợp nội bộ",doc:"Kết quả SIT · Defect log · Build ổn định"},
-     {side:"right",node:"✅",sc:"var(--g4)",sn:"UAT",badge:"Chặng 11",name:"UAT",actors:["Customer","BA"],act:"Khách test theo kịch bản, nghiệm thu",doc:"Biên bản UAT · Sign-off"}
-   ],
-   cmp:{rows:[
-     {feat:"Bắt đầu code",before:"Bỏ qua FRD / SRS, từ BRD nhảy thẳng sang SAD và code; đặc tả chưa xong → yêu cầu đổi → viết lại từ đầu, bay cả tuần",after:'AI <b>dừng và liệt kê trọn gói</b> tiền đề còn thiếu (SRS, AC, thiết kế, API) trước khi code'},
-     {feat:"Thiết kế test case",before:"QA tự nghĩ, dễ thiếu negative / boundary, chỉ có happy path",after:'Đề xuất đủ <b>positive · negative · boundary · exception</b>'},
-     {feat:"Độ phủ test",before:"Mở 500 test case không biết cái nào kiểm yêu cầu nào",after:'Mỗi test <b>trace về AC</b> → thấy ngay yêu cầu nào chưa test (cả SIT lẫn UAT)'}
-   ],prompts:[
-     {tag:"Phase: delivery",text:'"Sinh bộ test case cho CRM-AC-045 gồm đủ positive, negative, boundary, exception (DOC-16)."'},
-     {tag:"Phase: delivery",text:'"Những AC nào của module [X] chưa có test case (cả SIT lẫn UAT)? Đối chiếu 📄 trace-matrix."'}
-   ]}},
-
- 5:{title:"Triển khai & Vận hành",color:"var(--g5)",diag:"collab",
-   cmp:{rows:[
-     {feat:"Quyết định go-live",before:'"Code xong là lên", không có đường quay lui, vỡ trận lúc 2h sáng',after:'<b>Checklist go-live</b> + <b>dry-run rollback</b> bắt buộc trước khi lên'},
-     {feat:"Xử lý sự cố (Hyper Care)",before:'Lục email / chat tìm "ai yêu cầu, vì sao" giữa đêm',after:'AI truy nguồn nhanh từ <b>bộ nhớ dự án</b>'},
-     {feat:"Thay đổi khi bảo trì",before:'Khách "tiện thể thêm" → không CR → scope creep + tài liệu chết dần',after:'Mọi thay đổi qua <b>Change Request</b> + <b>phân tích tác động</b>'}
-   ],prompts:[
-     {tag:"Phase: delivery",text:'"Lập checklist go-live cho dự án CRM kèm kịch bản dry-run rollback (DOC-17). Trước go-live bắt buộc doc-review."'},
-     {tag:"/minipower",text:'"Sự cố ở chức năng [X] lúc golive: truy nguồn yêu cầu gốc, ai đã quyết định, bản vá liên quan (đọc 📄 memory, 📄 trace-matrix)."'},
-     {tag:"Phase: change-control",text:'"Khách xin thêm [Y] khi bảo trì — tạo Change Request và phân tích tác động tới các module liên quan (DOC-18)."'}
-   ]}},
-
- 6:{title:"Nghiệm thu & Bàn giao",color:"var(--g6)",diag:"signing",
-   cmp:{rows:[
-     {feat:"Onboard / bàn giao",before:"Người mới đọc 500 trang, mất 2 tuần–2 tháng mới nắm việc",after:'<b>Hỏi AI</b>, trả lời kèm trỏ tới cuộc họp / quyết định gốc'},
-     {feat:"Giữ tri thức khi người nghỉ",before:'Tri thức nằm trong đầu "Human Database", nghỉ việc là mất',after:'<b>Baseline + memory</b> lưu lại — tri thức không đi theo người'}
-   ],prompts:[
-     {tag:"/minipower",text:'"Tóm tắt cho người mới: dự án CRM có những module nào, quyết định lớn nào, trỏ tới tài liệu gốc (đọc 📄 overview, 📄 memory)."'},
-     {tag:"Phase: delivery",text:'"[Người phụ trách module X] sắp nghỉ — tổng hợp toàn bộ tri thức, quyết định và điểm cần lưu ý của module X (rollup 📄 memory)."'}
-   ]}}
-};
+const GDATA = window.__GDATA;
 
 /* Màu tag theo cách gọi thật: Phase (theo phase) · /minipower (router) */
 const PHASECOLOR={discovery:"var(--g1)",planning:"var(--g2)",requirements:"var(--g3)",
