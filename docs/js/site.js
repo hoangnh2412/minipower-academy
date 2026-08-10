@@ -30,20 +30,20 @@ const WORKSHOPS = [
     homework: "workshops/03-ai-foundation/homework.html",
   },
   {
-    id: "04-ai-deployment",
-    title: "Buổi 04 — AI Deployment",
+    id: "04-git-cicd",
+    title: "Buổi 04 — Git & CI/CD auto-deploy",
     description:
-      "Docker · Vercel · Railway · Render — đưa app lên domain thật, HTTPS ngay từ sớm để buổi nào cũng thấy kết quả chạy thật.",
+      "Dựng 'đường ray': khởi tạo dự án trên Git, dùng AI push code & tài liệu, scaffold bằng jarvis framework — push là CI/CD tự deploy.",
     status: "Sắp diễn ra",
-    path: "workshops/04-ai-deployment/index.html",
+    path: "workshops/04-git-cicd/index.html",
   },
   {
-    id: "05-ai-coding-tools",
-    title: "Buổi 05 — AI Coding Tools",
+    id: "05-adr-plan-code",
+    title: "Buổi 05 — ADR & Plan → Code & Test",
     description:
-      "Cursor · Claude Code · OpenCode — thành thạo 5 thao tác cốt lõi: sinh code, explain, debug, refactor, doc.",
+      "Thiết kế nhẹ rồi code luôn (spec/plan-driven, kiểu Superpower): chốt ADR → lập Plan → code từng Task → test theo tiêu chí done → push là auto-deploy.",
     status: "Sắp diễn ra",
-    path: "workshops/05-ai-coding-tools/index.html",
+    path: "workshops/05-adr-plan-code/index.html",
   },
   {
     id: "06-vibe-coding-workflow",

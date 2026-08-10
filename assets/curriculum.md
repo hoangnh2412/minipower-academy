@@ -13,10 +13,12 @@
 AI = trợ lý ra quyết định   ·   Con người = người quyết định cuối cùng
 ```
 
-- Ở mức **Vibe Coding**, cổng người-chốt được làm **nhẹ** (một chốt trước deploy, một chốt sau deploy)
-  — không đòi BRD/SAD/QC đầy đủ như lộ trình v1.
-- Nhưng **không** có buổi nào dạy "AI tự chạy dự án", "AI tự đẩy lên production". AI sinh rất nhanh,
-  người vẫn là người **mở cổng** và **ghi quyết định** vào Minipower.
+- Ở mức **Vibe Coding**, cổng người-chốt được làm **nhẹ** theo lối **spec/plan-driven** (giống *Superpower*):
+  dựng sẵn **Git + CI/CD auto-deploy** (buổi 04) rồi từ yêu cầu → **ADR** (chốt quyết định) → **Plan**
+  (Epic/Story/Task, mỗi task có tiêu chí *done*) → **code & test theo plan** → **push là tự deploy**.
+  **Không** viết SRS/SAD đầy đủ như v1 — ADR + Plan là bản thiết kế nhẹ bắc cầu từ yêu cầu sang code.
+- Nhưng **không** có buổi nào dạy "AI tự chạy dự án". CI/CD chạy tự động, nhưng chính người
+  **quyết định push/merge** mới kích deploy — người vẫn **mở cổng** và **ghi quyết định** vào Minipower.
 - Minipower giữ vai **bộ nhớ & trợ lý dự án** xuyên suốt khoá: mọi thứ học viên làm đều vào kho tri thức.
 
 > **Gốc rễ từ 2 buổi đã chạy:** 12 nỗi đau (buổi 01) là vấn đề của **tri thức dự án**, không phải của AI;
@@ -49,13 +51,13 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 | 01 | **Giới thiệu — 12 nỗi đau & Minipower** *(đã chạy)* | 90' | Minipower cài trên máy; hiểu 12 nỗi đau = vấn đề tri thức dự án |
 | 02 | **Minipower là ai?** — vòng đời dự án *(đã chạy)* | 90–120' | Hiểu AI ở cả 17 chặng; biết pipeline 6 phase × skill × 19 DOC |
 | 03 | **AI Foundation — LLM, Prompt & Context Engineering** | 120' | Prompt có context từ một biên bản họp thật + biết khi nào không tin AI |
-| 04 | **AI Deployment** — deploy sớm để buổi nào cũng thấy kết quả | 120' | App lên **domain thật, HTTPS** qua Docker / Vercel / Railway / Render |
 
 ### Màn 2 — Vibe code & Xây thật
 
 | # | Tên buổi | Thời lượng | Học viên rời phòng với |
 |---|----------|-----------|------------------------|
-| 05 | **AI Coding Tools** — Cursor · Claude Code · OpenCode | 120' | Thành thạo 5 thao tác (sinh code · explain · debug · refactor · doc) |
+| 04 | **Git & CI/CD auto-deploy** — dựng "đường ray" (jarvis) *(mới)* | 120' | Git khởi tạo · AI push code & tài liệu · scaffold jarvis · **push là CI/CD tự deploy** |
+| 05 | **ADR & Plan → Code & Test theo Plan** | 120' | Chốt ADR → lập Plan → code từng Task → test theo *done* → push (auto-deploy) |
 | 06 | **Vibe Coding Workflow** | 120' | Landing Page / Todo App chạy thật theo flow có **cổng người-chốt** |
 | 07 | **Fullstack cơ bản** | 120' | CRUD + đăng nhập chạy được, không đào sâu kiến trúc |
 | 08 | **AI Debugging** | 120' | Sửa bug bằng AI; mỗi bug ghi bài học vào Minipower |
@@ -84,20 +86,31 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 - **Thực hành:** lấy một biên bản họp thật → viết prompt có context → AI phản biện, đối chiếu với
   nguồn → **chốt**: yêu cầu nào đúng/đủ, ghi vào Minipower.
 
-### Buổi 04 — AI Deployment *(deploy sớm)*
-- **Nội dung:** Docker · Vercel · Railway · Render.
-- **Vì sao dạy sớm:** đưa "cái chạy được" đầu tiên lên **domain thật** ngay từ đầu, để **buổi nào**
-  học viên xây xong cũng deploy được và **nhìn thấy kết quả thật** — không đợi tới cuối khoá.
-- **Bám buổi 01–02:** chặng **Triển khai & Vận hành** trong 17 chặng; AI chuẩn bị checklist,
-  **người bấm nút và chốt**.
-- **Thực hành:** app mẫu lên domain thật; checklist deploy + màn hình "đã chốt" ghi trong Minipower.
-  Từ đây mỗi buổi sau kết thúc bằng một lần deploy.
+### Buổi 04 — Git & CI/CD auto-deploy *(mới · dựng "đường ray")*
+- **Nội dung:** khởi tạo dự án trên **Git**; dùng AI **push code + tài liệu** (docs Minipower) lên repo;
+  **scaffold dự án bằng jarvis framework**; nối **CI/CD** để **push là tự deploy** (không deploy tay).
+- **Vì sao đặt sớm:** dựng sẵn "đường ray" ngay đầu → từ buổi sau, mỗi lần push là **tự lên production**,
+  buổi nào cũng thấy kết quả thật. Đây là bản nâng cấp của "deploy sớm" — gộp luôn khâu triển khai vào
+  **một lần thiết lập**.
+- **Bám buổi 01–02:** chặng **Triển khai & Vận hành** trong 17 chặng; AI dựng pipeline, **người chốt**
+  cấu hình (nhánh, secret, môi trường) và **quyết định push/merge** mới kích deploy.
+- **Thực hành:** init repo → jarvis scaffold "cái chạy được" đầu tiên → push → xem **CI/CD tự deploy**
+  lên domain thật; ghi cấu hình + "đã chốt" vào Minipower. *(Chi tiết jarvis chờ tài liệu framework.)*
 
-### Buổi 05 — AI Coding Tools
-- **Nội dung:** Cursor · Claude Code · OpenCode · (Copilot, Gemini CLI nếu có); 5 thao tác cốt lõi.
-- **Bám buổi 01–02:** công cụ là "đôi tay", Minipower là "bộ nhớ" — giải nỗi đau #12 (tìm tri thức cực khó).
-- **Thực hành:** mỗi học viên `init` một dự án đúng 4 nhánh thư mục + có "cái chạy được" đầu tiên;
-  hỏi AI theo từng chặng trong 17 chặng để nhận ra chỗ AI mạnh/yếu.
+### Buổi 05 — ADR & Plan → Code & Test theo Plan
+- **Thiết kế nhẹ (spec/plan-driven, giống *Superpower*):** từ yêu cầu thô (DOC-01/02/03 — nháp từ bài về
+  nhà buổi 03), **không viết SRS**. Thay vào đó:
+  1. **ADR (DOC-09)** — mỗi quyết định chính (stack · cấu trúc dữ liệu · cách làm) một file: bối cảnh →
+     phương án → **vì sao chọn / loại**. *Accepted* thì không sửa; đổi ý → viết ADR mới.
+  2. **Plan (DOC-08)** — bóc **Epic / Story / Task**, mỗi task có **tiêu chí *done* (test)**, trace ngược
+     về yêu cầu — không task mồ côi.
+- **Rồi code luôn trong buổi:** dùng **AI Coding Tools** (Cursor · Claude Code · OpenCode; 5 thao tác) để
+  code **từng Task theo plan** → **test theo *done*** → tick plan → **người chốt** → **push (auto-deploy
+  từ buổi 04)**. AI thực thi nhanh, người mở cổng từng mốc.
+- **Bám buổi 01–02:** ADR giải nỗi đau #6 (ai quyết định — có tên người chốt); Minipower là "bộ nhớ"
+  giải nỗi đau #12 (tìm tri thức cực khó).
+- **Thực hành:** 1 module lõi (vd *Đơn nghỉ phép*) đi trọn **ADR → Plan → Code → Test → push**; mỗi task
+  xong ghi trạng thái vào Minipower.
 
 ### Buổi 06 — Vibe Coding Workflow
 - **Flow (có cổng người-chốt nhẹ):**
@@ -138,7 +151,9 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 Sau khoá, học viên:
 
 - ✅ **Xây MVP chạy thật** trong vài giờ và deploy lên internet
+- ✅ Dựng **Git + CI/CD auto-deploy** (scaffold jarvis) — **push là tự lên production**
 - ✅ Biết **Prompt & Context Engineering** — viết đúng câu hỏi, đủ ngữ cảnh
+- ✅ Chạy được lối **ADR → Plan → Code → Test theo plan** (spec/plan-driven, kiểu *Superpower*) — nhẹ mà vẫn truy vết
 - ✅ Dùng được **AI Coding Tools** (sinh · explain · debug · refactor · doc)
 - ✅ Biết **review kết quả AI** — không tin lời AI, luôn chạy thử
 - ✅ **Quản lý tri thức dự án bằng Minipower** — MOM, yêu cầu, quyết định, bug đều truy vết được
@@ -164,12 +179,12 @@ Tổng 8 điểm. Dưới 60% → làm lại trước buổi kế.
 **Giảng viên**
 - Màn hình chia đôi: slide trái, IDE phải — dùng đúng dự án mẫu.
 - Chuẩn bị sẵn một trạng thái "đã chạy đến bước trước" để không mất thời gian.
-- Một **lỗi cố ý** trong code cho buổi 07 (bắt buộc).
+- Một **lỗi cố ý** trong code cho buổi 08 (bắt buộc).
 
 **Học viên**
 - Laptop + IDE (Cursor / Claude Code / OpenCode) có Minipower cài ở buổi 01.
 - Một biên bản họp / email yêu cầu thật **hoặc** một ý tưởng app để xây.
-- Từ buổi 08: tài khoản hosting + domain (giảng viên hướng dẫn loại rẻ).
+- Từ buổi 04: tài khoản **Git (GitHub)** + hosting/domain (giảng viên hướng dẫn loại rẻ).
 - Ngân sách token: nhắc việc nhỏ đừng bật đủ cổng nặng.
 
 ---
@@ -179,7 +194,7 @@ Tổng 8 điểm. Dưới 60% → làm lại trước buổi kế.
 | | v1 · SE (16 buổi) | v2 · Vibe Coding (9 buổi) |
 |--|-------------------|---------------------------|
 | Đối tượng | BA/PM/SA/QA/Dev có kinh nghiệm | Người mới, chưa cần kiến thức SE |
-| Trọng tâm | AI trong **toàn bộ SDLC** (cổng đủ) | AI Coding + **cổng nhẹ** |
+| Trọng tâm | AI trong **toàn bộ SDLC** (cổng đủ) | AI Coding + **cổng nhẹ** (ADR/Plan, bỏ SRS) + CI/CD auto-deploy |
 | Kiến trúc | SAD/ADR/TDD/CSDL | Không đào sâu |
 | Đầu ra | Sản phẩm đi qua 7 cổng người-chốt | MVP chạy thật + tri thức dự án trong Minipower |
 | Dùng chung | Buổi 01–02 | Buổi 01–02 |
@@ -220,8 +235,8 @@ từ `_template/` và đăng ký trong `docs/js/site.js`.
 | # | Slug thư mục | Ghi chú |
 |---|--------------|---------|
 | 03 | `03-ai-foundation` | **mới** |
-| 04 | `04-ai-deployment` | **mới** · deploy sớm |
-| 05 | `05-ai-coding-tools` | **mới** |
+| 04 | `04-git-cicd` | **mới** · Git + CI/CD auto-deploy (jarvis) |
+| 05 | `05-adr-plan-code` | **mới** · ADR + Plan → Code & Test |
 | 06 | `06-vibe-coding-workflow` | **mới** |
 | 07 | `07-fullstack-co-ban` | **mới** |
 | 08 | `08-ai-debugging` | **mới** |
