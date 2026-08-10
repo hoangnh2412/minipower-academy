@@ -27,6 +27,13 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Chống cache: gắn mã commit vào mọi link .css/.js trong HTML.
+      # Mỗi lần push → URL asset đổi → trình duyệt buộc tải bản mới, không đợi hết max-age.
+      - name: Bust asset cache (version = commit SHA)
+        run: |
+          find docs -name '*.html' -print0 \
+            | xargs -0 sed -i -E 's#(href|src)="([^":?]+\.(css|js))(\?v=[^"]*)?"#\1="\2?v='"${GITHUB_SHA::8}"'"#g'
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
