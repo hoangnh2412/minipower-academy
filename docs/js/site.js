@@ -30,12 +30,12 @@ const WORKSHOPS = [
     homework: "workshops/03-ai-foundation/homework.html",
   },
   {
-    id: "04-setup-deploy",
-    title: "Buổi 04 — Thiết lập & đường ray deploy",
+    id: "04-discovery",
+    title: "Buổi 04 — Khám phá cùng Minipower",
     description:
-      "Scaffold jarvis (.NET) + React bằng AI, push lên Git, nối Dokploy — push là tự deploy. Code theo jarvis để còn troubleshoot được.",
+      "Soi lại ba tài liệu buổi 03 bằng chính Minipower: hai luật gõ prompt và ba nhóm câu hỏi để tự biết mình đang ở đâu, tài liệu có khớp nhau không, tiếp theo làm gì.",
     status: "Sắp diễn ra",
-    path: "workshops/04-setup-deploy/index.html",
+    path: "workshops/04-discovery/index.html",
   },
   {
     id: "05-brainstorm-plan",
@@ -49,7 +49,7 @@ const WORKSHOPS = [
     id: "06-test-driven-coding",
     title: "Buổi 06 — Test-Driven & AI Coding",
     description:
-      "Định nghĩa test/done trước → AI code trên jarvis cho tới khi pass → push là auto-deploy. Test là 'hợp đồng' giữ AI không code lạc.",
+      "Định nghĩa test/done trước → AI code trên jarvis cho tới khi pass → đẩy lên GitHub. Test là 'hợp đồng' giữ AI không code lạc.",
     status: "Sắp diễn ra",
     path: "workshops/06-test-driven-coding/index.html",
   },
@@ -57,7 +57,7 @@ const WORKSHOPS = [
     id: "07-ai-coding",
     title: "Buổi 07 — AI Coding",
     description:
-      "Vibe code nốt các tính năng của sản phẩm; debug lồng trong khi code — nhờ code theo jarvis nên lần ra gốc sự cố. Push auto-deploy.",
+      "Vibe code nốt các tính năng của sản phẩm; debug lồng trong khi code — nhờ code theo jarvis nên lần ra gốc sự cố. Đẩy lên GitHub.",
     status: "Sắp diễn ra",
     path: "workshops/07-ai-coding/index.html",
   },
@@ -73,7 +73,7 @@ const WORKSHOPS = [
     id: "09-demo-day-capstone",
     title: "Buổi 09 — Demo sản phẩm · Capstone",
     description:
-      "MVP chạy thật trên internet qua Dokploy + bộ nhớ dự án trong Minipower + lộ trình 30/60/90. Demo bằng chính sản phẩm.",
+      "MVP chạy thật trên máy + bộ nhớ dự án trong Minipower + lộ trình 30/60/90. Demo bằng chính sản phẩm.",
     status: "Sắp diễn ra",
     path: "workshops/09-demo-day-capstone/index.html",
   },

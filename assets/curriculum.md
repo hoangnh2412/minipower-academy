@@ -17,13 +17,12 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
   5 lớp) để khi có sự cố còn **lần ra mà sửa**, không phải "spaghetti AI" không ai debug nổi.
 - Trọng tâm là **kỹ năng vibe coding**: brainstorm → write plan → test-driven → AI coding → code review
   (debug **lồng trong** các buổi coding). Không dạy code vỡ lòng — học viên có cả người đã biết code.
-- **Deploy sớm:** dựng sẵn Git + **Dokploy auto-deploy** ngay buổi 04 → mỗi lần push là tự lên production,
-  buổi nào cũng thấy kết quả thật.
 - **Không** có buổi nào dạy "AI tự chạy dự án". AI brainstorm/sinh code rất nhanh, nhưng chính người
   **chốt plan** và **quyết định push/merge** — người vẫn **mở cổng** và **ghi quyết định** vào Minipower.
 - Minipower giữ vai **bộ nhớ & trợ lý dự án** xuyên suốt khoá: mọi thứ học viên làm đều vào kho tri thức.
 
-> **Stack khoá học:** backend **.NET 9 / C# (jarvis framework)** · frontend **ReactJS** · deploy **Dokploy**.
+> **Stack khoá học:** backend **.NET 9 / C# (jarvis framework)** · frontend **ReactJS**.
+> Sản phẩm **chạy trên máy học viên**; code và tài liệu **đẩy lên GitHub**.
 
 > **Gốc rễ từ 2 buổi đã chạy:** 12 nỗi đau (buổi 01) là vấn đề của **tri thức dự án**, không phải của AI;
 > vòng đời **17 chặng / 6 nhóm** (buổi 02) cho thấy AI là **đồng nghiệp ở cả vòng đời**. Khoá này xây
@@ -60,17 +59,17 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 
 | # | Tên buổi | Thời lượng | Học viên rời phòng với |
 |---|----------|-----------|------------------------|
-| 04 | **Thiết lập & đường ray deploy** — jarvis · Git · Dokploy | 120' | Scaffold jarvis + React, push lên Git, **Dokploy tự deploy** lên domain thật |
+| 04 | **Khám phá cùng Minipower** | 120' | Tự soi được ba tài liệu của mình · hai luật gõ prompt · ba nhóm câu hỏi (ở đâu · khớp không · tiếp theo) |
 | 05 | **Brainstorm & Write Plan** | 120' | Brainstorm giải pháp (AI bày trade-off, người chốt) + Plan (Story/Task có *done*) đã confirm |
-| 06 | **Test-Driven & AI Coding** | 120' | Định nghĩa test/*done* trước → AI code trên jarvis cho pass → push (auto-deploy) |
-| 07 | **AI Coding** — hoàn thiện sản phẩm | 120' | Vibe code nốt các tính năng; **debug lồng trong** khi code; push auto-deploy |
+| 06 | **Test-Driven & AI Coding** | 120' | Định nghĩa test/*done* trước → AI code trên jarvis cho pass → đẩy lên GitHub |
+| 07 | **AI Coding** — hoàn thiện sản phẩm | 120' | Vibe code nốt các tính năng; **debug lồng trong** khi code; đẩy lên GitHub |
 | 08 | **Code Review với AI** | 120' | Review code AI sinh — không tin lời AI, chạy thật; refactor đúng chuẩn jarvis |
 
 ### Màn 3 — Ship & Demo
 
 | # | Tên buổi | Thời lượng | Học viên rời phòng với |
 |---|----------|-----------|------------------------|
-| 09 | **Demo sản phẩm — Capstone** | 120' | MVP chạy thật qua Dokploy + bộ nhớ dự án trong Minipower + lộ trình 30/60/90 |
+| 09 | **Demo sản phẩm — Capstone** | 120' | MVP chạy thật trên máy + bộ nhớ dự án trong Minipower + lộ trình 30/60/90 |
 
 ---
 
@@ -90,17 +89,20 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 - **Thực hành:** lấy một biên bản họp thật → viết prompt có context → AI phản biện, đối chiếu với
   nguồn → **chốt**: yêu cầu nào đúng/đủ, ghi vào Minipower *(HW: DOC-01/02/03)*.
 
-### Buổi 04 — Thiết lập & đường ray deploy *(mới)*
-- **Nội dung:** scaffold **backend jarvis** (.NET 9, dùng AI skill `jarvis-dotnet`) + **frontend ReactJS**;
-  khởi tạo **Git**, dùng AI **push toàn bộ tài liệu (docs Minipower) + source** lên GitHub; nối **Dokploy**
-  → **push là tự build & deploy** lên domain thật.
-- **Vì sao theo jarvis:** khung **Clean Architecture 5 lớp** (Domain.Shared · Domain · Application/CQRS ·
-  Infrastructure/EF · Host) → khi sự cố còn **lần ra gốc mà sửa**, không phải code AI rối không debug nổi.
-- **Vì sao deploy sớm:** dựng "đường ray" ngay đầu → từ buổi sau, mỗi lần push là **tự lên production**.
-- **Bám buổi 01–02:** chặng **Triển khai & Vận hành** trong 17 chặng; AI dựng, **người chốt** cấu hình
-  (domain · env · secret) và **quyết định push/merge** mới kích deploy.
-- **Thực hành:** jarvis scaffold "cái chạy được" (Swagger + health check) + React "hello" → push →
-  Dokploy tự deploy → mở domain thật thấy chạy; ghi cấu hình + "đã chốt" vào Minipower.
+### Buổi 04 — Khám phá cùng Minipower *(mới)*
+- **Nội dung:** soi lại **ba tài liệu** từ bài tập buổi 03 — **DOC-01** Vision · **DOC-02** Stakeholder ·
+  **DOC-03** BRD — mục nào thiếu là hỏng; rồi học **hai luật gõ prompt** (khai `Phase:` · có scope `@`)
+  và **ba nhóm câu hỏi**: *tôi đang ở đâu* (tiến độ) · *có khớp nhau không* (truy vết) ·
+  *tiếp theo làm gì* (điều hướng).
+- **Vẫn ở nhịp Requirement:** chưa brainstorm, chưa lên plan, chưa đụng code. Việc của buổi này là
+  **làm cho phần yêu cầu đứng vững** để buổi 05 brainstorm trên nền chắc.
+- **Điểm lõi — truy vết:** hai câu quét bắt hai loại bệnh — **BO không có BRQ** *(sót việc)* và
+  **BRQ không phục vụ BO nào** *(làm thừa)*. Đây là thứ Minipower làm được mà thư mục Drive không làm được.
+- **Bám buổi 01–02:** trị nỗi đau *"không biết ai quyết định"* — mọi chỗ bổ sung vào BRD phải có
+  **tên người chốt**; AI soạn nháp, **người ký**.
+- **Nhẹ máy móc:** chỉ cần IDE có AI + Minipower đã `Init project`. Không cài môi trường, không build.
+- **Kiểu buổi:** trình bày — không mốc kiểm tra tại lớp. Phần tay chân dồn vào bài tập.
+- **Bài tập:** chạy **11 prompt** đã học trên dự án của chính mình, dán kết quả, **đẩy lên GitHub**.
 
 ### Buổi 05 — Brainstorm & Write Plan
 - **Brainstorm giải pháp:** từ yêu cầu (DOC-01/02/03 từ HW buổi 03), AI **bày các phương án + trade-off**
@@ -114,19 +116,19 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 
 ### Buổi 06 — Test-Driven & AI Coding
 - **Cách làm (test-driven):** định nghĩa **test / tiêu chí *done* TRƯỚC** → AI code (backend jarvis: CQRS
-  command/query + EF; frontend React gọi API) cho tới khi **pass test** → push (**Dokploy auto-deploy**).
+  command/query + EF; frontend React gọi API) cho tới khi **pass test** → **đẩy lên GitHub**.
   Test là "hợp đồng" giữ AI không code lạc; **pass test = done thật**.
 - **AI Coding Tools:** Cursor · Claude Code · OpenCode; 5 thao tác — buổi này nhấn **sinh code · explain**.
 - **Bám buổi 01–02:** công cụ là "đôi tay", Minipower là "bộ nhớ" — giải nỗi đau #12 (tìm tri thức cực khó).
-- **Thực hành:** code module *Đơn nghỉ phép* theo plan buổi 05, **test trước — code sau**, push thấy tự
-  lên production; mỗi task xong ghi trạng thái vào Minipower.
+- **Thực hành:** code module *Đơn nghỉ phép* theo plan buổi 05, **test trước — code sau**, chạy thử trên máy
+  rồi **đẩy lên GitHub**; mỗi task xong ghi trạng thái vào Minipower.
 
 ### Buổi 07 — AI Coding — hoàn thiện sản phẩm
 - **Nội dung:** tiếp tục **vibe code** các tính năng còn lại theo plan (thêm module/màn, frontend React +
   backend jarvis). **Debug lồng trong**: khi test fail / gặp lỗi → nhờ **cấu trúc jarvis** lần ra gốc,
   fix cùng AI ngay trong lúc code. Code nhanh nhưng **có kiểm soát**.
 - **Bám buổi 01–02:** nỗi đau #7 (test không trace requirement) — khi fix, ghi "bug do yêu cầu/task nào".
-- **Thực hành:** mở rộng sản phẩm; gặp lỗi debug cùng AI tại chỗ; push auto-deploy; ghi bài học Minipower.
+- **Thực hành:** mở rộng sản phẩm; gặp lỗi debug cùng AI tại chỗ; đẩy lên GitHub; ghi bài học Minipower.
 
 ### Buổi 08 — Code Review với AI
 - **Nội dung:** review code AI sinh — **không tin lời AI, luôn chạy thật**; đối chiếu **plan/test**;
@@ -137,7 +139,7 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
   định review vào Minipower.
 
 ### Buổi 09 — Demo sản phẩm · Capstone
-- **Yêu cầu:** MVP (CRM Mini · HRM Mini · POS Mini · Chat AI · CMS) chạy thật trên internet **qua Dokploy**;
+- **Yêu cầu:** MVP (CRM Mini · HRM Mini · POS Mini · Chat AI · CMS) **chạy thật trên máy**, code + tài liệu **đã lên GitHub**;
   AI hỗ trợ ≥70% mã; **đi qua đủ 6 nhóm chặng của vòng đời** (từ buổi 02), mỗi chặng có quyết định
   người-chốt ghi trong Minipower; demo kể lại hành trình bằng chính sản phẩm.
 - **Hình thức:** trình bày; chấm theo rubric rút gọn; chốt lộ trình 30/60/90 cho dự án của mình.
@@ -148,8 +150,8 @@ AI = trợ lý ra quyết định   ·   Con người = người quyết định
 
 Sau khoá, học viên:
 
-- ✅ **Vibe code ra MVP chạy thật** trên nền **jarvis (.NET) + React**, deploy internet qua **Dokploy**
-- ✅ Dựng **Git + Dokploy auto-deploy** — **push là tự lên production**
+- ✅ **Vibe code ra MVP chạy thật** trên nền **jarvis (.NET) + React**
+- ✅ Dùng **Git/GitHub** — code và tài liệu dự án nằm cùng một chỗ, đẩy lên được
 - ✅ Thành thạo vòng lặp **brainstorm → write plan → test-driven → AI coding → code review**
 - ✅ **Debug** được nhờ code theo khung jarvis — lần ra gốc sự cố, không sửa mò
 - ✅ Biết **review kết quả AI** — không tin lời AI, luôn chạy thử
@@ -162,7 +164,7 @@ Sau khoá, học viên:
 
 | Tiêu chí | 0 điểm | 1 điểm | 2 điểm |
 |----------|--------|--------|--------|
-| **Chạy được** | Không có gì chạy | Chạy local | Deploy thật qua Dokploy + chạy ổn |
+| **Nộp được** | Không đẩy gì lên | Đẩy lên GitHub nhưng thiếu | **Bài tập đã đẩy đủ lên GitHub** |
 | **Cổng** | AI tự đi tiếp | Có quyết định nhưng người không đọc | Mỗi cổng có người chốt + ghi vào Minipower |
 | **Trace** | Không ghi gì | Ghi rời rạc | Yêu cầu → plan → code → bug truy được trong Minipower |
 | **Bằng chứng** | Tin lời AI | Có chạy thử nhưng không ghi | Test pass + review + ghi assumption/TBD rõ |
@@ -177,12 +179,11 @@ Tổng 8 điểm. Dưới 60% → làm lại trước buổi kế.
 - Màn hình chia đôi: slide trái, IDE phải — dùng đúng dự án mẫu (jarvis + React).
 - Chuẩn bị sẵn một trạng thái "đã chạy đến bước trước" để không mất thời gian.
 - Vài **lỗi cố ý** để lồng vào buổi coding (07) cho học viên debug cùng AI.
-- Một **server Dokploy** dựng sẵn để học viên nối repo và deploy.
 
 **Học viên**
 - Laptop + IDE (Cursor / Claude Code / OpenCode) có Minipower cài ở buổi 01.
 - **.NET 9 SDK** + **Node.js** (cho React) cài sẵn.
-- Tài khoản **Git (GitHub)**; từ buổi 04 nối **Dokploy** (giảng viên cấp server) để auto-deploy.
+- Tài khoản **Git (GitHub)** để đẩy code và tài liệu dự án.
 - Một ý tưởng app / biên bản yêu cầu thật để xây xuyên khoá.
 - Ngân sách token: nhắc việc nhỏ đừng bật đủ cổng nặng.
 
@@ -195,7 +196,7 @@ Tổng 8 điểm. Dưới 60% → làm lại trước buổi kế.
 | Đối tượng | BA/PM/SA/QA/Dev có kinh nghiệm | Người mới **hoặc đã biết code**, muốn vibe với AI |
 | Trọng tâm | AI trong **toàn bộ SDLC** (cổng đủ) | **Vibe code ra sản phẩm** + kỹ năng AI-workflow (cổng nhẹ) |
 | Tài liệu | BRD/SRS/SAD/AC đầy đủ | Brainstorm → **ADR + Plan** (bỏ SRS) |
-| Stack | tuỳ dự án | jarvis (.NET) + React + Dokploy |
+| Stack | tuỳ dự án | jarvis (.NET) + React |
 | Dùng chung | Buổi 01–02 | Buổi 01–02 |
 
 > Vibe Coding là **cửa ngõ** dẫn tới lộ trình SE: học viên có thể học xong v2 rồi tiếp v1
@@ -234,7 +235,7 @@ từ `_template/` và đăng ký trong `docs/js/site.js`.
 | # | Slug thư mục | Ghi chú |
 |---|--------------|---------|
 | 03 | `03-ai-foundation` | **mới** |
-| 04 | `04-setup-deploy` | **mới** · jarvis + Git + Dokploy (đường ray) |
+| 04 | `04-discovery` | **mới** · khám phá cùng Minipower (soi BRD + ba nhóm câu hỏi) |
 | 05 | `05-brainstorm-plan` | **mới** · brainstorm + write plan |
 | 06 | `06-test-driven-coding` | **mới** · test-driven + AI coding |
 | 07 | `07-ai-coding` | **mới** · hoàn thiện sản phẩm (debug lồng trong) |

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W4 · Khám phá cùng Minipower — MiniPower Academy</title>
+  <link rel="stylesheet" href="../_shared/css/slides.css">
+  <style>
+    /* ===== Mở rộng cho buổi 04 (giữ hệ màu _shared) ===== */
+    .slide.dense{justify-content:safe center;padding-top:clamp(1.1rem,3vh,2.1rem);padding-bottom:4.4rem;overflow-y:auto}
+    .slide.dense h2{margin-bottom:.7rem}
+    .slide.dense .prompt{margin:.6rem 0}
+    .slide.dense table.cmp{margin:.35rem 0}
+    .kicker{color:var(--slide-accent);letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+      font-size:clamp(.72rem,1.4vw,.95rem);margin:0 0 .6rem}
+    .grad{background:linear-gradient(135deg,#fff 30%,var(--slide-accent));-webkit-background-clip:text;
+      background-clip:text;-webkit-text-fill-color:transparent}
+    .muted{color:var(--slide-muted)} .danger{color:#f87171} .good{color:#34d399} .warn{color:#f5a623}
+    .accent-text{color:var(--slide-accent)}
+    .slide strong,.slide b{color:var(--slide-text)}
+    .slide h3{margin:.9rem 0 .4rem;font-size:clamp(1rem,2.2vw,1.35rem);color:var(--slide-text)}
+    .lead-in{margin-top:1rem;font-style:italic;color:var(--slide-text)}
+    .note{color:var(--slide-muted);font-size:.9em;margin:.7rem 0 0}
+    .cover-tag{margin-top:1.4rem;color:var(--slide-accent);font-weight:700;
+      letter-spacing:.3em;font-size:clamp(.82rem,1.6vw,1.05rem)}
+    .title-slide h1{max-width:24ch;margin-left:auto;margin-right:auto}
+    /* Nền minh hoạ cho cover — theo lối buổi 03 */
+    .cover-bg{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none}
+    .cover-bg svg{width:min(92vw,1050px);opacity:.09}
+    .slide.title-slide{overflow:hidden}
+    .slide.title-slide>:not(.cover-bg){position:relative;z-index:1}
+
+    /* Badge nhịp */
+    .beat{display:inline-flex;align-items:center;gap:.45rem;font-size:clamp(.7rem,1.3vw,.85rem);
+      font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;
+      padding:.28rem .8rem;margin:0 .4rem .8rem 0}
+    .beat.demo{background:rgba(59,130,246,.14);color:#7ab3ff;border:1px solid rgba(59,130,246,.4)}
+    .beat.hands{background:rgba(245,166,35,.12);color:#f5a623;border:1px solid rgba(245,166,35,.4)}
+    .beat.must{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.4)}
+    .beat.cut{background:rgba(52,211,153,.1);color:#34d399;border:1px solid rgba(52,211,153,.35)}
+    .beat.key{background:rgba(167,139,250,.14);color:#a78bfa;border:1px solid rgba(167,139,250,.4)}
+
+    /* Khối mốc kiểm tra */
+    .moc{max-width:940px;margin:0 auto;border:1px solid rgba(52,211,153,.4);border-radius:14px;
+      background:rgba(52,211,153,.07);padding:1.8rem 2.2rem;text-align:center}
+    .moc-label{color:#34d399;text-transform:uppercase;letter-spacing:.18em;font-weight:700;
+      font-size:.82rem;margin:0 0 .9rem}
+    .moc-text{font-size:clamp(1.1rem,2.4vw,1.6rem);line-height:1.45;color:var(--slide-text);margin:0}
+    .moc-sub{margin:1.2rem 0 0;padding-top:1rem;border-top:1px dashed rgba(52,211,153,.28);
+      color:var(--slide-muted);font-size:clamp(.85rem,1.6vw,1rem)}
+
+    /* Khối prompt copy được */
+    .prompt{position:relative;background:#0b0f16;border:1px solid rgba(59,130,246,.3);border-radius:10px;
+      padding:1.5rem 1.2rem 1.1rem;margin:.8rem 0;max-width:960px}
+    .prompt::before{content:"PROMPT";position:absolute;top:.5rem;left:1.2rem;font-size:.62rem;
+      letter-spacing:.14em;color:var(--slide-accent);font-weight:700}
+    .prompt code{display:block;background:none;padding:0;color:var(--slide-text);
+      font-family:var(--slide-mono);font-size:clamp(.82rem,1.55vw,1.02rem);line-height:1.55;
+      white-space:pre-wrap}
+    .prompt .ph{color:#f5a623;font-weight:700}
+
+    /* Chốt */
+    .chot{max-width:920px;margin:0 auto;text-align:center;border-left:4px solid var(--slide-accent);
+      background:var(--slide-surface);border-radius:12px;padding:1.8rem 2.2rem}
+    .chot-label{color:var(--slide-accent);text-transform:uppercase;letter-spacing:.16em;font-weight:700;
+      font-size:.78rem;margin:0 0 .8rem}
+    .chot-text{font-size:clamp(1.25rem,2.8vw,1.95rem);line-height:1.4;color:var(--slide-text);margin:0}
+
+    /* Bảng */
+    table.cmp{border-collapse:collapse;margin:.5rem 0;width:100%;max-width:1000px;
+      font-size:clamp(.82rem,1.55vw,1.05rem)}
+    table.cmp th,table.cmp td{border:1px solid rgba(139,156,179,.2);padding:.48rem .75rem;text-align:left;
+      color:var(--slide-muted);vertical-align:top}
+    table.cmp th{color:var(--slide-text);background:var(--slide-surface);font-weight:600}
+    table.cmp td:first-child{color:var(--slide-text);font-weight:500}
+    table.cmp tr.hi td{background:rgba(59,130,246,.08)}
+    table.cmp tr.hi td:first-child{color:var(--slide-accent)}
+
+    /* Thẻ & lưới */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.5rem 0}
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:.9rem 0}
+    .card{background:var(--slide-surface);border:1px solid rgba(139,156,179,.18);border-radius:12px;
+      padding:.9rem 1.1rem}
+    .card p{margin:.3rem 0 0;font-size:clamp(.88rem,1.6vw,1.08rem)}
+    .tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;
+      color:var(--slide-accent);font-weight:700;margin-bottom:.15rem}
+
+    /* Mạch 3 bước */
+    .flow{display:flex;align-items:stretch;gap:.7rem;flex-wrap:wrap;margin:1.4rem 0;justify-content:center}
+    .flow .step{flex:1;min-width:180px;background:var(--slide-surface);border-radius:12px;
+      padding:1.1rem 1.2rem;border:1px solid rgba(139,156,179,.18);text-align:center}
+    .flow .step b{display:block;color:var(--slide-text);font-size:clamp(.98rem,2vw,1.25rem)}
+    .flow .step span{display:block;margin-top:.35rem;color:var(--slide-muted);font-size:.86em}
+    .flow .step.on{border-color:var(--slide-accent);background:rgba(59,130,246,.1)}
+    .flow .step em{display:block;margin-top:.3rem;font-style:normal;color:var(--slide-accent);font-weight:600}
+    .flow .arrow{align-self:center;color:var(--slide-accent);font-size:1.6rem;flex:0 0 auto}
+
+    /* Cây thư mục */
+    pre.tree{font-size:clamp(.76rem,1.45vw,.98rem);line-height:1.62}
+    pre.tree b{color:var(--slide-accent)}
+    pre.tree i{color:var(--slide-muted);font-style:normal}
+
+    /* Cảnh báo */
+    .warnbox{border:1px solid rgba(245,166,35,.4);background:rgba(245,166,35,.07);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:960px}
+    .warnbox p{margin:0;color:var(--slide-text)}
+    .dangerbox{border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.06);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:960px}
+    .dangerbox p{margin:0;color:var(--slide-text)}
+    .goodbox{border:1px solid rgba(52,211,153,.4);background:rgba(52,211,153,.06);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:960px}
+    .goodbox p{margin:0;color:var(--slide-text)}
+
+    ol.steps{max-width:960px;margin:.5rem 0 0} ol.steps li{color:var(--slide-text);margin-top:.42rem}
+    ul.plain{list-style:none;padding-left:0;max-width:960px}
+    ul.plain li{margin-top:.45rem;color:var(--slide-text)}
+    .x{color:#f87171;font-weight:700} .v{color:#34d399;font-weight:700}
+    .sectlabel{font-size:clamp(.75rem,1.4vw,.9rem);color:var(--slide-muted);margin:0 0 .3rem;
+      letter-spacing:.1em;text-transform:uppercase}
+    .stack{display:flex;flex-direction:column;align-items:center;gap:.2rem;width:100%}
+    .stack .txt{width:auto}
+    table.cmp.nowrap-1 td:nth-child(1),table.cmp.nowrap-1 th:nth-child(1),
+    table.cmp.nowrap-1 td:nth-child(2),table.cmp.nowrap-1 th:nth-child(2){white-space:nowrap}
+
+    /* ===== Căn giữa toàn bộ nội dung + phóng chữ ===== */
+    .slide{align-items:center;text-align:center}
+    .slide > *{margin-left:auto;margin-right:auto}
+
+    /* Chữ to hơn */
+    .slide h1{font-size:clamp(2.2rem,5.4vw,4rem)}
+    .slide h2{font-size:clamp(1.7rem,4vw,2.7rem)}
+    .slide h3{font-size:clamp(1.15rem,2.5vw,1.6rem)}
+    .slide p,.slide li{font-size:clamp(1.12rem,2.35vw,1.6rem);line-height:1.55}
+    .slide .subtitle{font-size:clamp(1.1rem,2.3vw,1.5rem)}
+    .kicker{font-size:clamp(.82rem,1.6vw,1.1rem)}
+    table.cmp{font-size:clamp(.98rem,1.9vw,1.32rem)}
+    table.cmp th,table.cmp td{padding:.6rem .9rem}
+    .prompt code{font-size:clamp(.95rem,1.8vw,1.25rem)}
+    .slide pre code{font-size:clamp(.95rem,1.8vw,1.25rem)}
+    .card p{font-size:clamp(1.02rem,2vw,1.38rem)}
+    .tag{font-size:.8rem}
+    .note{font-size:.92em}
+    .moc-text{font-size:clamp(1.3rem,2.9vw,2rem)}
+    .moc-sub{font-size:clamp(1rem,1.95vw,1.3rem)}
+    .moc-label{font-size:.95rem}
+    .afternote{font-size:clamp(1.05rem,2.1vw,1.45rem)}
+    .beat{font-size:clamp(.8rem,1.5vw,1rem)}
+    .stepper .st .stt{font-size:clamp(.95rem,1.8vw,1.18rem)}
+    .stepper .st .sts{font-size:clamp(.82rem,1.5vw,1rem)}
+    .stepper .st{padding:.6rem .9rem}
+    .ask{font-size:clamp(1.05rem,2.1vw,1.42rem)}
+    .chot-text{font-size:clamp(1.45rem,3.2vw,2.3rem)}
+    .cover-tag{font-size:clamp(.9rem,1.8vw,1.2rem)}
+
+    /* Chỗ BẮT BUỘC canh trái để đọc được: code, ô bảng, mục danh sách */
+    .slide pre,.slide .prompt{text-align:left}
+    .slide pre code,.slide .prompt code{text-align:left}
+    table.cmp th,table.cmp td{text-align:left}
+    ol.steps,ul.plain{text-align:left;display:inline-block}
+    ol.steps li,ul.plain li{text-align:left}
+    .slide ul,.slide ol{text-align:left}
+    .card{text-align:left}
+    .concept{text-align:left}
+    .moc{text-align:center}
+    .afternote{text-align:left}
+    .warnbox,.dangerbox,.goodbox{text-align:left}
+
+    /* ===== Ngôn ngữ hình ảnh học từ buổi 03 ===== */
+    .stepper{display:flex;gap:.5rem;flex-wrap:wrap;margin:0 0 1rem;max-width:1000px;width:100%}
+    .stepper .st{flex:1;min-width:150px;background:var(--slide-surface);border:1px solid rgba(139,156,179,.15);
+      border-radius:9px;padding:.45rem .7rem;opacity:.4;transition:opacity .2s}
+    .stepper .st .stn{color:var(--slide-muted);font-weight:800;margin-right:.35rem}
+    .stepper .st .stt{color:var(--slide-text);font-weight:600;font-size:.9rem}
+    .stepper .st .sts{display:block;color:var(--slide-muted);font-size:.76rem;margin-top:.05rem}
+    .stepper .st.on{opacity:1;border-color:var(--slide-accent);background:rgba(59,130,246,.12)}
+    .stepper .st.on .stn{color:var(--slide-accent)}
+
+    .concept{display:flex;gap:2rem;align-items:center;max-width:1100px;margin:.4rem 0;width:100%}
+    .concept .txt{flex:1;min-width:0}
+    .concept .txt p{margin:.5rem 0 0}
+    .concept .fig{flex:0 0 auto;width:clamp(260px,38vw,430px)}
+    .fig svg{width:100%;height:auto;display:block;background:#0b0f16;
+      border:1px solid rgba(139,156,179,.2);border-radius:12px}
+    .fig svg text{font-family:var(--slide-font)}
+
+    .reveal{opacity:0;transition:opacity .3s ease;pointer-events:none}
+    .reveal.shown{opacity:1;pointer-events:auto}
+    .ask{color:var(--slide-muted);font-style:italic;margin-top:.3rem}
+    .ask .cue{color:var(--slide-accent);font-style:normal;font-weight:600}
+
+    .afternote{max-width:1120px;margin:.85rem 0 0;color:var(--slide-text);
+      border-left:4px solid var(--slide-accent);background:var(--slide-surface);
+      border-radius:10px;padding:.9rem 1.1rem}
+    .afternote b{color:var(--slide-accent)}
+    .big-q{font-size:clamp(1.5rem,4vw,2.8rem);line-height:1.22;max-width:26ch;margin:0 auto}
+
+    @media (max-height: 900px){
+      .slide.dense .stepper{margin-bottom:.6rem}
+      .slide.dense .stepper .st{padding:.32rem .55rem}
+      .slide.dense .stepper .st{padding:.4rem .6rem}
+      .slide.dense .concept{gap:1.2rem}
+      .slide.dense .afternote{padding:.7rem .9rem;margin-top:.6rem}
+    }
+
+    /* Màn hình thấp (1024x640 · 1280x720 · 1440x810 · laptop 13") — thu gọn slide dày */
+    @media (max-height: 900px){
+      .slide.dense{padding-top:.9rem;padding-bottom:4rem;padding-left:clamp(1.5rem,4vw,3rem);
+        padding-right:clamp(1.5rem,4vw,3rem)}
+      .slide.dense h2{margin-bottom:.5rem}
+      .slide.dense h3{margin:.6rem 0 .3rem}
+      .slide.dense p,.slide.dense li{line-height:1.45}
+      .slide.dense table.cmp th,.slide.dense table.cmp td{padding:.42rem .65rem}
+      .slide.dense pre{padding:.85rem 1rem;margin-top:.55rem}
+      .slide.dense .prompt{padding:1.05rem .95rem .7rem;margin:.32rem 0}
+      .slide.dense .ask{margin-top:.45rem}
+      .slide.dense .card{padding:.7rem .9rem}
+      .slide.dense .warnbox,.slide.dense .dangerbox,.slide.dense .goodbox{padding:.7rem 1rem;margin:.6rem 0}
+      .slide.dense .lead-in{margin-top:.7rem}
+      .slide.dense .note{margin-top:.5rem}
+      .slide.dense ol.steps li{margin-top:.34rem}
+    }
+
+    /* Màn rất thấp (≤700px): co nhẹ để không cắt chữ — vẫn to hơn hẳn bản cũ */
+    @media (max-height: 700px){
+      .slide h2{font-size:clamp(1.45rem,3.4vw,2.1rem)}
+      .slide p,.slide li{font-size:clamp(1rem,2vw,1.3rem)}
+      table.cmp{font-size:clamp(.9rem,1.7vw,1.12rem)}
+      table.cmp th,table.cmp td{padding:.4rem .6rem}
+      .prompt code,.slide pre code{font-size:clamp(.88rem,1.65vw,1.08rem)}
+      .afternote{font-size:clamp(.95rem,1.85vw,1.2rem);padding:.65rem .85rem}
+      .ask{font-size:clamp(.95rem,1.85vw,1.2rem)}
+      .stepper .st .stt{font-size:clamp(.86rem,1.6vw,1.02rem)}
+      .stepper .st .sts{font-size:clamp(.76rem,1.4vw,.9rem)}
+      .moc-text{font-size:clamp(1.15rem,2.5vw,1.65rem)}
+      .moc-sub{font-size:clamp(.92rem,1.8vw,1.12rem)}
+    }
+  </style>
+</head>
+<body>
+  <div id="deck" class="deck">
+
+    <section class="slide title-slide active">
+      <div class="cover-bg" aria-hidden="true">
+        <svg viewBox="0 0 1000 360" fill="none">
+          <rect x="60" y="140" width="210" height="82" rx="16" stroke="#3b82f6" stroke-width="2"/>
+          <rect x="395" y="140" width="210" height="82" rx="16" stroke="#3b82f6" stroke-width="2"/>
+          <rect x="730" y="140" width="210" height="82" rx="16" stroke="#3b82f6" stroke-width="2"/>
+          <line x1="270" y1="181" x2="395" y2="181" stroke="#8b9cb3" stroke-width="2"/>
+          <line x1="605" y1="181" x2="730" y2="181" stroke="#8b9cb3" stroke-width="2"/>
+          <circle cx="165" cy="181" r="14" stroke="#8b9cb3" stroke-width="2"/>
+          <circle cx="500" cy="181" r="14" stroke="#8b9cb3" stroke-width="2"/>
+          <circle cx="835" cy="181" r="14" stroke="#8b9cb3" stroke-width="2"/>
+        </svg>
+      </div>
+      <p class="kicker">Buổi 04 · MiniPower Academy</p>
+      <h1>Khám phá<br><span class="grad">cùng Minipower</span></h1>
+      <p class="cover-tag">VIBE CODING</p>
+    </section>
+
+    <!-- ===== KIỂM BÀI TẬP BUỔI 03 ===== -->
+
+    <section class="slide dense">
+      <h2>Bài tập buổi 03 đã cho ra cái gì?</h2>
+      <div class="stack">
+        <div class="txt">
+          <table class="cmp nowrap-1">
+            <tr><th>Mã</th><th>Tên</th><th>Trả lời câu gì</th></tr>
+            <tr><td><strong>DOC-01</strong></td><td class="muted">Vision &amp; Business Case</td><td>Làm dự án này để làm gì?</td></tr>
+            <tr><td><strong>DOC-02</strong></td><td class="muted">Stakeholder Analysis</td><td>Ai liên quan, ai quyết?</td></tr>
+            <tr class="hi"><td><strong>DOC-03</strong></td><td class="muted">BRD</td><td><strong>Cần làm cái gì?</strong></td></tr>
+          </table>
+        </div>
+        <div class="fig" style="width:clamp(280px,46vw,560px);margin-top:.8rem">
+          <svg viewBox="0 0 380 200" role="img" aria-label="Thư mục docs/01-project chứa ba tài liệu">
+            <text x="20" y="30" fill="#8b9cb3" font-size="12" letter-spacing="1">THƯ MỤC DỰ ÁN</text>
+            <rect x="18" y="42" width="344" height="34" rx="8" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <text x="34" y="64" fill="#e8edf4" font-size="14">docs/01-project/</text>
+            <line x1="40" y1="76" x2="40" y2="106" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="40" y1="106" x2="58" y2="106" stroke="#8b9cb3" stroke-width="1.5"/>
+            <rect x="58" y="92" width="290" height="28" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.5"/>
+            <text x="72" y="111" fill="#8b9cb3" font-size="12.5">DOC-01 · Vision</text>
+            <line x1="40" y1="106" x2="40" y2="140" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="40" y1="140" x2="58" y2="140" stroke="#8b9cb3" stroke-width="1.5"/>
+            <rect x="58" y="126" width="290" height="28" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.5"/>
+            <text x="72" y="145" fill="#8b9cb3" font-size="12.5">DOC-02 · Stakeholder</text>
+            <line x1="40" y1="140" x2="40" y2="174" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="40" y1="174" x2="58" y2="174" stroke="#8b9cb3" stroke-width="1.5"/>
+            <rect x="58" y="160" width="290" height="28" rx="6" fill="rgba(59,130,246,.14)" stroke="#3b82f6" stroke-width="2"/>
+            <text x="72" y="179" fill="#e8edf4" font-size="12.5" font-weight="700">DOC-03 · BRD</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <h2>DOC-01 đủ thì trông thế nào?</h2>
+      <p><strong>Tầm nhìn &amp; Hồ sơ kinh doanh</strong> — trả lời <em>làm dự án này để làm gì</em>.
+        Bản mẫu 10 mục.</p>
+      <table class="cmp">
+          <tr><th>Mục</th><th>Tên</th><th>Vì sao không được thiếu</th></tr>
+          <tr><td><strong>3</strong></td><td>Vấn đề nghiệp vụ</td><td>Không nêu được vấn đề thì dự án <strong>không có lý do tồn tại</strong></td></tr>
+          <tr><td><strong>4</strong></td><td>Mục tiêu &amp; chỉ số — <code>G-001</code></td><td>Không có chỉ số thì không ai biết <strong>bao giờ là thành công</strong></td></tr>
+          <tr><td><strong>6</strong></td><td>Hồ sơ kinh doanh — lợi ích vs chi phí</td><td>Không cân được thì không biết <strong>có đáng làm không</strong></td></tr>
+          <tr class="hi"><td><strong>8</strong></td><td>Rủi ro cấp cao — <code>R-001</code></td><td>Không gọi tên rủi ro trước thì <strong>đến lúc vỡ mới biết</strong></td></tr>
+        </table>
+    </section>
+
+    <section class="slide dense">
+      <h2>DOC-02 đủ thì trông thế nào?</h2>
+      <p><strong>Phân tích stakeholder</strong> — trả lời <em>ai liên quan, ai quyết</em>. Bản mẫu 6 mục.</p>
+      <table class="cmp">
+          <tr><th>Mục</th><th>Tên</th><th>Vì sao không được thiếu</th></tr>
+          <tr><td><strong>2</strong></td><td>Đăng ký stakeholder — <code>SH-001</code></td><td>Sót một người liên quan thì <strong>đến lúc duyệt mới lòi ra</strong></td></tr>
+          <tr><td><strong>3</strong></td><td>Bản đồ quyền lực × quan tâm</td><td>Biết ai phải <em>quản chặt</em>, ai chỉ cần <em>báo tin</em></td></tr>
+          <tr class="hi"><td><strong>4</strong></td><td>RACI</td><td>Chữ <strong>A</strong> = người chốt. Đây là chỗ trị nỗi đau <strong>"không biết ai quyết định"</strong> của buổi 01</td></tr>
+        </table>
+    </section>
+
+    <section class="slide dense">
+      <h2>DOC-03 (BRD) đủ thì trông thế nào?</h2>
+      <p>Bản mẫu có 13 mục. Không phải mục nào cũng bắt buộc với dự án nhỏ.</p>
+      <table class="cmp">
+          <tr><th>Mục</th><th>Tên</th><th>Vì sao không được thiếu</th></tr>
+          <tr><td><strong>3</strong></td><td>Mục tiêu nghiệp vụ — <code>BO-xxx</code></td><td>Không có mục tiêu thì không biết làm để làm gì</td></tr>
+          <tr><td><strong>4</strong></td><td>Phạm vi — trong / ngoài</td><td>Không chốt phạm vi thì dự án phình mãi</td></tr>
+          <tr><td><strong>7</strong></td><td>Yêu cầu nghiệp vụ — <code>BRQ-xxx</code></td><td>Đây là ruột của BRD</td></tr>
+          <tr><td><strong>8</strong></td><td>Quy tắc nghiệp vụ — <code>BR-xxx</code></td><td>Luật nghiệp vụ phải tuân</td></tr>
+          <tr><td><strong>9</strong></td><td><strong>Ràng buộc</strong> <span class="muted">— pháp lý · ngân sách · thời hạn · công nghệ</span></td><td>Không ghi thì buổi 05 brainstorm ra phương án <strong>không làm được</strong></td></tr>
+        </table>
+    </section>
+
+    <section class="slide title-slide">
+      <h1 class="big-q" style="max-width:none">Bạn đã có đủ<br>
+        <span class="grad">3 tài liệu này chưa?</span></h1>
+    </section>
+
+    <!-- ===== HAI LUẬT ===== -->
+
+    <section class="slide title-slide">
+      <h1 class="big-q" style="max-width:none">Hỏi Minipower về dự án</h1>
+      <p class="subtitle" style="margin-top:1.4rem">Luôn phải cho Minipower biết hai thứ:</p>
+      <div class="flow" style="max-width:820px;margin-left:auto;margin-right:auto">
+        <div class="step on"><b>Đang ở giai đoạn nào</b><span>Phase</span></div>
+        <div class="step on"><b>Đang hỏi về tài liệu nào</b><span>scope · @</span></div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <span class="beat key">🔑 Luật 1</span>
+      <h2>Khai phase — nói rõ mình đang ở giai đoạn nào</h2>
+      <div class="concept">
+        <div class="txt">
+          <div class="prompt"><code>/minipower
+Phase: discovery</code></div>
+          <p>Khai phase thì Minipower mới <b>đọc đúng bộ hướng dẫn</b> và <b>đúng phần ghi nhớ</b>
+            của giai đoạn đó trước khi trả lời.</p>
+          <p class="note">Không khai thì Minipower phải đoán — mà đoán là bắt đầu sai.</p>
+        </div>
+        <div class="fig">
+          <svg viewBox="0 0 380 230" role="img" aria-label="Sáu giai đoạn, discovery được chọn">
+            <text x="20" y="26" fill="#8b9cb3" font-size="12" letter-spacing="1">SÁU GIAI ĐOẠN</text>
+            <rect x="18" y="38" width="344" height="28" rx="6" fill="rgba(59,130,246,.16)" stroke="#3b82f6" stroke-width="2"/>
+            <text x="32" y="57" fill="#e8edf4" font-size="13" font-weight="700">discovery</text>
+            <text x="352" y="57" fill="#3b82f6" font-size="12" text-anchor="end">← ta ở đây</text>
+            <rect x="18" y="72" width="344" height="24" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.3"/>
+            <text x="32" y="89" fill="#8b9cb3" font-size="12.5">requirements</text>
+            <rect x="18" y="102" width="344" height="24" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.3"/>
+            <text x="32" y="119" fill="#8b9cb3" font-size="12.5">architecture</text>
+            <rect x="18" y="132" width="344" height="24" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.3"/>
+            <text x="32" y="149" fill="#8b9cb3" font-size="12.5">planning</text>
+            <rect x="18" y="162" width="344" height="24" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.3"/>
+            <text x="32" y="179" fill="#8b9cb3" font-size="12.5">delivery</text>
+            <rect x="18" y="192" width="344" height="24" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.3"/>
+            <text x="32" y="209" fill="#8b9cb3" font-size="12.5">change-control</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <span class="beat key">🔑 Luật 2</span>
+      <h2>Có scope — việc càng nặng, càng phải khai rõ</h2>
+      <p><strong>Minipower</strong> không soi đều tay. Minipower nhìn <strong>việc mình định làm</strong>:
+        việc nhỏ thì cho qua, việc đụng vào tài liệu thì bắt khai <strong>Phase · module · DOC</strong>.</p>
+      <table class="cmp">
+        <tr><th>Prompt</th><th>Kết quả</th></tr>
+        <tr><td><code>Sửa typo chính tả trong README.md</code></td>
+            <td><span class="v">✓</span> Qua — việc nhỏ, <strong>không cần khai gì</strong></td></tr>
+        <tr><td><code>Viết lại toàn bộ docs/03-modules/employee</code></td>
+            <td><span class="x">✗</span> <strong>Chặn</strong> — và liệt kê ra <strong>thiếu gì</strong>: Phase · module · DOC</td></tr>
+        <tr class="hi"><td><code>Phase: discovery · module leave · DOC-04:</code><br><code>nháp UC đăng ký nghỉ phép</code></td>
+            <td><span class="v">✓</span> Qua — <strong>đủ scope</strong>, agent trả lời bình thường</td></tr>
+      </table>
+      <div class="reveal">
+        <p class="afternote">Để ý: Minipower <b>không im lặng từ chối</b> — Minipower <b>nói rõ mình còn thiếu gì</b>
+          để mình bổ sung. Nhớ bài <b>hallucination</b> buổi 03: AI bịa khi
+          <span class="danger">không đủ ngữ cảnh mà vẫn phải trả lời</span>. Luật này buộc mình
+          khoanh vùng trước — vừa đỡ tốn, vừa tránh câu trả lời nghe hay mà sai.</p>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <h2>Một prompt đúng luôn có ba phần</h2>
+      <div class="flow" style="max-width:1000px;margin:.25rem auto 0">
+        <div class="step on"><b><code>/minipower</code></b><span>gọi</span></div>
+        <div class="arrow">→</div>
+        <div class="step on"><b><code>Phase: …</code></b><span>luật 1 · giai đoạn</span></div>
+        <div class="arrow">→</div>
+        <div class="step on"><b><code>@đường-dẫn — câu hỏi</code></b><span>luật 2 · tài liệu</span></div>
+      </div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/01-project/DOC-01-vision-business-case.md — mục tiêu đã có chỉ số
+đo được chưa? Ai là người duyệt?</code></div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/01-project/DOC-02-stakeholder-analysis.md — ai là A trong RACI?</code></div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — cái gì trong phạm vi, cái gì ngoài?</code></div>
+    </section>
+
+    <!-- ===== BA NHÓM CÂU HỎI ===== -->
+
+    <section class="slide">
+      <h2>Ba nhóm câu hỏi</h2>
+      <div class="stepper">
+        <div class="st on"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st on"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st on"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st on"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <h2>Hai câu hỏi tiến độ</h2>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/ — dự án đang ở phase nào? Liệt kê DOC đã có và trạng thái.</code></div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — BRD đã đủ chưa? Thiếu mục nào?</code></div>
+      <div class="reveal">
+        <p class="afternote"><b>Câu thứ hai.</b> Minipower không chỉ trả lời xong hay chưa — mà đưa ra
+          <b>danh sách việc phải bù</b>.</p>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st on"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <h2>Drive <span class="muted">cất</span> file — Minipower <span class="accent-text">biết chúng liên quan</span></h2>
+      <div class="concept">
+        <div class="txt">
+          <p>Đây là chỗ khác biệt lớn nhất. Google Drive chỉ <b>cất</b> file — muốn biết chúng ăn khớp
+            với nhau không thì phải tự mở ra đọc.</p>
+          <p>Minipower <b>biết các tài liệu nối vào nhau thế nào</b>, và có hẳn một file ma trận truy vết
+            trong <code>docs/05-traceability/</code>.</p>
+        </div>
+        <div class="fig">
+          <svg viewBox="0 0 380 200" role="img" aria-label="Drive rời rạc so với Minipower có liên kết">
+            <text x="14" y="24" fill="#8b9cb3" font-size="11" letter-spacing="1">DRIVE</text>
+            <rect x="14" y="34" width="52" height="34" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.5"/>
+            <rect x="78" y="52" width="52" height="34" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.5"/>
+            <rect x="46" y="94" width="52" height="34" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.5"/>
+            <rect x="112" y="112" width="52" height="34" rx="6" fill="none" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="190" y1="20" x2="190" y2="180" stroke="rgba(139,156,179,.3)" stroke-width="1" stroke-dasharray="4 4"/>
+            <text x="212" y="24" fill="#3b82f6" font-size="11" letter-spacing="1">MINIPOWER</text>
+            <rect x="212" y="34" width="52" height="30" rx="6" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <rect x="296" y="34" width="52" height="30" rx="6" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <rect x="212" y="92" width="52" height="30" rx="6" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <rect x="296" y="92" width="52" height="30" rx="6" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <rect x="254" y="150" width="52" height="30" rx="6" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <line x1="264" y1="49" x2="296" y2="49" stroke="#34d399" stroke-width="2"/>
+            <line x1="238" y1="64" x2="238" y2="92" stroke="#34d399" stroke-width="2"/>
+            <line x1="322" y1="64" x2="322" y2="92" stroke="#34d399" stroke-width="2"/>
+            <line x1="238" y1="122" x2="272" y2="150" stroke="#34d399" stroke-width="2"/>
+            <line x1="322" y1="122" x2="290" y2="150" stroke="#34d399" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st on"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <span class="beat key">🔑 Rất hay nhầm</span>
+      <h2>Ba mã — <code>BO</code> · <code>BRQ</code> · <code>BR</code></h2>
+      <table class="cmp">
+        <tr><th>Mã</th><th>Là gì</th><th>Nằm ở đâu</th></tr>
+        <tr class="hi"><td><code>BO-xxx</code></td><td><strong>Mục tiêu nghiệp vụ</strong> — kinh doanh muốn đạt được gì</td><td>BRD mục 3</td></tr>
+        <tr class="hi"><td><code>BRQ-xxx</code></td><td><strong>Yêu cầu nghiệp vụ</strong> — cần làm gì để đạt mục tiêu đó</td><td>BRD mục 7</td></tr>
+        <tr class="hi"><td><code>BR-xxx</code></td><td><strong>Quy tắc nghiệp vụ</strong> — luật phải tuân, <em>khác hẳn hai cái trên</em></td><td>DOC-04 <span class="muted">(tóm tắt ở BRD mục 8)</span></td></tr>
+      </table>
+      <div class="reveal">
+        <ul class="plain">
+          <li><strong class="accent-text">BO</strong> — <em>"Giảm thời gian duyệt đơn nghỉ phép xuống dưới 1 ngày."</em></li>
+          <li><strong class="accent-text">BRQ</strong> — <em>"Nhân viên phải gửi được đơn nghỉ phép trực tuyến."</em></li>
+          <li><strong class="accent-text">BR</strong> — <em>"Đơn nghỉ quá 3 ngày phải có cấp trưởng phòng duyệt."</em></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st on"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <h2>Truy ngược trong chính BRD</h2>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — với mỗi BRQ ở mục 7, cho biết nó phục vụ
+mục tiêu BO nào ở mục 3. Trình bày thành bảng.</code></div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st on"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <div class="concept">
+        <div class="txt">
+          <div class="prompt"><code>@…DOC-03-brd.md — có mục tiêu BO nào ở mục 3
+mà chưa có BRQ nào phục vụ không?</code></div>
+          <div class="prompt"><code>@…DOC-03-brd.md — có BRQ nào ở mục 7
+không phục vụ mục tiêu BO nào không?</code></div>
+        </div>
+        <div class="fig">
+          <svg viewBox="0 0 380 210" role="img" aria-label="BO và BRQ nối nhau, một BO mồ côi và một BRQ mồ côi">
+            <text x="20" y="24" fill="#8b9cb3" font-size="11" letter-spacing="1">BO · MỤC TIÊU</text>
+            <text x="248" y="24" fill="#8b9cb3" font-size="11" letter-spacing="1">BRQ · YÊU CẦU</text>
+            <rect x="18" y="38" width="110" height="30" rx="7" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <text x="34" y="58" fill="#e8edf4" font-size="12.5">BO-001</text>
+            <rect x="248" y="38" width="110" height="30" rx="7" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <text x="264" y="58" fill="#e8edf4" font-size="12.5">BRQ-001</text>
+            <line x1="128" y1="53" x2="248" y2="53" stroke="#34d399" stroke-width="2"/>
+            <rect x="18" y="92" width="110" height="30" rx="7" fill="none" stroke="#f5a623" stroke-width="2" stroke-dasharray="5 3"/>
+            <text x="34" y="112" fill="#f5a623" font-size="12.5">BO-002</text>
+            <text x="150" y="108" fill="#f5a623" font-size="11">? chưa ai làm</text>
+            <rect x="248" y="146" width="110" height="30" rx="7" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="5 3"/>
+            <text x="264" y="166" fill="#f87171" font-size="12.5">BRQ-002</text>
+            <text x="126" y="162" fill="#f87171" font-size="11">không phục vụ gì ?</text>
+          </svg>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="afternote"><span class="warn">BO không có BRQ</span> = <b>sót việc</b> — có mục tiêu mà
+          chưa ai định làm gì. <span class="danger">BRQ không phục vụ BO nào</span> = <b>làm thừa</b> —
+          sắp làm một việc không phục vụ mục tiêu nào.</p>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st on"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/ — mỗi BRQ trong BRD đã có FR nào ở DOC-06 giải quyết chưa?</code></div>
+      <div class="reveal">
+        <div class="fig" style="width:100%;max-width:820px;margin-top:.6rem">
+          <svg viewBox="0 0 820 96" role="img" aria-label="Chuỗi tài liệu từ BO tới test, đang ở đoạn đầu">
+            <rect x="10" y="30" width="86" height="30" rx="7" fill="rgba(59,130,246,.16)" stroke="#3b82f6" stroke-width="2"/>
+            <text x="53" y="50" fill="#e8edf4" font-size="13" text-anchor="middle">BO</text>
+            <rect x="122" y="30" width="86" height="30" rx="7" fill="rgba(59,130,246,.16)" stroke="#3b82f6" stroke-width="2"/>
+            <text x="165" y="50" fill="#e8edf4" font-size="13" text-anchor="middle">BRQ</text>
+            <rect x="234" y="30" width="86" height="30" rx="7" fill="rgba(59,130,246,.16)" stroke="#3b82f6" stroke-width="2"/>
+            <text x="277" y="50" fill="#e8edf4" font-size="13" text-anchor="middle">BR</text>
+            <rect x="346" y="30" width="86" height="30" rx="7" fill="none" stroke="#8b9cb3" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <text x="389" y="50" fill="#8b9cb3" font-size="13" text-anchor="middle">UC</text>
+            <rect x="458" y="30" width="86" height="30" rx="7" fill="none" stroke="#8b9cb3" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <text x="501" y="50" fill="#8b9cb3" font-size="13" text-anchor="middle">FR</text>
+            <rect x="570" y="30" width="86" height="30" rx="7" fill="none" stroke="#8b9cb3" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <text x="613" y="50" fill="#8b9cb3" font-size="13" text-anchor="middle">AC</text>
+            <rect x="682" y="30" width="86" height="30" rx="7" fill="none" stroke="#8b9cb3" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <text x="725" y="50" fill="#8b9cb3" font-size="13" text-anchor="middle">test</text>
+            <line x1="96" y1="45" x2="122" y2="45" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="208" y1="45" x2="234" y2="45" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="320" y1="45" x2="346" y2="45" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="432" y1="45" x2="458" y2="45" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="544" y1="45" x2="570" y2="45" stroke="#8b9cb3" stroke-width="1.5"/>
+            <line x1="656" y1="45" x2="682" y2="45" stroke="#8b9cb3" stroke-width="1.5"/>
+            <text x="165" y="82" fill="#3b82f6" font-size="12" text-anchor="middle">↑ mình đang ở đây</text>
+            <text x="613" y="82" fill="#8b9cb3" font-size="12" text-anchor="middle">↑ buổi 05, 06</text>
+          </svg>
+        </div>
+        <p class="afternote"><b>"Chưa có" chính là câu trả lời đúng.</b> Minipower cho biết mình đang đứng ở
+          đoạn nào trên chuỗi và còn bao xa nữa — cũng là một dạng <i>"tôi đang ở đâu"</i>, nhưng nhìn
+          theo <b>chiều tài liệu</b> chứ không theo chiều thời gian.</p>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <div class="stepper">
+        <div class="st"><span class="stn">1</span><span class="stt">Tôi đang ở đâu?</span><span class="sts">tiến độ</span></div>
+        <div class="st"><span class="stn">2</span><span class="stt">Có khớp nhau không?</span><span class="sts">truy vết</span></div>
+        <div class="st on"><span class="stn">3</span><span class="stt">Tiếp theo làm gì?</span><span class="sts">điều hướng</span></div>
+      </div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/ — tiếp theo tôi cần làm gì? Trả lời ngắn, theo ưu tiên.</code></div>
+      <div class="prompt"><code>/minipower
+Phase: discovery
+@docs/ — dự án nhỏ, một người làm. Bước nào rút gọn được? Bỏ thì mất gì?</code></div>
+      <div class="reveal">
+        <p class="afternote">Được — <b>nhưng phải biết mình đang rút cái gì</b>, chứ không phải bỏ vì lười.
+          Có hai chỗ <span class="danger">không được rút</span>: chốt phạm vi dự án, và sửa tài liệu đã ký.
+          Và <b>người quyết rút là mình</b> — AI chỉ bày ra cái giá phải trả.</p>
+      </div>
+    </section>
+
+    <!-- ===== BỔ SUNG BRD ===== -->
+
+    <!-- ===== GIAO BÀI ===== -->
+
+    <section class="slide">
+      <p class="kicker">Tổng kết</p>
+      <h2>Hai quy tắc mang về</h2>
+      <div class="two-col">
+        <div class="card"><span class="tag">Quy tắc 1</span>
+          <p><strong>Không hỏi trống.</strong> Mọi câu hỏi về tài liệu đều phải có
+            <code>Phase:</code> và <code>@</code>. Hỏi trống thì hoặc bị chặn, hoặc tệ hơn —
+            nhận một câu trả lời nghe hay mà bịa.</p></div>
+        <div class="card"><span class="tag">Quy tắc 2</span>
+          <p><strong>AI soạn, mình ký.</strong> Mọi thứ AI viết vào tài liệu đều là
+            <strong>nháp</strong> cho tới khi có tên người chốt bên dưới.</p></div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <h2>Bài tập về nhà</h2>
+      <p>Chạy lại <strong>toàn bộ prompt đã học hôm nay</strong> trên dự án của mình —
+        dán kết quả nộp lại.</p>
+      <table class="cmp">
+        <tr><th>Nhóm</th><th>Prompt đã học</th><th>Nộp</th></tr>
+        <tr><td><strong>Ba tài liệu</strong></td>
+            <td>Soi DOC-01 · DOC-02 · DOC-03</td><td>3 kết quả</td></tr>
+        <tr><td><strong>1 · Tôi đang ở đâu</strong></td>
+            <td>Đang ở phase nào · BRD đủ chưa, thiếu mục nào</td><td>2 kết quả</td></tr>
+        <tr class="hi"><td><strong>2 · Có khớp nhau không</strong></td>
+            <td>BRQ phục vụ BO nào · BO nào chưa có BRQ · BRQ nào không phục vụ BO nào · đã có FR chưa</td><td>4 kết quả</td></tr>
+        <tr><td><strong>3 · Tiếp theo làm gì</strong></td>
+            <td>Tiếp theo cần làm gì · bước nào rút gọn được</td><td>2 kết quả</td></tr>
+      </table>
+      <p class="afternote">Tổng <b>11 prompt</b> — mọi câu đều nằm trong các slide vừa rồi,
+        copy về chạy đúng trên tài liệu của mình.</p>
+    </section>
+
+    <section class="slide dense">
+      <h2>Nộp bài qua GitHub</h2>
+      <div class="concept">
+        <div class="txt">
+          <ol class="steps">
+            <li>Tạo tài khoản ở <strong>github.com</strong> <span class="muted">(nếu chưa có)</span></li>
+            <li>Cài <strong>Git</strong> từ <code>git-scm.com</code> — kiểm bằng <code>git --version</code></li>
+            <li>Trên GitHub bấm <strong>New</strong> → tạo repository, để <strong>Private</strong></li>
+            <li>Copy đường dẫn repo, rồi chạy sáu lệnh bên cạnh</li>
+          </ol>
+          <div class="dangerbox"><p><strong>Không bao giờ</strong> đẩy mật khẩu hay khoá bí mật lên GitHub.</p></div>
+        </div>
+        <div class="fig" style="width:clamp(300px,44vw,540px)">
+<pre style="margin:0"><code>git init
+git add .
+git commit -m "Bài tập buổi 04"
+git remote add origin &lt;đường-dẫn-repo&gt;
+git branch -M main
+git push -u origin main</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <h2>11 prompt cần chạy</h2>
+      <p class="note">Mọi prompt đều bắt đầu bằng <code>/minipower</code> + <code>Phase: discovery</code>
+        + <code>@đường-dẫn</code></p>
+      <div class="two-col">
+        <div class="card">
+          <span class="tag">Ba tài liệu</span>
+          <p><strong>1.</strong> DOC-01 — mục tiêu có chỉ số đo được chưa? Ai duyệt?<br>
+             <strong>2.</strong> DOC-02 — ai là <strong>A</strong> trong RACI?<br>
+             <strong>3.</strong> DOC-03 — cái gì trong phạm vi, cái gì ngoài?</p>
+          <span class="tag" style="margin-top:.7rem;display:inline-block">1 · Tôi đang ở đâu</span>
+          <p><strong>4.</strong> Dự án đang ở phase nào? Liệt kê DOC đã có và trạng thái<br>
+             <strong>5.</strong> BRD đã đủ chưa? Thiếu mục nào?</p>
+        </div>
+        <div class="card">
+          <span class="tag">2 · Có khớp nhau không</span>
+          <p><strong>6.</strong> Mỗi BRQ phục vụ mục tiêu BO nào?<br>
+             <strong>7.</strong> BO nào chưa có BRQ nào phục vụ?<br>
+             <strong>8.</strong> BRQ nào không phục vụ BO nào?<br>
+             <strong>9.</strong> Mỗi BRQ đã có FR nào giải quyết chưa?</p>
+          <span class="tag" style="margin-top:.7rem;display:inline-block">3 · Tiếp theo làm gì</span>
+          <p><strong>10.</strong> Tiếp theo tôi cần làm gì?<br>
+             <strong>11.</strong> Bước nào rút gọn được? Bỏ thì mất gì?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dense">
+      <h2>Hướng dẫn dành cho bạn</h2>
+      <table class="cmp">
+        <tr><th>Triệu chứng</th><th>Nguyên nhân thường gặp</th><th>Xử lý</th></tr>
+        <tr><td>Trả về <strong>checklist</strong> thay vì câu trả lời</td><td>Thiếu <code>@</code> scope, hoặc sai đường dẫn</td><td>Kiểm lại đường dẫn; copy từ IDE cho chắc</td></tr>
+        <tr><td><strong>Mọi lệnh minipower bị chặn</strong></td><td>Thiếu <code>memory/profile.json</code></td><td>Chạy <em>Init project</em>, trả lời 5 câu</td></tr>
+        <tr><td>Trả lời chung chung, không bám tài liệu</td><td>Quên khai <code>Phase:</code></td><td>Thêm dòng <code>Phase: discovery</code></td></tr>
+      </table>
+    </section>
+
+  </div>
+
+  <nav class="deck-controls" aria-label="Điều hướng slide">
+    <div>
+      <a class="home-link" href="../../index.html">← Trang chủ</a>
+      <button id="prev" type="button" aria-label="Slide trước">← Trước</button>
+    </div>
+    <div class="progress" aria-hidden="true">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <span id="counter" class="slide-counter">1 / 1</span>
+    <button id="next" type="button" aria-label="Slide tiếp">Tiếp →</button>
+  </nav>
+
+  <script>
+    // Controller học từ buổi 03: điều hướng slide + "hỏi trước → trả lời sau" (.reveal).
+    // Slide không có .reveal chạy y như controller _shared.
+    (function () {
+      const deck = document.getElementById("deck");
+      if (!deck) return;
+      const slides = [...deck.querySelectorAll(".slide")];
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      const counter = document.getElementById("counter");
+      const bar = document.getElementById("progress-bar");
+      let cur = 0;
+
+      const frags = (i) => [...slides[i].querySelectorAll(".reveal")];
+      const shownIn = (i) => frags(i).filter((f) => f.classList.contains("shown")).length;
+
+      function render() {
+        slides.forEach((s, i) => s.classList.toggle("active", i === cur));
+        if (prevBtn) prevBtn.disabled = cur === 0 && shownIn(cur) === 0;
+        if (nextBtn) nextBtn.disabled = cur === slides.length - 1 && shownIn(cur) === frags(cur).length;
+        if (counter) counter.textContent = `${cur + 1} / ${slides.length}`;
+        if (bar) bar.style.width = `${((cur + 1) / slides.length) * 100}%`;
+      }
+      function next() {
+        const f = frags(cur), shown = shownIn(cur);
+        if (shown < f.length) { f[shown].classList.add("shown"); render(); return; }
+        if (cur < slides.length - 1) { cur++; frags(cur).forEach((x) => x.classList.remove("shown")); render(); }
+      }
+      function prev() {
+        if (shownIn(cur) > 0) { frags(cur)[shownIn(cur) - 1].classList.remove("shown"); render(); return; }
+        if (cur > 0) { cur--; frags(cur).forEach((x) => x.classList.add("shown")); render(); }
+      }
+      function goto(i, revealAll) {
+        cur = Math.max(0, Math.min(i, slides.length - 1));
+        frags(cur).forEach((x) => x.classList.toggle("shown", !!revealAll));
+        render();
+      }
+      prevBtn?.addEventListener("click", prev);
+      nextBtn?.addEventListener("click", next);
+      document.addEventListener("keydown", (e) => {
+        switch (e.key) {
+          case "ArrowRight": case "ArrowDown": case " ": case "PageDown":
+            e.preventDefault(); next(); break;
+          case "ArrowLeft": case "ArrowUp": case "PageUp":
+            e.preventDefault(); prev(); break;
+          case "Home": e.preventDefault(); goto(0, false); break;
+          case "End": e.preventDefault(); goto(slides.length - 1, true); break;
+        }
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>
