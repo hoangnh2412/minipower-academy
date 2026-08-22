@@ -36,6 +36,7 @@ const WORKSHOPS = [
       "Soi lại ba tài liệu buổi 03 bằng chính Minipower: hai luật gõ prompt và ba nhóm câu hỏi để tự biết mình đang ở đâu, tài liệu có khớp nhau không, tiếp theo làm gì.",
     status: "Sắp diễn ra",
     path: "workshops/04-discovery/index.html",
+    homework: "workshops/04-discovery/homework.html",
   },
   {
     id: "05-brainstorm-plan",

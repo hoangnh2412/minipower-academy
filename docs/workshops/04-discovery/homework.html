@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập về nhà — Workshop 04 · Khám phá cùng Minipower</title>
+  <link rel="stylesheet" href="../../css/site.css">
+  <style>
+    :root{
+      --hw-accent:#4f8cff; --hw-accent-glow:rgba(79,140,255,.2);
+      --hw-chapter:#f5a623; --hw-good:#34d399; --hw-danger:#f87171;
+      --hw-surface:rgba(255,255,255,.06); --hw-border:rgba(255,255,255,.12);
+    }
+    body{overflow-y:auto}
+
+    .hw-header{padding:2.5rem 0 2rem;border-bottom:1px solid var(--color-border)}
+    .hw-header .breadcrumb{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+      font-size:.85rem;color:var(--color-muted);margin-bottom:1rem}
+    .hw-header .breadcrumb a{color:var(--color-muted)}
+    .hw-header .breadcrumb a:hover{color:var(--color-accent)}
+    .hw-header h1{margin:0 0 .75rem;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+    .hw-header .intro{margin:0;max-width:64ch;color:var(--color-muted);font-size:1.05rem;line-height:1.65}
+    .hw-header .intro strong{color:var(--color-text)}
+
+    .hw-main{padding:2rem 0 4rem}
+
+    .sect{margin:2.25rem 0 1rem;display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
+    .sect h2{margin:0;font-size:1.05rem;font-weight:700;color:var(--color-text);
+      letter-spacing:.04em;text-transform:uppercase}
+    .sect span{color:var(--color-muted);font-size:.9rem}
+
+    .task-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.25rem}
+    .task-card{background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius);padding:1.4rem 1.6rem;box-shadow:var(--shadow)}
+    .task-card .task-num{display:inline-flex;align-items:center;justify-content:center;
+      width:2rem;height:2rem;border-radius:50%;background:var(--hw-accent-glow);
+      border:1px solid rgba(79,140,255,.4);color:var(--hw-accent);font-weight:700;
+      font-size:.9rem;margin-bottom:.75rem}
+    .task-card h3{margin:0 0 .5rem;font-size:1.12rem;font-weight:600;color:var(--color-text)}
+    .task-card .task-desc{margin:0 0 .9rem;color:var(--color-muted);font-size:.94rem;line-height:1.6}
+
+    .prompt-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--hw-accent);margin-bottom:.5rem}
+    .prompt-row{display:flex;flex-direction:column;gap:.65rem}
+    @media (min-width:640px){.prompt-row{flex-direction:row;align-items:flex-start}}
+    .prompt-block{flex:1;padding:1rem 1.15rem;border-radius:8px;background:rgba(0,0,0,.35);
+      border:1px solid rgba(79,140,255,.25);font-family:var(--font-mono);font-size:.88rem;
+      line-height:1.6;color:#b8d4ff;white-space:pre-wrap;word-break:break-word}
+    .copy-btn{flex-shrink:0;padding:.55rem 1rem;border-radius:8px;border:1px solid var(--hw-border);
+      background:var(--hw-surface);color:var(--color-text);font-family:var(--font-sans);
+      font-size:.85rem;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s}
+    .copy-btn:hover{border-color:var(--hw-accent);background:var(--hw-accent-glow)}
+    .copy-btn.copied{border-color:var(--hw-good);color:var(--hw-good)}
+
+    .answer-area{width:100%;min-height:110px;margin-top:.75rem;padding:.9rem 1.1rem;border-radius:8px;
+      border:1px solid var(--color-border);background:rgba(0,0,0,.25);color:var(--color-text);
+      font-family:var(--font-sans);font-size:.94rem;line-height:1.6;resize:vertical}
+    .answer-area:focus{outline:none;border-color:var(--hw-accent);box-shadow:0 0 0 3px var(--hw-accent-glow)}
+    .answer-area::placeholder{color:var(--color-muted)}
+
+    .callout{margin-top:.9rem;padding:.8rem 1.1rem;border-radius:8px;
+      border-left:3px solid var(--hw-chapter);background:rgba(245,166,35,.1);
+      font-size:.9rem;line-height:1.55;color:#f0d9a8}
+    .callout strong{color:#ffd89b}
+    .callout.good{border-left-color:var(--hw-good);background:rgba(52,211,153,.09);color:#a7e8cd}
+    .callout.good strong{color:#c8f5e2}
+
+    .submit-note{margin-top:2rem;padding:1.25rem 1.5rem;border-radius:var(--radius);
+      background:var(--hw-accent-glow);border:1px solid rgba(79,140,255,.3);
+      font-size:.95rem;line-height:1.6;color:#c8dcff}
+    .submit-note strong{color:var(--color-text)}
+
+    .req-list{list-style:none;margin:0;padding:0;counter-reset:req;display:flex;flex-direction:column;gap:.8rem}
+    .req-list li{position:relative;padding-left:2.6rem;color:var(--color-muted);font-size:.96rem;line-height:1.6}
+    .req-list li::before{counter-increment:req;content:counter(req);position:absolute;left:0;top:.05rem;
+      width:1.8rem;height:1.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      background:var(--hw-accent-glow);border:1px solid rgba(79,140,255,.4);
+      color:var(--hw-accent);font-weight:700;font-size:.82rem}
+    .req-list li strong{color:var(--color-text);font-weight:600}
+
+    table.hw{border-collapse:collapse;width:100%;margin:.6rem 0;font-size:.92rem}
+    table.hw th,table.hw td{border:1px solid var(--color-border);padding:.55rem .8rem;
+      text-align:left;color:var(--color-muted);vertical-align:top}
+    table.hw th{color:var(--color-text);background:rgba(255,255,255,.04);font-weight:600}
+    table.hw td strong{color:var(--color-text)}
+    table.hw code{font-family:var(--font-mono);font-size:.9em;color:#b8d4ff}
+
+    pre.cmd{margin:.7rem 0 0;padding:1rem 1.15rem;border-radius:8px;background:rgba(0,0,0,.35);
+      border:1px solid var(--color-border);font-family:var(--font-mono);font-size:.88rem;
+      line-height:1.65;color:#b8d4ff;overflow-x:auto}
+
+    .progress-bar-wrap{position:sticky;top:0;z-index:20;background:var(--color-bg);
+      padding:.7rem 0;border-bottom:1px solid var(--color-border)}
+    .progress-row{display:flex;align-items:center;gap:.9rem;font-size:.88rem;color:var(--color-muted)}
+    .progress-track{flex:1;height:6px;border-radius:3px;background:var(--color-surface);overflow:hidden}
+    .progress-fill{height:100%;width:0;background:var(--hw-accent);border-radius:3px;transition:width .25s}
+  </style>
+</head>
+<body>
+  <header class="hw-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Điều hướng">
+        <a href="../../index.html">Trang chủ</a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html">Workshop 04 · Khám phá cùng Minipower</a>
+        <span aria-hidden="true">/</span>
+        <span>Bài tập về nhà</span>
+      </nav>
+      <h1>Bài tập về nhà</h1>
+      <p class="intro">
+        Buổi 04 cho bạn <strong>11 câu hỏi</strong> để tự soi dự án của mình. Bài tập này rất đơn giản:
+        chạy lại đủ 11 câu đó trên <strong>chính dự án của bạn</strong>, dán kết quả vào đây, rồi đẩy
+        lên GitHub. Không phải viết code — chỉ hỏi và đọc.
+        Nhớ hai luật: <strong>khai <code>Phase:</code></strong> và <strong>có scope <code>@</code></strong>.
+      </p>
+    </div>
+  </header>
+
+  <div class="progress-bar-wrap">
+    <div class="container">
+      <div class="progress-row">
+        <span id="prog-text">0 / 11 câu đã dán kết quả</span>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+        <button class="copy-btn" id="btn-clear" type="button">Xoá hết</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="hw-main">
+    <div class="container">
+
+      <!-- ===== CHUẨN BỊ ===== -->
+      <div class="task-card">
+        <div class="task-num" style="background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--hw-chapter)">0</div>
+        <h3>Trước khi bắt đầu — kiểm ba thứ</h3>
+        <ol class="req-list">
+          <li><strong>Minipower đã cài</strong> trong IDE (Cursor · Claude Code · OpenCode).</li>
+          <li><strong>Đã chạy <code>Init project</code></strong> — nếu thiếu <code>memory/profile.json</code>
+            thì <strong>mọi lệnh minipower bị chặn cứng</strong>.</li>
+          <li><strong>Ba tài liệu buổi 03</strong> nằm trong <code>docs/01-project/</code>:
+            DOC-01 Vision · DOC-02 Stakeholder · DOC-03 BRD.</li>
+        </ol>
+        <div class="callout">
+          <strong>Chưa có đủ ba tài liệu?</strong> Vẫn làm được — chạy được câu nào thì dán câu đó,
+          và ghi lại câu nào không chạy được vì thiếu tài liệu. Đó cũng là một kết quả.
+        </div>
+      </div>
+
+      <!-- ===== NHÓM A ===== -->
+      <div class="sect"><h2>Nhóm A · Soi ba tài liệu</h2><span>3 câu</span></div>
+      <div class="task-list">
+
+        <div class="task-card">
+          <div class="task-num">1</div>
+          <h3>DOC-01 — Tầm nhìn &amp; Hồ sơ kinh doanh</h3>
+          <p class="task-desc">Mục tiêu đã đo được chưa, và ai là người duyệt?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p1">/minipower
+Phase: discovery
+@docs/01-project/DOC-01-vision-business-case.md — mục tiêu đã có chỉ số đo được chưa? Ai là người duyệt?</div>
+            <button class="copy-btn" data-copy="p1" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="1" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">2</div>
+          <h3>DOC-02 — Phân tích stakeholder</h3>
+          <p class="task-desc">Trong bảng RACI, chữ <strong>A</strong> là người chốt. Ai đang giữ chữ đó?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p2">/minipower
+Phase: discovery
+@docs/01-project/DOC-02-stakeholder-analysis.md — ai là A trong RACI?</div>
+            <button class="copy-btn" data-copy="p2" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="2" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">3</div>
+          <h3>DOC-03 — BRD</h3>
+          <p class="task-desc">Phạm vi đã chốt chưa — cái gì làm, cái gì không làm?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p3">/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — cái gì trong phạm vi, cái gì ngoài?</div>
+            <button class="copy-btn" data-copy="p3" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="3" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+      </div>
+
+      <!-- ===== NHÓM B ===== -->
+      <div class="sect"><h2>Nhóm B · Tôi đang ở đâu?</h2><span>2 câu · tiến độ</span></div>
+      <div class="task-list">
+
+        <div class="task-card">
+          <div class="task-num">4</div>
+          <h3>Toàn cảnh dự án</h3>
+          <p class="task-desc">Đang ở giai đoạn nào, đã có những tài liệu gì.</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p4">/minipower
+Phase: discovery
+@docs/ — dự án đang ở phase nào? Liệt kê DOC đã có và trạng thái.</div>
+            <button class="copy-btn" data-copy="p4" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="4" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">5</div>
+          <h3>BRD đã đủ chưa? — <em>câu đắt nhất buổi</em></h3>
+          <p class="task-desc">Không chỉ trả lời xong hay chưa — nó đưa ra <strong>danh sách việc phải bù</strong>.</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p5">/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — BRD đã đủ chưa? Thiếu mục nào?</div>
+            <button class="copy-btn" data-copy="p5" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="5" placeholder="Dán kết quả Minipower trả về…"></textarea>
+          <div class="callout">
+            <strong>Nếu Minipower bảo “đã đủ hết”</strong> — hỏi thêm để soi chất lượng:
+            <em>“mục 7 có bao nhiêu BRQ? Có BRQ nào mô tả quá chung chung không?”</em>
+            Đủ mục khác với đủ chất.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NHÓM C ===== -->
+      <div class="sect"><h2>Nhóm C · Có khớp nhau không?</h2><span>4 câu · truy vết</span></div>
+      <div class="task-list">
+
+        <div class="task-card">
+          <div class="task-num">6</div>
+          <h3>Truy ngược trong BRD</h3>
+          <p class="task-desc">Mỗi yêu cầu <code>BRQ</code> đang phục vụ mục tiêu <code>BO</code> nào?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p6">/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — với mỗi BRQ ở mục 7, cho biết nó phục vụ mục tiêu BO nào ở mục 3. Trình bày thành bảng.</div>
+            <button class="copy-btn" data-copy="p6" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="6" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">7</div>
+          <h3>Câu quét — bắt <span style="color:var(--hw-chapter)">sót việc</span></h3>
+          <p class="task-desc">Có mục tiêu nào mà chưa ai định làm gì để đạt không?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p7">/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — có mục tiêu BO nào ở mục 3 mà chưa có BRQ nào phục vụ không? Liệt kê ra.</div>
+            <button class="copy-btn" data-copy="p7" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="7" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">8</div>
+          <h3>Câu quét — bắt <span style="color:var(--hw-danger)">làm thừa</span></h3>
+          <p class="task-desc">Có yêu cầu nào không phục vụ mục tiêu nào không?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p8">/minipower
+Phase: discovery
+@docs/01-project/DOC-03-brd.md — có BRQ nào ở mục 7 không phục vụ mục tiêu BO nào không? Liệt kê ra.</div>
+            <button class="copy-btn" data-copy="p8" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="8" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">9</div>
+          <h3>Nhìn về phía trước</h3>
+          <p class="task-desc">Mỗi yêu cầu đã có chức năng nào giải quyết chưa?</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p9">/minipower
+Phase: discovery
+@docs/ — mỗi BRQ trong BRD đã có FR nào ở DOC-06 giải quyết chưa?</div>
+            <button class="copy-btn" data-copy="p9" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="9" placeholder="Dán kết quả Minipower trả về…"></textarea>
+          <div class="callout good">
+            <strong>Câu này sẽ trả lời “chưa có” — và đó là kết quả đúng.</strong>
+            Lớp chưa làm tới DOC-06. Nó cho biết bạn đang đứng ở đoạn nào trên chuỗi
+            <code>BO → BRQ → BR → UC → FR → AC → test</code>. Cứ dán nguyên câu trả lời đó vào.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NHÓM D ===== -->
+      <div class="sect"><h2>Nhóm D · Tiếp theo làm gì?</h2><span>2 câu · điều hướng</span></div>
+      <div class="task-list">
+
+        <div class="task-card">
+          <div class="task-num">10</div>
+          <h3>Bước kế tiếp</h3>
+          <p class="task-desc">Việc gì nên làm trước, việc gì để sau.</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p10">/minipower
+Phase: discovery
+@docs/ — tiếp theo tôi cần làm gì? Trả lời ngắn, theo ưu tiên.</div>
+            <button class="copy-btn" data-copy="p10" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="10" placeholder="Dán kết quả Minipower trả về…"></textarea>
+        </div>
+
+        <div class="task-card">
+          <div class="task-num">11</div>
+          <h3>Rút gọn được không?</h3>
+          <p class="task-desc">Bộ đầy đủ có 19 tài liệu — dự án nhỏ không cần đủ. Nhưng phải biết mình đang rút cái gì.</p>
+          <p class="prompt-label">Prompt</p>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p11">/minipower
+Phase: discovery
+@docs/ — dự án nhỏ, một người làm. Bước nào rút gọn được? Bỏ thì mất gì?</div>
+            <button class="copy-btn" data-copy="p11" type="button">Copy</button>
+          </div>
+          <textarea class="answer-area" data-answer="11" placeholder="Dán kết quả Minipower trả về…"></textarea>
+          <div class="callout">
+            <strong>Người quyết rút là bạn</strong>, không phải AI. AI chỉ bày ra cái giá phải trả.
+            Có hai chỗ <strong>không được rút</strong>: chốt phạm vi dự án, và sửa tài liệu đã ký.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NỘP BÀI ===== -->
+      <div class="sect"><h2>Nộp bài</h2><span>đẩy lên GitHub</span></div>
+      <div class="task-card">
+        <div class="task-num" style="background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:var(--hw-good)">↑</div>
+        <h3>Đẩy kết quả lên GitHub</h3>
+        <p class="task-desc">
+          Lưu 11 kết quả vào một file — ví dụ <code>docs/01-project/homework-04.md</code> —
+          rồi đẩy cả thư mục dự án lên GitHub.
+        </p>
+        <ol class="req-list">
+          <li>Tạo tài khoản ở <strong>github.com</strong> <em>(nếu chưa có)</em>.</li>
+          <li>Cài <strong>Git</strong> từ <code>git-scm.com</code> — kiểm bằng <code>git --version</code>.</li>
+          <li>Trên GitHub bấm <strong>New</strong> → tạo repository, để <strong>Private</strong>.</li>
+          <li>Copy đường dẫn repo, rồi chạy sáu lệnh dưới đây.</li>
+        </ol>
+<pre class="cmd">git init
+git add .
+git commit -m "Bài tập buổi 04"
+git remote add origin &lt;đường-dẫn-repo&gt;
+git branch -M main
+git push -u origin main</pre>
+        <div class="callout">
+          <strong>Không bao giờ</strong> đẩy mật khẩu hay khoá bí mật lên GitHub.
+          Nếu dự án có file <code>.env</code>, thêm nó vào <code>.gitignore</code> trước khi commit.
+        </div>
+      </div>
+
+      <!-- ===== TẮC THÌ LÀM GÌ ===== -->
+      <div class="sect"><h2>Tắc thì làm gì</h2><span>ba lỗi hay gặp</span></div>
+      <div class="task-card">
+        <table class="hw">
+          <tr><th>Triệu chứng</th><th>Nguyên nhân thường gặp</th><th>Xử lý</th></tr>
+          <tr>
+            <td>Trả về <strong>checklist</strong> thay vì câu trả lời</td>
+            <td>Thiếu <code>@</code> scope, hoặc sai đường dẫn</td>
+            <td>Kiểm lại đường dẫn — copy thẳng từ IDE cho chắc</td>
+          </tr>
+          <tr>
+            <td><strong>Mọi lệnh minipower bị chặn</strong></td>
+            <td>Thiếu <code>memory/profile.json</code></td>
+            <td>Chạy <code>Init project</code>, trả lời 5 câu</td>
+          </tr>
+          <tr>
+            <td>Trả lời chung chung, không bám tài liệu</td>
+            <td>Quên khai <code>Phase:</code></td>
+            <td>Thêm dòng <code>Phase: discovery</code></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="submit-note">
+        <strong>Nộp bài:</strong> dán <strong>link repository GitHub</strong> cho giảng viên qua kênh
+        đã thông báo trong buổi học. Repo cần có file chứa <strong>11 kết quả</strong> ở trên.
+        <br><br>
+        Nội dung bạn gõ trong trang này được <strong>lưu tự động trên máy bạn</strong> — đóng tab mở lại vẫn còn.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><a href="index.html">← Quay lại slide workshop</a> · MiniPower Academy</p>
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "minipower-hw-04";
+    const TOTAL = 11;
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+    function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    let state = loadState();
+
+    // --- nút copy prompt ---
+    document.querySelectorAll(".copy-btn[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const el = document.getElementById(btn.dataset.copy);
+        try {
+          await navigator.clipboard.writeText(el.textContent.trim());
+          btn.textContent = "Đã copy!";
+          btn.classList.add("copied");
+          setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1800);
+        } catch { btn.textContent = "Lỗi copy"; }
+      });
+    });
+
+    // --- ô dán kết quả: lưu tự động + đếm tiến độ ---
+    const areas = [...document.querySelectorAll(".answer-area[data-answer]")];
+
+    function updateProgress() {
+      const done = areas.filter((el) => el.value.trim().length > 0).length;
+      document.getElementById("prog-text").textContent = done + " / " + TOTAL + " câu đã dán kết quả";
+      document.getElementById("prog-fill").style.width = (done / TOTAL * 100) + "%";
+    }
+
+    areas.forEach((el) => {
+      const key = "answer-" + el.dataset.answer;
+      if (state[key]) el.value = state[key];
+      el.addEventListener("input", () => {
+        state[key] = el.value;
+        saveState(state);
+        updateProgress();
+      });
+    });
+
+    document.getElementById("btn-clear").addEventListener("click", () => {
+      if (!confirm("Xoá hết nội dung đã nhập trong trang này?")) return;
+      areas.forEach((el) => { el.value = ""; });
+      state = {};
+      saveState(state);
+      updateProgress();
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
