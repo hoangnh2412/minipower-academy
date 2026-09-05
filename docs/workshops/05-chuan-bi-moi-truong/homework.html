@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập về nhà — Workshop 05 · Chuẩn bị môi trường</title>
+  <link rel="stylesheet" href="../../css/site.css">
+  <style>
+    :root{
+      --hw-accent:#4f8cff; --hw-accent-glow:rgba(79,140,255,.2);
+      --hw-chapter:#f5a623; --hw-good:#34d399; --hw-danger:#f87171;
+      --hw-surface:rgba(255,255,255,.06); --hw-border:rgba(255,255,255,.12);
+    }
+    body{overflow-y:auto}
+
+    .hw-header{padding:2.5rem 0 2rem;border-bottom:1px solid var(--color-border)}
+    .hw-header .breadcrumb{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+      font-size:.85rem;color:var(--color-muted);margin-bottom:1rem}
+    .hw-header .breadcrumb a{color:var(--color-muted)}
+    .hw-header .breadcrumb a:hover{color:var(--color-accent)}
+    .hw-header h1{margin:0 0 .75rem;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+    .hw-header .intro{margin:0;max-width:64ch;color:var(--color-muted);font-size:1.05rem;line-height:1.65}
+    .hw-header .intro strong{color:var(--color-text)}
+
+    .hw-main{padding:2rem 0 4rem}
+
+    .sect{margin:2.25rem 0 1rem;display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
+    .sect h2{margin:0;font-size:1.05rem;font-weight:700;color:var(--color-text);
+      letter-spacing:.04em;text-transform:uppercase}
+    .sect span{color:var(--color-muted);font-size:.9rem}
+
+    .task-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.25rem}
+    .task-card{background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius);padding:1.4rem 1.6rem;box-shadow:var(--shadow)}
+    .task-card .task-num{display:inline-flex;align-items:center;justify-content:center;
+      width:2rem;height:2rem;border-radius:50%;background:var(--hw-accent-glow);
+      border:1px solid rgba(79,140,255,.4);color:var(--hw-accent);font-weight:700;
+      font-size:.9rem;margin-bottom:.75rem}
+    .task-card h3{margin:0 0 .5rem;font-size:1.12rem;font-weight:600;color:var(--color-text)}
+    .task-card .task-desc{margin:0 0 .9rem;color:var(--color-muted);font-size:.94rem;line-height:1.6}
+
+    .prompt-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--hw-accent);margin-bottom:.5rem}
+    .prompt-row{display:flex;flex-direction:column;gap:.65rem}
+    @media (min-width:640px){.prompt-row{flex-direction:row;align-items:flex-start}}
+    .prompt-block{flex:1;padding:1rem 1.15rem;border-radius:8px;background:rgba(0,0,0,.35);
+      border:1px solid rgba(79,140,255,.25);font-family:var(--font-mono);font-size:.88rem;
+      line-height:1.6;color:#b8d4ff;white-space:pre-wrap;word-break:break-word}
+    .copy-btn{flex-shrink:0;padding:.55rem 1rem;border-radius:8px;border:1px solid var(--hw-border);
+      background:var(--hw-surface);color:var(--color-text);font-family:var(--font-sans);
+      font-size:.85rem;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s}
+    .copy-btn:hover{border-color:var(--hw-accent);background:var(--hw-accent-glow)}
+    .copy-btn.copied{border-color:var(--hw-good);color:var(--hw-good)}
+
+    .answer-area{width:100%;min-height:110px;margin-top:.75rem;padding:.9rem 1.1rem;border-radius:8px;
+      border:1px solid var(--color-border);background:rgba(0,0,0,.25);color:var(--color-text);
+      font-family:var(--font-sans);font-size:.94rem;line-height:1.6;resize:vertical}
+    .answer-area:focus{outline:none;border-color:var(--hw-accent);box-shadow:0 0 0 3px var(--hw-accent-glow)}
+    .answer-area::placeholder{color:var(--color-muted)}
+
+    .callout{margin-top:.9rem;padding:.8rem 1.1rem;border-radius:8px;
+      border-left:3px solid var(--hw-chapter);background:rgba(245,166,35,.1);
+      font-size:.9rem;line-height:1.55;color:#f0d9a8}
+    .callout strong{color:#ffd89b}
+    .callout.good{border-left-color:var(--hw-good);background:rgba(52,211,153,.09);color:#a7e8cd}
+    .callout.good strong{color:#c8f5e2}
+
+    .submit-note{margin-top:2rem;padding:1.25rem 1.5rem;border-radius:var(--radius);
+      background:var(--hw-accent-glow);border:1px solid rgba(79,140,255,.3);
+      font-size:.95rem;line-height:1.6;color:#c8dcff}
+    .submit-note strong{color:var(--color-text)}
+
+    .req-list{list-style:none;margin:0;padding:0;counter-reset:req;display:flex;flex-direction:column;gap:.8rem}
+    .req-list li{position:relative;padding-left:2.6rem;color:var(--color-muted);font-size:.96rem;line-height:1.6}
+    .req-list li::before{counter-increment:req;content:counter(req);position:absolute;left:0;top:.05rem;
+      width:1.8rem;height:1.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      background:var(--hw-accent-glow);border:1px solid rgba(79,140,255,.4);
+      color:var(--hw-accent);font-weight:700;font-size:.82rem}
+    .req-list li strong{color:var(--color-text);font-weight:600}
+
+    table.hw{border-collapse:collapse;width:100%;margin:.6rem 0;font-size:.92rem}
+    table.hw th,table.hw td{border:1px solid var(--color-border);padding:.55rem .8rem;
+      text-align:left;color:var(--color-muted);vertical-align:top}
+    table.hw th{color:var(--color-text);background:rgba(255,255,255,.04);font-weight:600}
+    table.hw td strong{color:var(--color-text)}
+    table.hw code{font-family:var(--font-mono);font-size:.9em;color:#b8d4ff}
+
+    pre.cmd{margin:.7rem 0 0;padding:1rem 1.15rem;border-radius:8px;background:rgba(0,0,0,.35);
+      border:1px solid var(--color-border);font-family:var(--font-mono);font-size:.88rem;
+      line-height:1.65;color:#b8d4ff;overflow-x:auto}
+
+    .progress-bar-wrap{position:sticky;top:0;z-index:20;background:var(--color-bg);
+      padding:.7rem 0;border-bottom:1px solid var(--color-border)}
+    .progress-row{display:flex;align-items:center;gap:.9rem;font-size:.88rem;color:var(--color-muted)}
+    .progress-track{flex:1;height:6px;border-radius:3px;background:var(--color-surface);overflow:hidden}
+    .progress-fill{height:100%;width:0;background:var(--hw-accent);border-radius:3px;transition:width .25s}
+
+    /* --- checklist nộp bài (riêng buổi 05) --- */
+    .check-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9rem}
+    .check-item{display:flex;gap:.9rem;align-items:flex-start;padding:.95rem 1.15rem;border-radius:10px;
+      background:var(--color-surface);border:1px solid var(--color-border);transition:border-color .15s}
+    .check-item:has(input:checked){border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.07)}
+    .check-item input[type=checkbox]{flex-shrink:0;width:1.25rem;height:1.25rem;margin-top:.15rem;
+      accent-color:var(--hw-good);cursor:pointer}
+    .check-item .ci-body{flex:1;min-width:0}
+    .check-item .ci-t{color:var(--color-text);font-weight:600;font-size:1rem;line-height:1.5}
+    .check-item .ci-d{margin:.3rem 0 0;color:var(--color-muted);font-size:.9rem;line-height:1.55}
+    .check-item .ci-d code{font-family:var(--font-mono);font-size:.9em;color:#b8d4ff}
+    .link-input{width:100%;margin-top:.6rem;padding:.6rem .85rem;border-radius:8px;
+      border:1px solid var(--color-border);background:rgba(0,0,0,.25);color:var(--color-text);
+      font-family:var(--font-sans);font-size:.92rem}
+    .link-input:focus{outline:none;border-color:var(--hw-accent);box-shadow:0 0 0 3px var(--hw-accent-glow)}
+    .link-input::placeholder{color:var(--color-muted)}
+  </style>
+</head>
+<body>
+  <header class="hw-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Điều hướng">
+        <a href="../../index.html">Trang chủ</a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html">Workshop 05 · Chuẩn bị môi trường</a>
+        <span aria-hidden="true">/</span>
+        <span>Bài tập về nhà</span>
+      </nav>
+      <h1>Bài tập về nhà</h1>
+      <p class="intro">
+        Buổi 05 dùng <strong>ba prompt</strong> để dựng nền. Bài tập là chạy lại đúng ba prompt đó trên
+        <strong>dự án của chính bạn</strong>, cộng thêm một việc mới: bảo Jarvis viết
+        <strong>autotest cho luồng đăng nhập</strong>. Không gõ dòng code nào — chỉ gõ prompt và bấm chạy.
+      </p>
+    </div>
+  </header>
+
+  <div class="progress-bar-wrap">
+    <div class="container">
+      <div class="progress-row">
+        <span id="prog-text">0 / 6 việc đã xong</span>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+        <button class="copy-btn" id="btn-clear" type="button">Xoá hết</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="hw-main">
+    <div class="container">
+
+      <div class="sect"><h2>Ba prompt của buổi</h2><span>copy và chạy lần lượt</span></div>
+
+      <ul class="task-list">
+        <li class="task-card">
+          <div class="task-num">1</div>
+          <h3>Thiết lập môi trường</h3>
+          <p class="task-desc">Cài <code>.NET 9 SDK</code> và <code>Node 22</code>. SQLite không phải cài gì.</p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p1">Kiểm tra máy đã cài .Net 9 và Node 22 chưa?
+
+Nếu chưa thì tải bộ cài theo hệ điều hành và cài đặt:
+- .Net 9: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
+- Node 22: https://nodejs.org/en/download
+
+Sau khi cài xong, tự kiểm tra lại kết quả, sau đó hướng dẫn tôi cách kiểm tra</div>
+            <button class="copy-btn" data-copy="p1" type="button">Copy</button>
+          </div>
+          <table class="hw">
+            <thead><tr><th style="width:44%">Kiểm bằng lệnh</th><th>Ra gì là đạt</th></tr></thead>
+            <tbody>
+              <tr><td><code>dotnet --list-sdks</code></td><td>Có dòng bắt đầu bằng <strong>9.</strong></td></tr>
+              <tr><td><code>node -v</code></td><td><strong>v22.x</strong></td></tr>
+            </tbody>
+          </table>
+        </li>
+
+        <li class="task-card">
+          <div class="task-num">2</div>
+          <h3>Tạo không gian làm việc</h3>
+          <p class="task-desc">Bốn thư mục, bốn vai: <code>ai-skills</code> kỹ năng ·
+            <code>jarvis</code> tiêu chuẩn · <code>documents</code> trí nhớ · <code>hrm</code> sản phẩm.</p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p2">Tạo không gian làm việc tại &lt;đường-dẫn&gt; gồm 4 thư mục:
+
+- ai-skills: clone từ https://github.com/hoangnh2412/ai-skills
+- jarvis: clone từ https://github.com/hoangnh2412/jarvis
+- documents: chứa tài liệu dự án của tôi
+- hrm: để trống
+
+Xong thì in cây thư mục để tôi kiểm.</div>
+            <button class="copy-btn" data-copy="p2" type="button">Copy</button>
+          </div>
+          <table class="hw">
+            <thead><tr><th style="width:24%">Kiểm</th><th>Đạt khi</th></tr></thead>
+            <tbody>
+              <tr><td><code>ai-skills/</code></td><td>Có <code>minipower/</code> và <code>jarvis/</code> bên trong</td></tr>
+              <tr><td><code>jarvis/</code></td><td>Có <code>frameworks/</code> và <code>modules/</code></td></tr>
+              <tr><td><code>documents/</code></td><td>Có <code>docs/</code> chứa tài liệu buổi 03–04 của bạn</td></tr>
+              <tr><td><code>hrm/</code></td><td>Rỗng</td></tr>
+            </tbody>
+          </table>
+        </li>
+
+        <li class="task-card">
+          <div class="task-num">3</div>
+          <h3>Tạo dự án Hrm</h3>
+          <p class="task-desc">Bốn phần: <code>backend</code> · <code>frontend</code> ·
+            <code>autotest</code> · <code>unittest</code>.</p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p3">Dùng skill @ai-skills/jarvis/README.md và code @jarvis (không cài Jarvis từ NuGet).
+1. Tạo project Hrm vào @hrm gồm 4 phần: backend, frontend, autotest, unittest.
+2. Chỉ 1 file Hrm.sln, đặt trong folder hrm
+3. Backend cài đặt sẵn Swagger, OTEL, Healthcheck, CORS
+5. Kiểm tra backend đã hoạt động bao gồm cả healcheck, swagger
+6. Kiểm tra frontend đã hoạt động
+7. Kiểm tra autotest đã hoạt động cả test API và UI
+8. Kiểm tra unittest đã hoạt động
+9. Gửi các lệnh để kiểm tra từng phần</div>
+            <button class="copy-btn" data-copy="p3" type="button">Copy</button>
+          </div>
+          <table class="hw">
+            <thead><tr><th style="width:32%">Kiểm gì</th><th>Lệnh</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Build backend + unittest</strong></td><td><code>dotnet build hrm/Hrm.sln</code></td></tr>
+              <tr><td><strong>Build frontend</strong></td><td><code>cd hrm/frontend &amp;&amp; npm install &amp;&amp; npm run build</code></td></tr>
+              <tr><td><strong>Build autotest</strong></td><td><code>cd hrm/autotest &amp;&amp; npm install &amp;&amp; npm run build</code></td></tr>
+              <tr><td><strong>Chạy API</strong></td><td><code>dotnet run --project hrm/backend/Hrm.Host</code></td></tr>
+              <tr><td><strong>Chạy giao diện</strong></td><td><code>cd hrm/frontend &amp;&amp; npm run dev</code></td></tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            <strong>Nếu chưa chạy được — đừng ngồi mò.</strong> Đọc thông báo lỗi thật, đưa nguyên văn
+            cho AI kèm câu <em>"giải thích trước, đừng sửa vội"</em>. Vẫn không xong thì hỏi trong group.
+          </div>
+        </li>
+
+        <li class="task-card">
+          <div class="task-num" style="background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--hw-chapter)">4</div>
+          <h3>Việc mới — viết autotest cho luồng đăng nhập</h3>
+          <p class="task-desc">Bảo Jarvis viết một ca kiểm thử đi trọn luồng, rồi chạy lại bộ test
+            để thấy <strong>số ca tăng thêm một</strong>.</p>
+          <div class="prompt-label">Prompt gợi ý</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p4">Dùng skill @ai-skills/jarvis/README.md, viết autotest cho luồng:
+
+Mở trang login → đăng nhập với username admin@gmail.com và password Admin@123
+→ vào được trang dashboard.
+
+Xong thì chạy lại toàn bộ test và cho tôi xem kết quả.</div>
+            <button class="copy-btn" data-copy="p4" type="button">Copy</button>
+          </div>
+          <div class="callout good">
+            <strong>Chụp kết quả test hai lần:</strong> một lần trước khi thêm ca này, một lần sau.
+            So hai con số — đó là thói quen sẽ thành luật cứng ở buổi 10.
+          </div>
+        </li>
+      </ul>
+
+      <div class="sect"><h2>Sáu thứ phải nộp</h2><span>tích khi xong</span></div>
+
+      <ul class="check-list">
+        <li class="check-item">
+          <input type="checkbox" data-k="c1" id="c1">
+          <div class="ci-body">
+            <label class="ci-t" for="c1">Ảnh chụp giao diện trang đăng nhập của frontend</label>
+            <p class="ci-d">Mở <code>npm run dev</code> rồi chụp màn hình đăng nhập.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="c2" id="c2">
+          <div class="ci-body">
+            <label class="ci-t" for="c2">Ảnh chụp truy cập được Swagger</label>
+            <p class="ci-d">Chạy backend rồi mở trang tài liệu API.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="c3" id="c3">
+          <div class="ci-body">
+            <label class="ci-t" for="c3">Ảnh chụp kết quả test</label>
+            <p class="ci-d">Chụp <strong>trước</strong> khi thêm autotest luồng login.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="c4" id="c4">
+          <div class="ci-body">
+            <label class="ci-t" for="c4">Dùng Jarvis viết autotest cho luồng đăng nhập</label>
+            <p class="ci-d">Mở trang login → đăng nhập <code>admin@gmail.com</code> / <code>Admin@123</code>
+              → vào được trang dashboard.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="c5" id="c5">
+          <div class="ci-body">
+            <label class="ci-t" for="c5">Ảnh chụp kết quả test sau khi thêm autotest luồng login</label>
+            <p class="ci-d">So với ảnh ở mục 3 — số ca phải nhiều hơn.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="c6" id="c6">
+          <div class="ci-body">
+            <label class="ci-t" for="c6">Code đẩy lên GitHub repo đã tạo từ buổi 04</label>
+            <p class="ci-d">Cùng một repo với tài liệu — code và tri thức dự án nằm chung một chỗ.</p>
+            <input class="link-input" type="text" data-k="repo" placeholder="Dán link repo của bạn vào đây…">
+          </div>
+        </li>
+      </ul>
+
+      <div class="sect"><h2>Đẩy lên GitHub</h2></div>
+      <pre class="cmd">cd &lt;thư-mục-workspace&gt;
+git add .
+git commit -m "Buổi 05: dựng nền — backend, frontend, autotest, unittest"
+git push</pre>
+      <div class="callout">
+        <strong>Đừng đẩy khoá bí mật lên GitHub.</strong> Kiểm lại file cấu hình trước khi commit —
+        không có mật khẩu, không có khoá API.
+      </div>
+
+      <div class="submit-note">
+        <strong>Hạn nộp và nơi nộp:</strong> theo thông báo trong group.
+        <br><br>
+        Nội dung bạn tích và dán trong trang này được <strong>lưu tự động trên máy bạn</strong> —
+        đóng tab mở lại vẫn còn.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><a href="index.html">← Quay lại slide workshop</a> · MiniPower Academy</p>
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "minipower-hw-05";
+    const TOTAL = 6;
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+    let luuDuoc = true;
+    function saveState(state) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+      catch { if (luuDuoc) { luuDuoc = false; canhBaoKhongLuuDuoc(); } }
+    }
+    function canhBaoKhongLuuDuoc() {
+      const box = document.createElement("div");
+      box.setAttribute("role", "status");
+      box.style.cssText =
+        "position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:99;max-width:38rem;" +
+        "margin:0 auto;padding:.85rem 1rem;border-radius:.6rem;line-height:1.5;" +
+        "background:#4a2c00;color:#ffe0b2;border:1px solid #8a5200;font-size:.95rem";
+      box.innerHTML =
+        "\u26a0\ufe0f <strong>Trình duyệt đang chặn lưu tự động.</strong> Bài làm sẽ mất khi tải lại trang.";
+      document.body.appendChild(box);
+    }
+    let state = loadState();
+
+    function chep(text, btn) {
+      const xong = () => {
+        btn.textContent = "Đã copy";
+        btn.classList.add("copied");
+        setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1600);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(xong).catch(() => chepKieuCu(text, xong));
+      } else { chepKieuCu(text, xong); }
+    }
+    function chepKieuCu(text, xong) {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.cssText = "position:fixed;left:-9999px";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); xong(); } catch {}
+      document.body.removeChild(ta);
+    }
+
+    document.querySelectorAll("[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = document.getElementById(btn.dataset.copy);
+        if (el) chep(el.textContent, btn);
+      });
+    });
+
+    const boxes = [...document.querySelectorAll("input[type=checkbox][data-k]")];
+    const inputs = [...document.querySelectorAll("input.link-input[data-k]")];
+
+    function capNhatTienDo() {
+      const xong = boxes.filter((b) => b.checked).length;
+      document.getElementById("prog-text").textContent = `${xong} / ${TOTAL} việc đã xong`;
+      document.getElementById("prog-fill").style.width = `${(xong / TOTAL) * 100}%`;
+    }
+
+    boxes.forEach((b) => {
+      if (state[b.dataset.k]) b.checked = true;
+      b.addEventListener("change", () => {
+        state[b.dataset.k] = b.checked; saveState(state); capNhatTienDo();
+      });
+    });
+    inputs.forEach((i) => {
+      if (state[i.dataset.k]) i.value = state[i.dataset.k];
+      i.addEventListener("input", () => { state[i.dataset.k] = i.value; saveState(state); });
+    });
+
+    document.getElementById("btn-clear").addEventListener("click", () => {
+      if (!confirm("Xoá hết nội dung đã tích và đã dán?")) return;
+      state = {}; saveState(state);
+      boxes.forEach((b) => (b.checked = false));
+      inputs.forEach((i) => (i.value = ""));
+      capNhatTienDo();
+    });
+
+    capNhatTienDo();
+  </script>
+</body>
+</html>

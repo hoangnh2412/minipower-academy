@@ -42,9 +42,10 @@ const WORKSHOPS = [
     id: "05-chuan-bi-moi-truong",
     title: "Buổi 05 — Chuẩn bị môi trường",
     description:
-      "Dựng nền trước khi xây: .NET 9, Node, kit Jarvis, SQLite. Vì sao phải có khung dựng sẵn thì AI mới sinh code đọc được.",
-    status: "Sắp diễn ra",
+      "Dựng nền trước khi xây: .NET 9, Node, Jarvis framework, SQLite. Ba prompt để cài công cụ, tạo không gian làm việc và tạo dự án — cả buổi không gõ dòng code nào.",
+    date: "2026-09-05",
     path: "workshops/05-chuan-bi-moi-truong/index.html",
+    homework: "workshops/05-chuan-bi-moi-truong/homework.html",
   },
   {
     id: "06-phan-tich-yeu-cau",
