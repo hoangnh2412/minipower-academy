@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W5 · Chuẩn bị môi trường — MiniPower Academy</title>
+  <link rel="stylesheet" href="../_shared/css/slides.css">
+  <style>
+    /* ===== Buổi 05 — buổi kỹ thuật: giới thiệu + hướng dẫn, không hỏi–đáp ===== */
+    .slide.dense{justify-content:safe center;padding-top:clamp(1.1rem,3vh,2.1rem);padding-bottom:4.4rem;overflow-y:auto}
+    .slide.dense h2{margin-bottom:.7rem}
+    .slide.dense .prompt{margin:.6rem 0}
+    .slide.dense table.cmp{margin:.35rem 0}
+    .kicker{color:var(--slide-accent);letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+      font-size:clamp(.72rem,1.4vw,.95rem);margin:0 0 .6rem}
+    .grad{background:linear-gradient(135deg,#fff 30%,var(--slide-accent));-webkit-background-clip:text;
+      background-clip:text;-webkit-text-fill-color:transparent}
+    .muted{color:var(--slide-muted)} .danger{color:#f87171} .good{color:#34d399} .warn{color:#f5a623}
+    .accent-text{color:var(--slide-accent)}
+    .slide strong,.slide b{color:var(--slide-text)}
+    .slide h3{margin:.9rem 0 .4rem;font-size:clamp(1rem,2.2vw,1.35rem);color:var(--slide-text)}
+    .note{color:var(--slide-muted);font-size:.9em;margin:.7rem 0 0}
+    .cover-tag{margin-top:1.4rem;color:var(--slide-accent);font-weight:700;
+      letter-spacing:.3em;font-size:clamp(.82rem,1.6vw,1.05rem)}
+    .title-slide h1{max-width:24ch;margin-left:auto;margin-right:auto}
+    .cover-bg{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none}
+    .cover-bg svg{width:min(92vw,1050px);opacity:.09}
+    .slide.title-slide{overflow:hidden}
+    .slide.title-slide>:not(.cover-bg){position:relative;z-index:1}
+
+    /* Badge nhịp */
+    .beat{display:inline-flex;align-items:center;gap:.45rem;font-size:clamp(.7rem,1.3vw,.85rem);
+      font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;
+      padding:.28rem .8rem;margin:0 .4rem .8rem 0}
+    .beat.hands{background:rgba(245,166,35,.12);color:#f5a623;border:1px solid rgba(245,166,35,.4)}
+    .beat.key{background:rgba(167,139,250,.14);color:#a78bfa;border:1px solid rgba(167,139,250,.4)}
+
+    /* Mốc kiểm tra */
+    .moc{max-width:940px;margin:0 auto;border:1px solid rgba(52,211,153,.4);border-radius:14px;
+      background:rgba(52,211,153,.07);padding:1.8rem 2.2rem;text-align:center}
+    .moc-label{color:#34d399;text-transform:uppercase;letter-spacing:.18em;font-weight:700;
+      font-size:.82rem;margin:0 0 .9rem}
+    .moc-text{font-size:clamp(1.1rem,2.4vw,1.6rem);line-height:1.45;color:var(--slide-text);margin:0}
+    .moc-sub{margin:1.2rem 0 0;padding-top:1rem;border-top:1px dashed rgba(52,211,153,.28);
+      color:var(--slide-muted);font-size:clamp(.85rem,1.6vw,1rem)}
+
+    /* Prompt copy được */
+    .prompt{position:relative;background:#0b0f16;border:1px solid rgba(59,130,246,.3);border-radius:10px;
+      padding:1.5rem 1.2rem 1.1rem;margin:.8rem 0;max-width:1000px}
+    .prompt::before{content:"PROMPT";position:absolute;top:.5rem;left:1.2rem;font-size:.62rem;
+      letter-spacing:.14em;color:var(--slide-accent);font-weight:700}
+    .prompt code{display:block;background:none;padding:0;color:var(--slide-text);
+      font-family:var(--slide-mono);font-size:clamp(.82rem,1.55vw,1.02rem);line-height:1.55;
+      white-space:pre-wrap}
+    .prompt .ph{color:#f5a623;font-weight:700}
+    .prompt .hl{color:#f5a623;font-weight:700}
+    .prompt.sm code{font-size:clamp(.76rem,1.42vw,1.02rem);line-height:1.5}
+
+    /* Chốt */
+    .chot{max-width:920px;margin:0 auto;text-align:center;border-left:4px solid var(--slide-accent);
+      background:var(--slide-surface);border-radius:12px;padding:1.8rem 2.2rem}
+    .chot-label{color:var(--slide-accent);text-transform:uppercase;letter-spacing:.16em;font-weight:700;
+      font-size:.78rem;margin:0 0 .8rem}
+    .chot-text{font-size:clamp(1.25rem,2.8vw,1.95rem);line-height:1.4;color:var(--slide-text);margin:0}
+
+    /* Bảng */
+    table.cmp{border-collapse:collapse;margin:.5rem 0;width:100%;max-width:1060px;
+      font-size:clamp(.82rem,1.55vw,1.05rem)}
+    table.cmp th,table.cmp td{border:1px solid rgba(139,156,179,.2);padding:.48rem .75rem;text-align:left;
+      color:var(--slide-muted);vertical-align:top}
+    table.cmp th{color:var(--slide-text);background:var(--slide-surface);font-weight:600}
+    table.cmp td:first-child{color:var(--slide-text);font-weight:500}
+    table.cmp tr.hi td{background:rgba(59,130,246,.08)}
+    table.cmp tr.hi td:first-child{color:var(--slide-accent)}
+    table.cmp code{font-size:.92em}
+
+    /* Thẻ & lưới */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.5rem 0;max-width:1060px;width:100%}
+    .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin:.9rem 0;max-width:1100px;width:100%}
+    .card{background:var(--slide-surface);border:1px solid rgba(139,156,179,.18);border-radius:12px;
+      padding:.9rem 1.1rem}
+    .card p{margin:.3rem 0 0;font-size:clamp(.88rem,1.6vw,1.08rem)}
+    .tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;
+      color:var(--slide-accent);font-weight:700;margin-bottom:.15rem}
+
+    /* Cây thư mục */
+    pre.tree{font-size:clamp(.8rem,1.6vw,1.1rem);line-height:1.7;text-align:left}
+    pre.tree b{color:var(--slide-accent)}
+    pre.tree i{color:var(--slide-muted);font-style:normal}
+
+    /* Hộp cảnh báo */
+    .warnbox{border:1px solid rgba(245,166,35,.4);background:rgba(245,166,35,.07);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:1000px}
+    .warnbox p{margin:0;color:var(--slide-text)}
+    .goodbox{border:1px solid rgba(52,211,153,.4);background:rgba(52,211,153,.06);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:1000px}
+    .goodbox p{margin:0;color:var(--slide-text)}
+
+    ol.steps{max-width:1000px;margin:.5rem 0 0} ol.steps li{color:var(--slide-text);margin-top:.42rem}
+    ul.plain{list-style:none;padding-left:0;max-width:1000px}
+    ul.plain li{margin-top:.45rem;color:var(--slide-text)}
+
+    .concept{display:flex;gap:2rem;align-items:center;max-width:1140px;margin:.4rem 0;width:100%}
+    .concept .txt{flex:1;min-width:0}
+    .concept .txt p{margin:.5rem 0 0}
+    .concept .fig{flex:0 0 auto;width:clamp(260px,40vw,470px)}
+    .fig svg{width:100%;height:auto;display:block;background:#0b0f16;
+      border:1px solid rgba(139,156,179,.2);border-radius:12px}
+    .fig svg text{font-family:var(--slide-font)}
+
+    .afternote{max-width:1120px;margin:.85rem 0 0;color:var(--slide-text);
+      border-left:4px solid var(--slide-accent);background:var(--slide-surface);
+      border-radius:10px;padding:.9rem 1.1rem}
+    .afternote b{color:var(--slide-accent)}
+
+    /* Danh sách ưu điểm có dấu tích */
+    ul.ticks{list-style:none;padding-left:0;margin:.5rem 0 0;text-align:left;width:100%}
+    ul.ticks li{position:relative;padding-left:1.8rem;margin-top:.42rem;color:var(--slide-text);
+      font-size:clamp(1rem,1.95vw,1.32rem);line-height:1.42}
+    ul.ticks li::before{content:"✓";position:absolute;left:0;top:0;color:#34d399;font-weight:800}
+    ul.mini{list-style:none;padding-left:0;margin:.45rem 0 0;text-align:left}
+    ul.mini li{position:relative;padding-left:.95rem;margin-top:.34rem;color:var(--slide-muted);
+      font-size:clamp(.88rem,1.62vw,1.1rem);line-height:1.38}
+    ul.mini li::before{content:"·";position:absolute;left:.1rem;top:-.05rem;color:var(--slide-accent);font-weight:800}
+    ul.mini li b{color:var(--slide-text)}
+    ul.mini li.plus::before{content:"✓";color:#34d399;font-size:.85em}
+    ul.mini li.minus::before{content:"✗";color:#f87171;font-size:.85em}
+    .stackcard{background:var(--slide-surface);border:1px solid rgba(139,156,179,.18);border-radius:12px;
+      padding:.8rem 1rem;text-align:left}
+    .stackcard .sname{font-weight:700;color:var(--slide-accent);font-size:clamp(1.02rem,2vw,1.35rem)}
+    .stackcard .sver{display:block;color:var(--slide-muted);font-weight:600;font-family:var(--slide-mono);
+      font-size:clamp(.78rem,1.4vw,.98rem);margin-top:.12rem}
+
+    .bigcard{background:var(--slide-surface);border:1px solid rgba(59,130,246,.35);border-radius:14px;
+      padding:1rem 1.3rem;max-width:1060px;width:100%;text-align:left}
+
+    /* Lộ trình — học từ buổi 03 */
+    .roadmap{display:flex;flex-wrap:wrap;gap:.55rem;margin:1.1rem 0;max-width:1060px;width:100%}
+    .rm-node{flex:1 1 175px;min-width:150px;background:var(--slide-surface);
+      border:1px solid rgba(139,156,179,.18);border-radius:14px;padding:.85rem 1rem;text-align:left}
+    .rm-node .rm-n{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--slide-muted);text-transform:uppercase}
+    .rm-node .rm-t{font-size:clamp(.92rem,1.65vw,1.14rem);color:var(--slide-text);font-weight:600;margin-top:.3rem;line-height:1.3}
+    .rm-node.done{border-color:rgba(52,211,153,.35)}
+    .rm-node.done .rm-n{color:#34d399}
+    .rm-node.current{border-color:var(--slide-accent);background:rgba(59,130,246,.15);
+      transform:scale(1.05);animation:rmPulse 2s ease-in-out infinite}
+    @keyframes rmPulse{
+      0%,100%{box-shadow:0 0 0 1px var(--slide-accent),0 0 16px rgba(59,130,246,.22)}
+      50%{box-shadow:0 0 0 2px var(--slide-accent),0 0 34px rgba(59,130,246,.55)}}
+    .rm-node.current .rm-n{color:var(--slide-accent)}
+    .rm-here{display:inline-block;margin-top:.4rem;font-size:.66rem;font-weight:800;color:var(--slide-accent);
+      text-transform:uppercase;letter-spacing:.09em}
+    .rm-node.dim{opacity:.38;border-style:dashed}
+    .rm-node.dim .rm-t{color:var(--slide-muted);font-weight:500}
+    .rm-node.code{opacity:.85;border-color:rgba(245,166,35,.55);background:rgba(245,166,35,.07)}
+    .rm-node.code .rm-n{color:#f5a623}
+    .rm-node.code .rm-t{color:var(--slide-text);font-weight:600}
+
+    /* ===== Căn giữa + phóng chữ ===== */
+    .slide{align-items:center;text-align:center}
+    .slide > *{margin-left:auto;margin-right:auto}
+    .slide h1{font-size:clamp(2.2rem,5.4vw,4rem)}
+    .slide h2{font-size:clamp(1.7rem,4vw,2.7rem)}
+    .slide h3{font-size:clamp(1.15rem,2.5vw,1.6rem)}
+    .slide p,.slide li{font-size:clamp(1.12rem,2.35vw,1.6rem);line-height:1.55}
+    .slide .subtitle{font-size:clamp(1.1rem,2.3vw,1.5rem)}
+    .kicker{font-size:clamp(.82rem,1.6vw,1.1rem)}
+    table.cmp{font-size:clamp(.98rem,1.9vw,1.3rem)}
+    table.cmp th,table.cmp td{padding:.6rem .9rem}
+    .prompt code{font-size:clamp(.95rem,1.8vw,1.22rem)}
+    .slide pre code{font-size:clamp(.95rem,1.8vw,1.22rem)}
+    .card p{font-size:clamp(1rem,1.95vw,1.32rem)}
+    .tag{font-size:.8rem}
+    .moc-text{font-size:clamp(1.3rem,2.9vw,2rem)}
+    .moc-sub{font-size:clamp(1rem,1.95vw,1.3rem)}
+    .moc-label{font-size:.95rem}
+    .afternote{font-size:clamp(1.05rem,2.1vw,1.45rem)}
+    .chot-text{font-size:clamp(1.45rem,3.2vw,2.3rem)}
+    .cover-tag{font-size:clamp(.9rem,1.8vw,1.2rem)}
+
+    /* Canh trái các khối cần đọc */
+    .slide pre,.slide .prompt{text-align:left}
+    .slide pre code,.slide .prompt code{text-align:left}
+    table.cmp th,table.cmp td{text-align:left}
+    ol.steps,ul.plain{text-align:left;display:inline-block}
+    ol.steps li,ul.plain li{text-align:left}
+    .slide ul,.slide ol{text-align:left}
+    .card{text-align:left}
+    .concept{text-align:left}
+    .moc{text-align:center}
+    .afternote{text-align:left}
+    .warnbox,.goodbox{text-align:left}
+
+    @media (max-height: 900px){
+      .slide.dense{padding-top:.9rem;padding-bottom:4rem;padding-left:clamp(1.5rem,4vw,3rem);
+        padding-right:clamp(1.5rem,4vw,3rem)}
+      .slide.dense h2{margin-bottom:.5rem}
+      .slide.dense h3{margin:.6rem 0 .3rem}
+      .slide.dense p,.slide.dense li{line-height:1.45}
+      .slide.dense table.cmp th,.slide.dense table.cmp td{padding:.42rem .65rem}
+      .slide.dense pre{padding:.85rem 1rem;margin-top:.55rem}
+      .slide.dense .prompt{padding:1.05rem .95rem .7rem;margin:.32rem 0}
+      .slide.dense .card{padding:.7rem .9rem}
+      .slide.dense .warnbox,.slide.dense .goodbox{padding:.7rem 1rem;margin:.6rem 0}
+      .slide.dense .concept{gap:1.2rem}
+      .slide.dense .concept .fig{width:clamp(230px,32vw,360px)}
+      .slide.dense .afternote{padding:.7rem .9rem;margin-top:.6rem}
+      .slide.dense ol.steps li{margin-top:.34rem}
+    }
+    /* Máy chiếu độ phân giải thấp (1024x640) */
+    @media (max-height: 700px){
+      .slide.dense .chot{padding:1.1rem 1.5rem}
+      .slide.dense .chot-text{font-size:clamp(1.15rem,2.6vw,1.7rem)}
+      .slide.dense .four-col,.slide.dense .two-col{margin:.55rem 0}
+      .slide.dense .card{padding:.55rem .8rem}
+      .slide.dense .card p{margin:.2rem 0 0}
+      .slide.dense .moc{padding:1.2rem 1.6rem}
+      .slide.dense .note{margin-top:.45rem}
+      .slide.dense .concept .txt p{font-size:clamp(.95rem,1.8vw,1.18rem);margin:.32rem 0 0;line-height:1.42}
+      .slide.dense .afternote{font-size:clamp(.95rem,1.85vw,1.2rem)}
+      .slide.dense .prompt code{font-size:clamp(.82rem,1.6vw,1.06rem);line-height:1.48}
+      .slide.dense .beat{margin-bottom:.5rem}
+    }
+
+    @media (max-width: 820px){
+      .two-col,.four-col{grid-template-columns:1fr}
+      .concept{flex-direction:column}
+      .concept .fig{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div id="deck" class="deck">
+
+    <!-- 1 · Bìa -->
+    <section class="slide title-slide active">
+      <div class="cover-bg" aria-hidden="true">
+        <svg viewBox="0 0 1000 360" fill="none">
+          <rect x="60" y="140" width="210" height="82" rx="16" stroke="#3b82f6" stroke-width="2"/>
+          <rect x="395" y="140" width="210" height="82" rx="16" stroke="#3b82f6" stroke-width="2"/>
+          <rect x="730" y="140" width="210" height="82" rx="16" stroke="#3b82f6" stroke-width="2"/>
+          <line x1="270" y1="181" x2="395" y2="181" stroke="#8b9cb3" stroke-width="2"/>
+          <line x1="605" y1="181" x2="730" y2="181" stroke="#8b9cb3" stroke-width="2"/>
+          <circle cx="165" cy="181" r="14" stroke="#8b9cb3" stroke-width="2"/>
+          <circle cx="500" cy="181" r="14" stroke="#8b9cb3" stroke-width="2"/>
+          <circle cx="835" cy="181" r="14" stroke="#8b9cb3" stroke-width="2"/>
+        </svg>
+      </div>
+      <p class="kicker">Buổi 05 · MiniPower Academy</p>
+      <h1>Chuẩn bị môi trường<br><span class="grad">Jarvis framework</span></h1>
+      <p class="cover-tag">VIBE CODING</p>
+    </section>
+
+    <!-- 2 · Lộ trình -->
+    <section class="slide dense">
+      <p class="kicker">Lộ trình khoá học · 10 buổi</p>
+      <h2>Chúng ta đang ở đâu?</h2>
+      <div class="roadmap">
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 01</div><div class="rm-t">12 nỗi đau &amp; Minipower</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 02</div><div class="rm-t">Minipower là ai?</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 03</div><div class="rm-t">AI Foundation</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 04</div><div class="rm-t">Khám phá cùng Minipower</div></div>
+        <div class="rm-node current"><div class="rm-n">Buổi 05</div><div class="rm-t">Chuẩn bị môi trường</div><span class="rm-here">▶ Bạn đang ở đây</span></div>
+        <div class="rm-node dim"><div class="rm-n">Buổi 06</div><div class="rm-t">Phân tích yêu cầu</div></div>
+        <div class="rm-node dim code"><div class="rm-n">Buổi 07</div><div class="rm-t">Chốt yêu cầu</div></div>
+        <div class="rm-node dim"><div class="rm-n">Buổi 08</div><div class="rm-t">Kế hoạch thực thi</div></div>
+        <div class="rm-node dim"><div class="rm-n">Buổi 09</div><div class="rm-t">Chốt kế hoạch</div></div>
+        <div class="rm-node dim code"><div class="rm-n">Buổi 10</div><div class="rm-t">Vibe code &amp; Demo</div></div>
+      </div>
+    </section>
+
+    <!-- 3 · Bốn việc hôm nay -->
+    <section class="slide dense">
+      <p class="kicker">Bốn việc của hôm nay</p>
+      <h2>Cả buổi chỉ gõ prompt và bấm chạy</h2>
+      <table class="cmp">
+        <thead><tr><th style="width:7%">#</th><th style="width:38%">Việc</th><th>Cách làm</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><b>Cài công cụ</b></td><td><span class="accent-text">Prompt</span> — AI kiểm máy và chỉ lệnh cài</td></tr>
+          <tr><td>2</td><td><b>Tạo không gian làm việc</b></td><td><span class="accent-text">Prompt</span> — AI tạo bốn thư mục, tải hai bộ tiêu chuẩn về</td></tr>
+          <tr><td>3</td><td><b>Tạo dự án</b></td><td><span class="accent-text">Prompt</span> — backend · frontend · unittest · autotest</td></tr>
+          <tr><td>4</td><td><b>Kiểm thử</b></td><td>Build cả bốn phần · chạy thử trên trình duyệt</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4 · Vì sao phải có buổi này -->
+    <section class="slide dense">
+      <p class="kicker">Vì sao phải có buổi này</p>
+      <h2>Không có tiêu chuẩn thì tám module ra tám phong cách</h2>
+      <div class="concept">
+        <div class="txt">
+          <p>Bảo AI <em>“viết cho tôi phần mềm quản lý nhân sự, 8 module”</em> — nó viết được, và rất nhanh.</p>
+          <p>Nhưng module này đặt luật nghiệp vụ ở chỗ này, module kia đặt chỗ khác.
+            Cách gọi dữ liệu mỗi nơi một khác.</p>
+          <p><b>Chạy thì chạy.</b> Nhưng sáu tháng sau có lỗi thì <span class="danger">không ai biết bắt đầu từ đâu.</span></p>
+          <p class="muted">Như mười người thợ xây chung một khu nhà mà không có bản vẽ chung —
+            xong rồi không ai sửa được nhà của người khác.</p>
+        </div>
+        <div class="fig">
+          <svg viewBox="0 0 420 240" xmlns="http://www.w3.org/2000/svg">
+            <text x="105" y="26" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle">KHÔNG TIÊU CHUẨN</text>
+            <text x="315" y="26" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle">CÓ TIÊU CHUẨN</text>
+            <g fill="none" stroke="#f87171" stroke-width="2">
+              <rect x="30" y="48" width="66" height="34" rx="4"/>
+              <rect x="112" y="56" width="44" height="52" rx="10"/>
+              <circle cx="55" cy="128" r="23"/>
+              <rect x="96" y="128" width="70" height="26" rx="3"/>
+              <rect x="34" y="172" width="38" height="44" rx="6"/>
+              <path d="M92 176 l40 0 l-14 40 l-40 0 z"/>
+              <rect x="140" y="170" width="30" height="30" rx="2"/>
+              <circle cx="150" cy="120" r="12"/>
+            </g>
+            <g fill="none" stroke="#34d399" stroke-width="2">
+              <rect x="240" y="48" width="66" height="40" rx="5"/>
+              <rect x="322" y="48" width="66" height="40" rx="5"/>
+              <rect x="240" y="104" width="66" height="40" rx="5"/>
+              <rect x="322" y="104" width="66" height="40" rx="5"/>
+              <rect x="240" y="160" width="66" height="40" rx="5"/>
+              <rect x="322" y="160" width="66" height="40" rx="5"/>
+            </g>
+            <line x1="210" y1="40" x2="210" y2="215" stroke="#8b9cb3" stroke-width="1" stroke-dasharray="4 6"/>
+          </svg>
+        </div>
+      </div>
+      <p class="afternote">Ngược lại, <b>mọi dự án dựng theo cùng một bộ tiêu chuẩn</b> thì tài liệu cũng
+        chuẩn hoá theo — <b>tri thức dự án dễ xây, dễ tra lại</b>. Đó là <b>nỗi đau #12</b> buổi 01 được giải.</p>
+    </section>
+
+    <!-- 5 · Bộ tiêu chuẩn là bản vẽ chung -->
+    <section class="slide dense">
+      <h2>Bộ tiêu chuẩn là bản vẽ chung</h2>
+      <div class="bigcard">
+        <span class="tag">Có tiêu chuẩn thì AI</span>
+        <ul class="ticks">
+          <li>Đặt code <b>đúng cấu trúc dự án</b></li>
+          <li>Sửa <b>đúng file, đúng hàm</b> — không rải rác mỗi nơi một ít</li>
+          <li><b>Không xoá code cũ</b> khi chưa được phép</li>
+          <li><b>Không viết thêm code thừa</b> khi chưa được phép</li>
+          <li><b>Tuân thủ quy ước viết code</b> của dự án</li>
+        </ul>
+      </div>
+      <div class="two-col" style="margin-top:.9rem">
+        <div class="card"><span class="tag">Người</span><p><b>Đọc một module là hiểu được cả tám</b></p></div>
+        <div class="card"><span class="tag">Khi lỗi</span><p><b>Con người dễ dàng follow AI để xử lý lỗi</b></p></div>
+      </div>
+    </section>
+
+    <!-- 6 · Jarvis framework -->
+    <section class="slide dense">
+      <h2><span class="grad">Jarvis framework</span> — bộ tiêu chuẩn của khoá học</h2>
+      <p class="muted" style="margin:0">Không phải một thư viện.</p>
+      <p class="muted" style="margin:.25rem 0 0">Là <b>bộ khuôn dựng sẵn</b> cho
+        backend, frontend, autotest — và cho chính AI.</p>
+      <div class="four-col" style="margin:.8rem 0">
+        <div class="stackcard">
+          <div class="sname">backend<span class="sver">.NET 9</span></div>
+          <ul class="mini">
+            <li><b>Năm lớp cố định</b></li>
+            <li>Sẵn <b>xác thực · phân quyền</b></li>
+            <li>Sẵn <b>lưu tệp · bộ nhớ đệm · thông báo</b></li>
+            <li>Sẵn <b>trang tài liệu API</b></li>
+          </ul>
+        </div>
+        <div class="stackcard">
+          <div class="sname">frontend<span class="sver">ReactJS</span></div>
+          <ul class="mini">
+            <li><b>Bộ giao diện dựng sẵn</b> — nút, bảng, biểu mẫu</li>
+            <li>Sẵn <b>đăng nhập · tài khoản · phân vai</b></li>
+            <li>Sẵn <b>dashboard · quản lý tệp</b></li>
+          </ul>
+        </div>
+        <div class="stackcard">
+          <div class="sname">autotest<span class="sver">Playwright</span></div>
+          <ul class="mini">
+            <li><b>Bộ chạy kiểm thử dựng sẵn</b></li>
+            <li>Kiểm <b>cả luồng</b> như người dùng thật bấm</li>
+            <li>Là lưới bắt lỗi của <b>buổi 10</b></li>
+          </ul>
+        </div>
+        <div class="stackcard">
+          <div class="sname">skills<span class="sver">jarvis</span></div>
+          <ul class="mini">
+            <li><b>Mỗi phần có hướng dẫn riêng</b> cho AI</li>
+            <li>AI <b>đọc rồi làm theo</b>, không tự đoán</li>
+            <li>Thứ khiến buổi 10 <b>chạy được</b></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · Ba lựa chọn -->
+    <section class="slide dense">
+      <h2>Vì sao <span class="grad">.NET 9 · ReactJS · SQLite</span></h2>
+      <p class="muted" style="margin:0">Cả ba chọn theo cùng một tiêu chí:
+        <b class="accent-text">đơn giản cho MVP.</b></p>
+      <div class="four-col" style="grid-template-columns:repeat(3,1fr);margin:.8rem 0">
+        <div class="stackcard">
+          <div class="sname">.NET 9<span class="sver">SDK 9.x</span></div>
+          <ul class="mini">
+            <li><b>Tiêu chuẩn Jarvis viết trên .NET</b></li>
+            <li><b>C# có kiểu tường minh</b> — sai kiểu là báo lỗi lúc dựng</li>
+            <li>Một bộ công cụ duy nhất: cài <code>dotnet</code> một lần</li>
+            <li>AI sinh C# ít đoán mò — ngôn ngữ luật chặt</li>
+          </ul>
+        </div>
+        <div class="stackcard">
+          <div class="sname">ReactJS<span class="sver">Node 22 LTS</span></div>
+          <ul class="mini">
+            <li><b>Bộ giao diện Jarvis viết bằng React</b> — có sẵn nút, bảng, biểu mẫu</li>
+            <li>Hệ sinh thái lớn nhất → AI sinh giao diện ít sai</li>
+            <li><b>Chia theo module</b> — giống cách chia module trong BRD buổi 04</li>
+          </ul>
+        </div>
+        <div class="stackcard">
+          <div class="sname">SQLite<span class="sver">không cài gì</span></div>
+          <ul class="mini">
+            <li class="plus"><b>Một file</b> trong thư mục dự án — không cài, không cấu hình</li>
+            <li class="minus">Chỉ hợp <b>một người dùng, một máy</b></li>
+            <li>Đổi sang máy chủ thật = <b>một dòng cấu hình</b>, nhờ đi qua EF Core</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · Thiết lập môi trường -->
+    <section class="slide dense">
+      <span class="beat hands">🖥 Lớp làm · 15 phút</span>
+      <h2>Thiết lập môi trường</h2>
+      <div class="prompt"><code>Kiểm tra máy đã cài .Net 9 và Node 22 chưa?
+
+Nếu chưa thì tải bộ cài theo hệ điều hành và cài đặt:
+- .Net 9: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
+- Node 22: https://nodejs.org/en/download
+
+Sau khi cài xong, tự kiểm tra lại kết quả, sau đó hướng dẫn tôi cách kiểm tra</code></div>
+      <table class="cmp" style="margin-top:.8rem">
+        <thead><tr><th style="width:44%">Kiểm bằng lệnh</th><th>Ra gì là đạt</th></tr></thead>
+        <tbody>
+          <tr><td><code>dotnet --list-sdks</code></td><td>Có dòng bắt đầu bằng <b>9.</b></td></tr>
+          <tr><td><code>node -v</code></td><td><b>v22.x</b></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 9 · Bốn thư mục -->
+    <section class="slide dense">
+      <h2>Bốn thư mục, bốn vai</h2>
+      <pre class="tree"><code>workspace/
+├── <b>ai-skills/</b>     <i>← bộ kỹ năng của AI</i>
+├── <b>jarvis/</b>        <i>← bộ tiêu chuẩn</i>
+├── <b>documents/</b>     <i>← tri thức dự án</i>
+└── <b>hrm/</b>           <i>← sản phẩm</i></code></pre>
+      <table class="cmp">
+        <thead><tr><th style="width:20%">Thư mục</th><th style="width:33%">Vai</th><th>Nội dung</th></tr></thead>
+        <tbody>
+          <tr><td><b>ai-skills</b></td><td>AI <b>biết làm gì</b></td><td>Tải về từ repo <code>ai-skills</code> — chứa Minipower và bộ kỹ năng Jarvis</td></tr>
+          <tr><td><b>jarvis</b></td><td>AI <b>đặt code theo hình gì</b></td><td>Tải về từ repo <code>jarvis</code> — tiêu chuẩn backend và bộ giao diện</td></tr>
+          <tr><td><b>documents</b></td><td>AI <b>biết mình đang làm dự án gì</b></td><td>Toàn bộ tài liệu từ buổi 03 tới giờ, và các buổi sau</td></tr>
+          <tr><td><b>hrm</b></td><td><b>Sản phẩm</b></td><td>Toàn bộ mã nguồn — tạo ở chương sau</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 10 · Tạo không gian làm việc -->
+    <section class="slide dense">
+      <span class="beat hands">🖥 Lớp làm · 15 phút</span>
+      <h2>Tạo không gian làm việc</h2>
+      <div class="prompt"><code>Tạo không gian làm việc tại <span class="ph">&lt;đường-dẫn&gt;</span> gồm 4 thư mục:
+
+- ai-skills: clone từ https://github.com/hoangnh2412/ai-skills
+- jarvis: clone từ https://github.com/hoangnh2412/jarvis
+- documents: chứa tài liệu dự án của tôi
+- hrm: để trống
+
+Xong thì in cây thư mục để tôi kiểm.</code></div>
+      <table class="cmp" style="margin-top:.8rem">
+        <thead><tr><th style="width:24%">Kiểm</th><th>Đạt khi</th></tr></thead>
+        <tbody>
+          <tr><td><code>ai-skills/</code></td><td>Có <code>minipower/</code> và <code>jarvis/</code> bên trong</td></tr>
+          <tr><td><code>jarvis/</code></td><td>Có <code>frameworks/</code> và <code>modules/</code></td></tr>
+          <tr><td><code>documents/</code></td><td>Có <code>docs/</code> chứa tài liệu buổi 03–04 của bạn</td></tr>
+          <tr><td><code>hrm/</code></td><td>Rỗng</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 11 · Dự án bốn phần -->
+    <section class="slide dense">
+      <h2>Dự án gồm bốn phần</h2>
+      <table class="cmp">
+        <thead><tr><th style="width:18%">Phần</th><th style="width:40%">Là gì</th><th>Vì sao cần</th></tr></thead>
+        <tbody>
+          <tr><td><b>backend</b></td><td>Máy chủ xử lý nghiệp vụ và lưu dữ liệu</td><td>Nơi luật nghiệp vụ sống</td></tr>
+          <tr><td><b>frontend</b></td><td>Màn hình người dùng nhìn thấy</td><td>Nơi khách gật đầu bằng mắt <i>(buổi 07)</i></td></tr>
+          <tr class="hi"><td><b>unittest</b></td><td>Kiểm từng mảnh nhỏ của backend</td><td><b>Lưới bắt lỗi tầng 1 của buổi 10</b></td></tr>
+          <tr class="hi"><td><b>autotest</b></td><td>Kiểm cả luồng như người dùng thật bấm</td><td><b>Lưới bắt lỗi tầng 2 và 3 của buổi 10</b></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 12 · Prompt tạo dự án Hrm -->
+    <section class="slide dense">
+      <h2>Tạo dự án <span class="accent-text">Hrm</span></h2>
+      <div class="prompt sm"><code>Dùng skill <span class="hl">@ai-skills/jarvis/README.md</span> và code <span class="hl">@jarvis</span> (không cài Jarvis từ NuGet).
+1. Tạo project Hrm vào <span class="hl">@hrm</span> gồm 4 phần: backend, frontend, autotest, unittest.
+2. Chỉ 1 file Hrm.sln, đặt trong folder hrm
+3. Backend cài đặt sẵn Swagger, OTEL, Healthcheck, CORS
+5. Kiểm tra backend đã hoạt động bao gồm cả healcheck, swagger
+6. Kiểm tra frontend đã hoạt động
+7. Kiểm tra autotest đã hoạt động
+8. Kiểm tra unittest đã hoạt động
+9. Gửi các lệnh để kiểm tra từng phần</code></div>
+      <table class="cmp" style="margin-top:.8rem">
+        <thead><tr><th style="width:34%">Dòng trong prompt</th><th style="width:18%">Trỏ vào</th><th>Cho máy biết gì</th></tr></thead>
+        <tbody>
+          <tr><td><code>@ai-skills/jarvis/README.md</code></td><td><b>ai-skills</b></td><td>Cách dựng project — <b>kỹ năng</b></td></tr>
+          <tr><td><code>@jarvis</code></td><td><b>jarvis</b></td><td>Tiêu chuẩn để bám và tham chiếu — <b>hình dạng</b></td></tr>
+          <tr><td><code>@hrm</code></td><td><b>hrm</b></td><td>Chỗ đặt sản phẩm</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 13 · Kiểm thử -->
+    <section class="slide dense">
+      <span class="beat hands">🖥 Lớp làm · 25 phút</span>
+      <h2>Kiểm thử</h2>
+      <table class="cmp">
+        <thead><tr><th style="width:32%">Kiểm gì</th><th>Lệnh</th></tr></thead>
+        <tbody>
+          <tr><td><b>Build backend + unittest</b></td><td><code>dotnet build hrm/Hrm.sln</code></td></tr>
+          <tr><td><b>Build frontend</b></td><td><code>cd hrm/frontend &amp;&amp; npm install &amp;&amp; npm run build</code></td></tr>
+          <tr><td><b>Build autotest</b></td><td><code>cd hrm/autotest &amp;&amp; npm install &amp;&amp; npm run build</code></td></tr>
+          <tr class="hi"><td><b>Chạy API</b></td><td><code>dotnet run --project hrm/backend/Hrm.Host</code> → mở trang tài liệu API</td></tr>
+          <tr class="hi"><td><b>Chạy giao diện</b></td><td><code>cd hrm/frontend &amp;&amp; npm run dev</code> → màn hình đăng nhập</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 14 · Bài tập -->
+    <section class="slide dense">
+      <p class="kicker">Bài tập về nhà</p>
+      <h2>Làm trên <span class="accent-text">dự án của chính mình</span></h2>
+      <table class="cmp">
+        <thead><tr><th style="width:7%">#</th><th>Nộp gì</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Ảnh chụp <b>giao diện trang đăng nhập</b> của frontend</td></tr>
+          <tr><td>2</td><td>Ảnh chụp <b>truy cập được Swagger</b></td></tr>
+          <tr><td>3</td><td>Ảnh chụp <b>kết quả test</b></td></tr>
+          <tr><td>4</td><td>Code đẩy lên <b>GitHub repo đã tạo từ buổi 04</b></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <nav class="deck-controls" aria-label="Điều hướng slide">
+    <div>
+      <a class="home-link" href="../../index.html">← Trang chủ</a>
+      <button id="prev" type="button" aria-label="Slide trước">← Trước</button>
+    </div>
+    <div class="progress" aria-hidden="true">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <span id="counter" class="slide-counter">1 / 1</span>
+    <button id="next" type="button" aria-label="Slide tiếp">Tiếp →</button>
+  </nav>
+
+  <script src="../_shared/js/slides.js"></script>
+</body>
+</html>
