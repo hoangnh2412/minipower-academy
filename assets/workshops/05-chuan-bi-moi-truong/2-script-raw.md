@@ -244,7 +244,7 @@ Dùng skill @ai-skills/jarvis/README.md và code @jarvis (không cài Jarvis t�
 3. Backend cài đặt sẵn Swagger, OTEL, Healthcheck, CORS
 5. Kiểm tra backend đã hoạt động bao gồm cả healcheck, swagger
 6. Kiểm tra frontend đã hoạt động
-7. Kiểm tra autotest đã hoạt động
+7. Kiểm tra autotest đã hoạt động cả test API và UI
 8. Kiểm tra unittest đã hoạt động
 9. Gửi các lệnh để kiểm tra từng phần
 ```
@@ -297,14 +297,16 @@ Một solution là **một danh sách project mở chung trong máy**. Nhiều s
 
 # Bài tập về nhà
 
-Làm trên **dự án của chính mình**. Bốn thứ phải nộp:
+Làm trên **dự án của chính mình**. Sáu thứ phải nộp:
 
 | # | Nộp gì |
 |---|---|
 | 1 | Ảnh chụp **giao diện trang đăng nhập** của frontend |
 | 2 | Ảnh chụp **truy cập được Swagger** |
 | 3 | Ảnh chụp **kết quả test** |
-| 4 | Code đẩy lên **GitHub repo đã tạo từ buổi 04** |
+| 4 | **Dùng Jarvis viết autotest** cho luồng: mở trang login → đăng nhập `admin@gmail.com` / `Admin@123` → vào được trang dashboard |
+| 5 | Ảnh chụp **kết quả test sau khi thêm autotest luồng login** |
+| 6 | Code đẩy lên **GitHub repo đã tạo từ buổi 04** |
 
 ---
 

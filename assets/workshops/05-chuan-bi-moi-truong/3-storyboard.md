@@ -71,7 +71,7 @@ khác hẳn buổi 04. Nhịp giữ bằng **prompt · mốc kiểm tra · bản
 | 11 | **Dự án gồm bốn phần** | bảng | backend · frontend · **unittest** · **autotest** |
 | 12 | **Tạo dự án Hrm** 🔑 | prompt.sm · bảng | Prompt chính thức **5 mục** + bảng **ba dòng `@` trỏ vào ba thư mục** |
 | 13 | **Kiểm thử** | beat · bảng | **Năm lệnh** build và chạy |
-| 14 | **Bài tập về nhà** | bảng | **4 thứ phải nộp** — ảnh đăng nhập · ảnh Swagger · ảnh kết quả test · link GitHub buổi 04 |
+| 14 | **Bài tập về nhà** | bảng | **6 thứ phải nộp** — ảnh đăng nhập · ảnh Swagger · ảnh kết quả test · **autotest luồng login** · **ảnh kết quả test sau khi thêm autotest** · link GitHub buổi 04 |
 
 ---
 
