@@ -3,17 +3,909 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buổi 06 — Phân tích yêu cầu — MiniPower Academy</title>
+  <title>W6 · Từ tài liệu đến prototype — MiniPower Academy</title>
   <link rel="stylesheet" href="../_shared/css/slides.css">
+  <style>
+    /* ===== Buổi 06 — BUỔI THỰC HÀNH: bảng thao tác + mốc kiểm tra, không hỏi–đáp ===== */
+    .slide.dense{justify-content:safe center;padding-top:clamp(1.1rem,3vh,2.1rem);padding-bottom:4.4rem;overflow-y:auto}
+    .slide.dense h2{margin-bottom:.7rem}
+    .slide.dense .prompt{margin:.6rem 0}
+    .slide.dense table.cmp{margin:.35rem 0}
+    .kicker{color:var(--slide-accent);letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+      font-size:clamp(.72rem,1.4vw,.95rem);margin:0 0 .6rem}
+    .grad{background:linear-gradient(135deg,#fff 30%,var(--slide-accent));-webkit-background-clip:text;
+      background-clip:text;-webkit-text-fill-color:transparent}
+    .muted{color:var(--slide-muted)} .danger{color:#f87171} .good{color:#34d399} .warn{color:#f5a623}
+    .accent-text{color:var(--slide-accent)}
+    .slide strong,.slide b{color:var(--slide-text)}
+    .slide h3{margin:.9rem 0 .4rem;font-size:clamp(1rem,2.2vw,1.35rem);color:var(--slide-text)}
+    .note{color:var(--slide-muted);font-size:.9em;margin:.7rem 0 0}
+    .cover-tag{margin-top:1.4rem;color:var(--slide-accent);font-weight:700;
+      letter-spacing:.3em;font-size:clamp(.82rem,1.6vw,1.05rem)}
+    .title-slide h1{max-width:24ch;margin-left:auto;margin-right:auto}
+    .cover-bg{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none}
+    .cover-bg svg{width:min(92vw,1050px);opacity:.09}
+    .slide.title-slide{overflow:hidden}
+    .slide.title-slide>:not(.cover-bg){position:relative;z-index:1}
+
+    /* Badge nhịp */
+    .beat{display:inline-flex;align-items:center;gap:.45rem;font-size:clamp(.7rem,1.3vw,.85rem);
+      font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;
+      padding:.28rem .8rem;margin:0 .4rem .8rem 0}
+    .beat.news{background:rgba(167,139,250,.14);color:#a78bfa;border:1px solid rgba(167,139,250,.45)}
+    .beat.moc{background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.45)}
+    .beat.hands{background:rgba(245,166,35,.12);color:#f5a623;border:1px solid rgba(245,166,35,.4)}
+    .beat.key{background:rgba(167,139,250,.14);color:#a78bfa;border:1px solid rgba(167,139,250,.4)}
+    .beat.must{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.4)}
+
+    /* Mốc — khuôn chung cho cả 4 điểm dừng của buổi */
+    .moc{max-width:980px;margin:0 auto;border:1px solid rgba(52,211,153,.4);border-radius:14px;
+      background:rgba(52,211,153,.07);padding:1.6rem 2rem;text-align:center}
+    .moc-label{color:#34d399;text-transform:uppercase;letter-spacing:.18em;font-weight:700;
+      font-size:.85rem;margin:0 0 .9rem}
+    .moc-big{font-size:clamp(2.2rem,5.4vw,3.8rem);font-weight:800;color:#34d399;line-height:1;margin:0}
+    .moc-text{font-size:clamp(1.1rem,2.4vw,1.6rem);line-height:1.45;color:var(--slide-text);margin:.5rem 0 0}
+    .moc-files{margin:1.1rem 0 0;padding-top:.9rem;border-top:1px dashed rgba(52,211,153,.3);
+      text-align:left;display:inline-block}
+    .moc-files code{display:block;margin:.26rem 0;font-size:clamp(.86rem,1.65vw,1.08rem);
+      background:none;color:var(--slide-text);padding:0}
+    .moc-files code b{color:#34d399}
+    .moc-sub{margin:1.1rem 0 0;padding-top:.9rem;border-top:1px dashed rgba(52,211,153,.28);
+      color:var(--slide-muted);font-size:clamp(.85rem,1.6vw,1rem)}
+
+    /* Prompt copy được */
+    .prompt{position:relative;background:#0b0f16;border:1px solid rgba(59,130,246,.3);border-radius:10px;
+      padding:1.5rem 1.2rem 1.1rem;margin:.8rem 0;max-width:1020px}
+    .prompt::before{content:"PROMPT";position:absolute;top:.5rem;left:1.2rem;font-size:.62rem;
+      letter-spacing:.14em;color:var(--slide-accent);font-weight:700}
+    .prompt code{display:block;background:none;padding:0;color:var(--slide-text);
+      font-family:var(--slide-mono);font-size:clamp(.82rem,1.55vw,1.02rem);line-height:1.55;
+      white-space:pre-wrap}
+    .prompt .hl{color:#f5a623;font-weight:700}
+    .prompt .ph{color:#f5a623;font-weight:700}
+
+    /* Chốt */
+    .chot{max-width:980px;margin:0 auto;text-align:center;border-left:4px solid var(--slide-accent);
+      background:var(--slide-surface);border-radius:12px;padding:1.8rem 2.2rem}
+    .chot-label{color:var(--slide-accent);text-transform:uppercase;letter-spacing:.16em;font-weight:700;
+      font-size:.78rem;margin:0 0 .8rem}
+    .chot-text{font-size:clamp(1.25rem,2.8vw,1.95rem);line-height:1.4;color:var(--slide-text);margin:0}
+
+    /* Bảng */
+    table.cmp{border-collapse:collapse;margin:.5rem 0;width:100%;max-width:1060px;
+      font-size:clamp(.82rem,1.55vw,1.05rem)}
+    table.cmp th,table.cmp td{border:1px solid rgba(139,156,179,.2);padding:.48rem .75rem;text-align:left;
+      color:var(--slide-muted);vertical-align:top}
+    table.cmp th{color:var(--slide-text);background:var(--slide-surface);font-weight:600}
+    table.cmp td:first-child{color:var(--slide-text);font-weight:500}
+    table.cmp tr.hi td{background:rgba(59,130,246,.08)}
+    table.cmp tr.hi td:first-child{color:var(--slide-accent)}
+    table.cmp tr.bad td{background:rgba(248,113,113,.07)}
+    table.cmp code{font-size:.92em}
+    table.cmp.tight th,table.cmp.tight td{padding:.4rem .6rem}
+    table.cmp.nowrap-1 td:nth-child(1),table.cmp.nowrap-1 th:nth-child(1){white-space:nowrap}
+    /* Lưới module — 3×3, mọi ô bằng nhau */
+    .modgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;max-width:1060px;width:100%;margin:.6rem auto 0}
+    .modcard{background:var(--slide-surface);border:1px solid rgba(139,156,179,.18);border-radius:12px;
+      padding:.7rem .9rem;text-align:left;display:flex;align-items:baseline;gap:.6rem}
+    .modcard .mcode{font-family:var(--slide-mono);font-weight:700;color:var(--slide-accent);
+      font-size:clamp(.9rem,1.7vw,1.15rem);flex:0 0 auto;min-width:3.4em}
+    .modcard .mname{color:var(--slide-text);font-size:clamp(.9rem,1.7vw,1.12rem);line-height:1.3}
+    .modcard.on{border-color:var(--slide-accent);background:rgba(59,130,246,.14)}
+    .modcard.on .mname{font-weight:700}
+    .modcard.on .mtoday{display:block;color:var(--slide-accent);font-size:.78em;font-weight:700;margin-top:.1rem}
+    @media (max-width: 820px){.modgrid{grid-template-columns:1fr 1fr}}
+
+    /* Thẻ & lưới */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.5rem 0;max-width:1060px;width:100%}
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:.9rem 0;max-width:1060px;width:100%}
+    .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin:.9rem 0;max-width:1100px;width:100%}
+    .card{background:var(--slide-surface);border:1px solid rgba(139,156,179,.18);border-radius:12px;
+      padding:.9rem 1.1rem}
+    .card p{margin:.3rem 0 0;font-size:clamp(.88rem,1.6vw,1.08rem)}
+    .tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;
+      color:var(--slide-accent);font-weight:700;margin-bottom:.15rem}
+    .bigcard{background:var(--slide-surface);border:1px solid rgba(59,130,246,.35);border-radius:14px;
+      padding:1rem 1.3rem;max-width:1060px;width:100%;text-align:left}
+
+    /* Mạch bước */
+    .flow{display:flex;align-items:stretch;gap:.7rem;flex-wrap:wrap;margin:1.2rem 0;justify-content:center;
+      max-width:1060px;width:100%}
+    .flow .step{flex:1;min-width:150px;background:var(--slide-surface);border-radius:12px;
+      padding:.95rem 1rem;border:1px solid rgba(139,156,179,.18);text-align:center}
+    .flow .step b{display:block;color:var(--slide-text);font-size:clamp(.95rem,1.9vw,1.2rem)}
+    .flow .step span{display:block;margin-top:.3rem;color:var(--slide-muted);font-size:.84em}
+    .flow .step.on{border-color:var(--slide-accent);background:rgba(59,130,246,.1)}
+    .flow .step.human{border-color:rgba(245,166,35,.55);background:rgba(245,166,35,.08)}
+    .flow .step.human b{color:#f5a623}
+    .flow .arrow{align-self:center;color:var(--slide-accent);font-size:1.5rem;flex:0 0 auto}
+    /* Sáu bước trên một dòng — không xuống hàng */
+    .flow.six{flex-wrap:nowrap;gap:.5rem}
+    .flow.six .step{flex:1 1 0;min-width:0;padding:.85rem .6rem}
+    .flow.six .step b{font-size:clamp(.8rem,1.5vw,1.04rem);line-height:1.25}
+    .flow.six .step span{font-size:clamp(.68rem,1.2vw,.84rem);margin-top:.25rem}
+    @media (max-width: 820px){.flow.six{flex-wrap:wrap}.flow.six .step{flex:1 1 30%}}
+
+    /* Hộp */
+    .warnbox{border:1px solid rgba(245,166,35,.4);background:rgba(245,166,35,.07);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:1030px}
+    .warnbox p{margin:0;color:var(--slide-text)}
+    .dangerbox{border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.06);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:1030px}
+    .dangerbox p{margin:0;color:var(--slide-text)}
+    .goodbox{border:1px solid rgba(52,211,153,.4);background:rgba(52,211,153,.06);border-radius:12px;
+      padding:.9rem 1.2rem;margin:.9rem 0;max-width:1030px}
+    .goodbox p{margin:0;color:var(--slide-text)}
+
+    ol.steps{max-width:1000px;margin:.5rem 0 0} ol.steps li{color:var(--slide-text);margin-top:.42rem}
+    ul.plain{list-style:none;padding-left:0;max-width:1000px}
+    ul.plain li{margin-top:.45rem;color:var(--slide-text)}
+    ul.mini{list-style:none;padding-left:0;margin:.45rem 0 0;text-align:left;max-width:1000px}
+    ul.mini li{position:relative;padding-left:.95rem;margin-top:.34rem;color:var(--slide-muted);line-height:1.4}
+    ul.mini li::before{content:"·";position:absolute;left:.1rem;top:-.05rem;color:var(--slide-accent);font-weight:800}
+    ul.mini li b{color:var(--slide-text)}
+    ul.ticks{list-style:none;padding-left:0;margin:.5rem 0 0;text-align:left;width:100%;max-width:1000px}
+    ul.ticks li{position:relative;padding-left:1.8rem;margin-top:.42rem;color:var(--slide-text);line-height:1.42}
+    ul.ticks li::before{content:"✓";position:absolute;left:0;top:0;color:#34d399;font-weight:800}
+    .x{color:#f87171;font-weight:700} .v{color:#34d399;font-weight:700}
+
+    /* Cây thư mục / sơ đồ chữ */
+    pre.tree{font-size:clamp(.8rem,1.6vw,1.1rem);line-height:1.7;text-align:left}
+    pre.tree b{color:var(--slide-accent)}
+    pre.tree i{color:var(--slide-muted);font-style:normal}
+    pre.tree .warn{color:#f5a623} pre.tree .good{color:#34d399} pre.tree .danger{color:#f87171}
+
+    .afternote{max-width:1120px;margin:.85rem 0 0;color:var(--slide-text);
+      border-left:4px solid var(--slide-accent);background:var(--slide-surface);
+      border-radius:10px;padding:.9rem 1.1rem}
+    .afternote b{color:var(--slide-accent)}
+
+    /* Lộ trình */
+    .roadmap{display:flex;flex-wrap:wrap;gap:.55rem;margin:1.1rem 0;max-width:1060px;width:100%}
+    .rm-node{flex:1 1 175px;min-width:150px;background:var(--slide-surface);
+      border:1px solid rgba(139,156,179,.18);border-radius:14px;padding:.85rem 1rem;text-align:left}
+    .rm-node .rm-n{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--slide-muted);text-transform:uppercase}
+    .rm-node .rm-t{font-size:clamp(.92rem,1.65vw,1.14rem);color:var(--slide-text);font-weight:600;margin-top:.3rem;line-height:1.3}
+    .rm-node.done{border-color:rgba(52,211,153,.35)}
+    .rm-node.done .rm-n{color:#34d399}
+    .rm-node.current{border-color:var(--slide-accent);background:rgba(59,130,246,.15);
+      transform:scale(1.05);animation:rmPulse 2s ease-in-out infinite}
+    @keyframes rmPulse{
+      0%,100%{box-shadow:0 0 0 1px var(--slide-accent),0 0 16px rgba(59,130,246,.22)}
+      50%{box-shadow:0 0 0 2px var(--slide-accent),0 0 34px rgba(59,130,246,.55)}}
+    .rm-node.current .rm-n{color:var(--slide-accent)}
+    .rm-here{display:inline-block;margin-top:.4rem;font-size:.66rem;font-weight:800;color:var(--slide-accent);
+      text-transform:uppercase;letter-spacing:.09em}
+    .rm-node.dim{opacity:.38;border-style:dashed}
+    .rm-node.dim .rm-t{color:var(--slide-muted);font-weight:500}
+    .rm-node.next{opacity:.85;border-color:rgba(245,166,35,.55);background:rgba(245,166,35,.07)}
+    .rm-node.next .rm-n{color:#f5a623}
+    .rm-node.next .rm-t{color:var(--slide-text);font-weight:600}
+
+    /* ===== Căn giữa + phóng chữ ===== */
+    .slide{align-items:center;text-align:center}
+    .slide > *{margin-left:auto;margin-right:auto}
+    .slide h1{font-size:clamp(2.2rem,5.4vw,4rem)}
+    .slide h2{font-size:clamp(1.7rem,4vw,2.7rem)}
+    .slide h3{font-size:clamp(1.15rem,2.5vw,1.6rem)}
+    .slide p,.slide li{font-size:clamp(1.12rem,2.35vw,1.6rem);line-height:1.55}
+    .slide .subtitle{font-size:clamp(1.1rem,2.3vw,1.5rem)}
+    .kicker{font-size:clamp(.82rem,1.6vw,1.1rem)}
+    table.cmp{font-size:clamp(.94rem,1.8vw,1.24rem)}
+    table.cmp th,table.cmp td{padding:.55rem .85rem}
+    .prompt code{font-size:clamp(.95rem,1.8vw,1.22rem)}
+    .slide pre code{font-size:clamp(.95rem,1.8vw,1.22rem)}
+    .card p{font-size:clamp(1rem,1.95vw,1.32rem)}
+    .tag{font-size:.8rem}
+    .note{font-size:.92em}
+    .afternote{font-size:clamp(1.05rem,2.1vw,1.45rem)}
+    .beat{font-size:clamp(.8rem,1.5vw,1rem)}
+    .chot-text{font-size:clamp(1.4rem,3.1vw,2.2rem)}
+    .cover-tag{font-size:clamp(.9rem,1.8vw,1.2rem)}
+    .moc-text{font-size:clamp(1.3rem,2.9vw,2rem)}
+    .moc-sub{font-size:clamp(1rem,1.95vw,1.3rem)}
+    .moc-label{font-size:.95rem}
+    ul.ticks li{font-size:clamp(1rem,1.95vw,1.32rem)}
+
+    /* Canh trái khối cần đọc */
+    .slide pre,.slide .prompt{text-align:left}
+    .slide pre code,.slide .prompt code{text-align:left}
+    table.cmp th,table.cmp td{text-align:left}
+    ol.steps,ul.plain{text-align:left;display:inline-block}
+    ol.steps li,ul.plain li{text-align:left}
+    .slide ul,.slide ol{text-align:left}
+    .card{text-align:left}
+    .afternote{text-align:left}
+    .warnbox,.dangerbox,.goodbox{text-align:left}
+    .moc{text-align:center}
+
+    @media (max-height: 900px){
+      .slide.dense{padding-top:.9rem;padding-bottom:4rem;padding-left:clamp(1.5rem,4vw,3rem);
+        padding-right:clamp(1.5rem,4vw,3rem)}
+      .slide.dense h2{margin-bottom:.5rem}
+      .slide.dense h3{margin:.6rem 0 .3rem}
+      .slide.dense p,.slide.dense li{line-height:1.45}
+      .slide.dense table.cmp th,.slide.dense table.cmp td{padding:.42rem .65rem}
+      .slide.dense pre{padding:.85rem 1rem;margin-top:.55rem}
+      .slide.dense .prompt{padding:1.05rem .95rem .7rem;margin:.32rem 0}
+      .slide.dense .card{padding:.7rem .9rem}
+      .slide.dense .warnbox,.slide.dense .dangerbox,.slide.dense .goodbox{padding:.7rem 1rem;margin:.6rem 0}
+      .slide.dense .note{margin-top:.5rem}
+      .slide.dense .afternote{padding:.7rem .9rem;margin-top:.6rem}
+      .slide.dense ol.steps li{margin-top:.34rem}
+      .slide.dense .moc{padding:1.3rem 1.7rem}
+    }
+    @media (max-height: 700px){
+      .slide h2{font-size:clamp(1.45rem,3.4vw,2.1rem)}
+      .slide p,.slide li{font-size:clamp(1rem,2vw,1.3rem)}
+      table.cmp{font-size:clamp(.88rem,1.65vw,1.08rem)}
+      table.cmp th,table.cmp td{padding:.38rem .58rem}
+      .prompt code,.slide pre code{font-size:clamp(.86rem,1.62vw,1.06rem)}
+      .afternote{font-size:clamp(.95rem,1.85vw,1.2rem);padding:.65rem .85rem}
+      .chot{padding:1.1rem 1.5rem}
+      .chot-text{font-size:clamp(1.15rem,2.6vw,1.7rem)}
+      .moc{padding:1.1rem 1.5rem}
+      .moc-text{font-size:clamp(1.12rem,2.5vw,1.62rem)}
+      .moc-sub{font-size:clamp(.92rem,1.8vw,1.12rem)}
+      .slide.dense .four-col,.slide.dense .three-col,.slide.dense .two-col{margin:.55rem 0}
+      .slide.dense .card{padding:.55rem .8rem}
+      .slide.dense .beat{margin-bottom:.5rem}
+      .flow .step{padding:.7rem .8rem;min-width:130px}
+    }
+    @media (max-width: 820px){
+      .two-col,.three-col,.four-col{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
   <div id="deck" class="deck">
 
+    <!-- ===== PHẦN 1 — MỞ ===== -->
+
+    <!-- 1 · Bìa -->
     <section class="slide title-slide active">
-      <h1>Buổi 06 — Phân tích yêu cầu</h1>
-      <p class="subtitle">32 tài liệu cho 8 module · mã ID &amp; bảng truy vết · fan-out song song</p>
-      <p class="subtitle" style="margin-top:1.5rem;">⏱ 120 phút · 🎯 Biết sinh 32 tài liệu song song mà không lệch mã</p>
-      <p class="subtitle" style="margin-top:2rem;opacity:.6;">✍️ Nội dung chi tiết đang được biên soạn — sẽ cập nhật sau.</p>
+      <div class="cover-bg" aria-hidden="true">
+        <svg viewBox="0 0 1000 320" fill="none">
+          <rect x="70" y="70" width="330" height="190" rx="14" stroke="#3b82f6" stroke-width="2"/>
+          <line x1="110" y1="115" x2="330" y2="115" stroke="#8b9cb3" stroke-width="2"/>
+          <line x1="110" y1="150" x2="360" y2="150" stroke="#8b9cb3" stroke-width="2"/>
+          <line x1="110" y1="185" x2="300" y2="185" stroke="#8b9cb3" stroke-width="2"/>
+          <line x1="110" y1="220" x2="340" y2="220" stroke="#8b9cb3" stroke-width="2"/>
+          <path d="M430 165 H560" stroke="#3b82f6" stroke-width="2"/>
+          <path d="M540 150 L565 165 L540 180" stroke="#3b82f6" stroke-width="2" fill="none"/>
+          <rect x="600" y="70" width="330" height="190" rx="14" stroke="#3b82f6" stroke-width="2"/>
+          <rect x="600" y="70" width="330" height="36" rx="14" stroke="#3b82f6" stroke-width="2"/>
+          <rect x="628" y="130" width="130" height="26" rx="6" stroke="#8b9cb3" stroke-width="2"/>
+          <rect x="628" y="172" width="274" height="26" rx="6" stroke="#8b9cb3" stroke-width="2"/>
+          <rect x="790" y="212" width="112" height="30" rx="8" stroke="#3b82f6" stroke-width="2"/>
+        </svg>
+      </div>
+      <p class="kicker">Buổi 06 · MiniPower Academy</p>
+      <h1>Từ tài liệu<br><span class="grad">đến prototype</span></h1>
+    </section>
+
+    <!-- 2 · Lộ trình -->
+    <section class="slide dense">
+      <p class="kicker">Lộ trình khoá học · 10 buổi</p>
+      <h2>Chúng ta đang ở đâu?</h2>
+      <div class="roadmap">
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 01</div><div class="rm-t">12 nỗi đau &amp; Minipower</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 02</div><div class="rm-t">Minipower là ai?</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 03</div><div class="rm-t">AI Foundation</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 04</div><div class="rm-t">Khám phá cùng Minipower</div></div>
+        <div class="rm-node done"><div class="rm-n">✓ Buổi 05</div><div class="rm-t">Chuẩn bị môi trường</div></div>
+        <div class="rm-node current"><div class="rm-n">Buổi 06</div><div class="rm-t">Từ tài liệu đến prototype</div><span class="rm-here">▶ Bạn đang ở đây</span></div>
+        <div class="rm-node next"><div class="rm-n">Buổi 07</div><div class="rm-t">Chốt yêu cầu</div></div>
+        <div class="rm-node dim"><div class="rm-n">Buổi 08</div><div class="rm-t">Kế hoạch thực thi</div></div>
+        <div class="rm-node dim"><div class="rm-n">Buổi 09</div><div class="rm-t">Chốt kế hoạch</div></div>
+        <div class="rm-node dim"><div class="rm-n">Buổi 10</div><div class="rm-t">Vibe code &amp; Demo</div></div>
+      </div>
+    </section>
+
+    <!-- 3 · Ba việc hôm nay -->
+    <section class="slide dense">
+      <span class="beat hands">✋ Buổi thực hành</span>
+      <h2>Ba việc của hôm nay</h2>
+      <table class="cmp">
+        <thead><tr><th style="width:7%">#</th><th style="width:30%">Việc</th><th>Làm thế nào</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><b>Đọc tài liệu</b></td><td>Tài liệu đã có sẵn — <b>đọc và hiểu yêu cầu</b></td></tr>
+          <tr><td>2</td><td><b>Ra màn hình</b></td><td><span class="accent-text">Prompt</span> — bảo AI liệt kê cần những màn hình nào</td></tr>
+          <tr><td>3</td><td><b>Vibe code</b></td><td><span class="accent-text">Prompt</span> — dựng prototype <b>bấm được</b></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Thông báo — repo đổi tên -->
+    <section class="slide dense">
+      <span class="beat news">📢 Thông báo</span>
+      <h2>Repo chính thức đổi tên thành <span class="accent-text">Minipower</span></h2>
+      <div class="three-col">
+        <div class="card" style="border-color:rgba(167,139,250,.4)">
+          <span class="tag" style="color:#a78bfa">Đổi tên</span>
+          <p>Tên chính thức từ nay là <b>Minipower</b> — thống nhất với tên gọi trong cả khoá học.</p>
+        </div>
+        <div class="card" style="border-color:rgba(167,139,250,.4)">
+          <span class="tag" style="color:#a78bfa">Tích hợp code</span>
+          <p>Gộp chung <b>backend</b> và <b>frontend</b> vào repo — không còn tách rời khỏi bộ tài liệu.</p>
+        </div>
+        <div class="card" style="border-color:rgba(167,139,250,.4)">
+          <span class="tag" style="color:#a78bfa">Autotest</span>
+          <p>Kèm sẵn <b>autotest</b> — kiểm thử tự động nằm cùng chỗ với code và tài liệu.</p>
+        </div>
+      </div>
+      <p class="afternote">Nghĩa là từ buổi này trở đi, <b>một repo duy nhất</b> giữ cả
+        <b>tài liệu</b> · <b>code</b> · <b>kiểm thử</b> — đúng thứ lớp sẽ mở ra dùng ngay sau đây.</p>
+    </section>
+
+    <!-- ===== PHẦN 2 — CÁCH CŨ VÀ CÁCH MỚI ===== -->
+
+    <!-- 4 · Cách cũ sáu bước -->
+    <section class="slide dense">
+      <p class="kicker">Phần 2 · Cũ và mới</p>
+      <h2>Cách cũ — sáu bước, tính bằng <span class="warn">tuần</span></h2>
+      <div class="flow">
+        <div class="step"><b>Brainstorm</b><span>họp khách</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><b>Ghi chép</b><span>biên bản</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><b>Vẽ mockup</b><span>designer</span></div>
+      </div>
+      <div class="flow" style="margin-top:0">
+        <div class="step"><b>Confirm định hướng</b><span>khách xem</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><b>Vẽ prototype</b><span>dựng bản bấm được</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><b>Confirm prototype</b><span>khách bấm</span></div>
+      </div>
+      <p class="afternote">Mỗi bước là <b>một vòng chờ</b>: chờ họp được, chờ ghi xong, chờ designer vẽ,
+        chờ khách rảnh, chờ dựng, rồi lại chờ khách xem lần nữa.
+        Từ buổi họp đầu tới lúc khách <b>bấm thử được cái gì đó</b> — tính bằng <span class="warn">tuần</span>.</p>
+    </section>
+
+    <!-- 5 · Cùng sáu bước, cách mới -->
+    <section class="slide dense">
+      <h2>Cùng sáu bước đó — <span class="accent-text">bước nào máy làm được thì máy làm</span></h2>
+      <table class="cmp tight nowrap-1">
+        <thead><tr><th>#</th><th>Bước</th><th>Cách mới</th><th>Ai làm</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Brainstorm</td><td>Sáu nhóm câu hỏi AI soạn sẵn trước khi vào phòng khách</td><td>AI soạn · <b>người hỏi</b></td></tr>
+          <tr><td>2</td><td>Ghi chép</td><td>AI cấu trúc hoá thành <code>DOC-04</code> quy tắc + <code>DOC-05</code> kịch bản</td><td>AI</td></tr>
+          <tr><td>3</td><td>Vẽ mockup</td><td>Sinh danh sách màn hình thẳng từ kịch bản</td><td>AI</td></tr>
+          <tr class="hi"><td>4</td><td><b>Confirm định hướng</b></td><td>Khách nhìn, gật hoặc lắc</td><td><b class="warn">Người</b></td></tr>
+          <tr><td>5</td><td>Vẽ prototype</td><td>Kit Jarvis dựng prototype <b>bấm được</b></td><td>AI</td></tr>
+          <tr class="hi"><td>6</td><td><b>Confirm prototype</b></td><td>Khách <b>bấm thử thật</b></td><td><b class="warn">Người</b></td></tr>
+        </tbody>
+      </table>
+      <p class="note">Không bỏ bước nào. Chỉ đổi <b>ai làm</b>.</p>
+    </section>
+
+    <!-- 7 · Hôm nay vào từ bước 3 -->
+    <section class="slide dense">
+      <h2>Hôm nay lớp vào thẳng <span class="accent-text">bước 3</span></h2>
+      <div class="flow six">
+        <div class="step" style="opacity:.4"><b>1 · Brainstorm</b><span>đã làm sẵn</span></div>
+        <div class="step" style="opacity:.4"><b>2 · Ghi chép</b><span>đã làm sẵn</span></div>
+        <div class="step on"><b>3 · Màn hình</b><span>thực hành 1</span></div>
+        <div class="step human"><b>4 · Confirm</b><span>người</span></div>
+        <div class="step on"><b>5 · Prototype</b><span>thực hành 2</span></div>
+        <div class="step human"><b>6 · Confirm</b><span>người</span></div>
+      </div>
+    </section>
+
+    <!-- ===== PHẦN 3 — BỘ TÀI LIỆU CÓ SẴN ===== -->
+
+    <!-- 7 · Dự án mẫu + chín module -->
+    <section class="slide dense">
+      <p class="kicker">Phần 3 · Bộ tài liệu đã có sẵn</p>
+      <h2>Dự án mẫu — nền tảng <span class="accent-text">Hoá đơn điện tử</span></h2>
+      <p>Cả khoá từ đây tới buổi 10 dùng <b>một dự án duy nhất</b>, tuân thủ thật
+        <b>NĐ 123/2020</b> · <b>NĐ 70/2025</b> · <b>TT 78/2021</b> · <b>TT 88/2021</b> · <b>TT 32/2025</b>.</p>
+      <div class="modgrid">
+        <div class="modcard"><span class="mcode">AUTH</span><span class="mname">Xác thực &amp; truy cập</span></div>
+        <div class="modcard"><span class="mcode">REG</span><span class="mname">Đăng ký phát hành</span></div>
+        <div class="modcard on"><span class="mcode">INV</span><span class="mname">Hoá đơn đầu ra<span class="mtoday">▶ hôm nay</span></span></div>
+        <div class="modcard"><span class="mcode">ERR</span><span class="mname">Xử lý sai sót</span></div>
+        <div class="modcard"><span class="mcode">TXN</span><span class="mname">Lịch sử truyền nhận</span></div>
+        <div class="modcard"><span class="mcode">RPT</span><span class="mname">Báo cáo</span></div>
+        <div class="modcard"><span class="mcode">CAT</span><span class="mname">Danh mục</span></div>
+        <div class="modcard"><span class="mcode">SYS</span><span class="mname">Hệ thống</span></div>
+        <div class="modcard"><span class="mcode">SUP</span><span class="mname">Hỗ trợ</span></div>
+      </div>
+      <p class="afternote">Hôm nay cả lớp làm <b><code>INV</code> — Hoá đơn đầu ra</b>, route <code>/hoa-don</code>.
+        Đây là <b>lõi của sản phẩm</b>.</p>
+    </section>
+
+    <!-- 10 · Tài liệu nằm ở đâu -->
+    <section class="slide dense">
+      <h2>Tài liệu nằm ở đâu</h2>
+      <pre class="tree"><code>einvoice-sample/
+├── <b>docs/</b>
+│   ├── 01-project/      DOC-01 vision · DOC-02 stakeholder · DOC-03 BRD
+│   ├── <b>03-modules/invoice/</b>  <span class="warn">← hôm nay mở ở đây</span>
+│   │       DOC-04 quy tắc · DOC-05 kịch bản · DOC-06 đặc tả · DOC-10 ERD
+│   ├── 04-platform/     DOC-08 SAD · nguyên tắc dùng Jarvis
+│   └── 05-traceability/ trace-matrix.md · doc-registry.md
+├── jarvis/              <i>platform — React 19 + .NET 9</i>
+├── <b>frontend/</b>            <span class="good">← chỗ prototype của chúng ta sẽ nằm</span>
+└── memory/              <i>decision-log · open-questions</i></code></pre>
+      <p class="note">Mỗi module đủ bốn file. Hôm nay chỉ mở <b>ba file</b> trong <code>docs/03-modules/invoice/</code>.</p>
+    </section>
+
+    <!-- 11 · Đọc theo trục -->
+    <section class="slide dense">
+      <span class="beat key">🔑 Cách đọc</span>
+      <h2>Hướng dẫn đọc tài liệu</h2>
+      <p>Đây là chỗ nhiều người mất thời gian nhất: mở tài liệu ra đọc tuần tự từ dòng một. <b class="danger">Đừng.</b></p>
+      <pre class="tree"><code>Chọn 1 kịch bản  →  xem nó đẻ ra chức năng nào  →  xem chức năng trỏ về quy tắc nào
+   <b>DOC-05 UC</b>              <b>DOC-06 FR</b>                      <b>DOC-04 BR</b></code></pre>
+    </section>
+
+    <!-- MỐC 1 — làm quen kho tài liệu -->
+    <section class="slide dense">
+      <span class="beat moc">⏸ Mốc 1 / 5 · Dừng lại</span>
+      <h2>Mở kho tài liệu lên xem</h2>
+      <div class="moc">
+        <p class="moc-label">Làm quen — 5 phút</p>
+        <p class="moc-big">5:00</p>
+        <p class="moc-text">Chưa đọc nội dung — chỉ <b>đi một vòng cho quen chỗ</b></p>
+        <div class="moc-files">
+          <code><b>docs/</b>README.md <i class="muted">→ đọc gì trước, tránh đọc gì</i></code>
+          <code><b>docs/05-traceability/</b>doc-registry.md <i class="muted">→ dự án có những DOC nào</i></code>
+          <code><b>docs/03-modules/</b> <i class="muted">→ mở thử vài module, xem đều có 4 file</i></code>
+        </div>
+        <p class="moc-sub"><b>Qua mốc khi</b> chỉ được: tài liệu của module nằm ở đâu? ·
+          <code>DOC-04</code>, <code>DOC-05</code>, <code>DOC-06</code> khác nhau chỗ nào? ·
+          thư mục <code>invoice</code> nằm đâu?</p>
+      </div>
+    </section>
+
+    <!-- DOC-05 — chọn một kịch bản -->
+    <section class="slide dense packed">
+      <h2><code>DOC-05</code> — chọn một kịch bản</h2>
+      <p class="note" style="margin:0 0 .2rem">Module <code>INV</code> có <b>15 kịch bản</b>
+        (<code>INV-UC-001</code> → <code>INV-UC-015</code>), trong đó <b>10 cái thuộc MVP</b>.
+        Hôm nay lấy <b class="accent-text">INV-UC-002 — Lập hoá đơn mới</b>.</p>
+      <table class="cmp tight nowrap-1">
+        <thead><tr><th>Bước</th><th>Luồng chính</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><span class="muted">(tuỳ chọn)</span> Chọn <b>Ký hiệu HĐ</b> trên thanh ngữ cảnh</td></tr>
+          <tr><td>2</td><td><b>Tạo mới (F4)</b> → mở <b>modal full-width</b> “Tạo mới Hoá đơn giá trị gia tăng”</td></tr>
+          <tr><td>3</td><td><b>Thông tin chung:</b> Ký hiệu* · Ngày HĐ* · Tiền tệ* · Tỷ giá* · HTTT* · Số ĐH/BK CK</td></tr>
+          <tr><td>4</td><td><b>Bên bán:</b> pre-fill từ <code>SYS-FR-01</code>, cho sửa</td></tr>
+          <tr class="hi"><td>5</td><td><b>Người mua:</b> nhập MST → <b>Tìm kiếm</b> <span class="muted">(<code>INV-BR-04</code>)</span>; hoặc chọn KH từ danh mục <code>[+]</code></td></tr>
+          <tr class="hi"><td>6</td><td><b>Grid HHDV:</b> Thêm dòng <b>(F9)</b> — mã HH, tên, UOM, SL, đơn giá, %VAT <span class="muted">(<code>INV-BR-07</code>)</span></td></tr>
+          <tr><td>7</td><td>Kiểm tra vùng <b>Tổng cộng</b> + <b>bằng chữ</b></td></tr>
+          <tr class="hi"><td>8</td><td><b>Lưu</b> → validate → toast success → đóng modal → refresh list → <b class="warn">Chờ ký</b></td></tr>
+        </tbody>
+      </table>
+      <p class="note">Bốn nhánh thay thế: <b>2a</b> Lưu &amp; ký · <b>2b</b> Xem trước ·
+        <b>2c</b> lỗi validate <code>[INV-VAL-xxx]</code> · <b>2d</b> đóng modal khi đang sửa dở.</p>
+    </section>
+
+    <!-- DOC-06 + DOC-04 — hai tài liệu còn lại -->
+    <section class="slide dense packed">
+      <h2>Hai tài liệu còn lại</h2>
+      <h3><code>DOC-06</code> — <code>INV-UC-002</code> đẻ ra 5 chức năng</h3>
+      <table class="cmp tight nowrap-1">
+        <tbody>
+          <tr><td><code>INV-FR-02</code></td><td>Lập HĐ mới (F4) <b>dạng modal</b>: ký hiệu, ngày, tiền tệ, tỷ giá, HTTT</td><td>—</td></tr>
+          <tr><td><code>INV-FR-03</code></td><td>Pre-fill bên bán từ <code>SYS-FR-01</code>, cho sửa</td><td>—</td></tr>
+          <tr><td><code>INV-FR-04</code></td><td>Tra cứu người mua theo MST <b>(CQT + danh mục KH)</b></td><td><code>BR-04</code></td></tr>
+          <tr><td><code>INV-FR-05</code></td><td>Grid nhiều dòng HHDV; tính tiền, thuế, tổng tự động</td><td><code>BR-07</code></td></tr>
+          <tr><td><code>INV-FR-06</code></td><td>Lưu HĐ trạng thái <b>Chờ ký</b> trước khi ký gửi</td><td><code>BR-06</code></td></tr>
+        </tbody>
+      </table>
+      <h3><code>DOC-04</code> — 8 quy tắc, ba cái đụng tới hôm nay</h3>
+      <ul class="mini">
+        <li><b><code>INV-BR-04</code></b> <span class="muted">Integration</span> — MST 10/13 số → tra <b>danh mục KH</b> trước, rồi <b>API CQT</b>, không có thì cho nhập tay</li>
+        <li><b><code>INV-BR-07</code></b> <span class="muted">Calculation</span> — mỗi dòng tự tính: thành tiền → chiết khấu → trước thuế → thuế GTGT → <b>sau thuế</b></li>
+        <li><b><code>INV-BR-06</code></b> <span class="muted">State</span> — <b class="warn">Chờ ký</b> (amber) → <b class="good">Thành công</b> (emerald) / <b class="danger">Có lỗi</b> (red)</li>
+      </ul>
+      <p class="note">Ba badge màu đó lát nữa <b>phải nhìn thấy trên màn hình</b>. Nhớ lấy.</p>
+    </section>
+
+    <!-- MỐC 1 — đọc tài liệu module -->
+    <section class="slide dense">
+      <span class="beat moc">⏸ Mốc 2 / 5 · Dừng lại</span>
+      <h2>Mở ba file ra đọc</h2>
+      <div class="moc">
+        <p class="moc-label">Đọc — 10 phút</p>
+        <p class="moc-big">10:00</p>
+        <p class="moc-text">Đọc <b>theo trục</b>: kịch bản → chức năng → quy tắc</p>
+        <div class="moc-files">
+          <code><b>docs/03-modules/invoice/</b>DOC-05-use-cases.md <i class="muted">→ INV-UC-002</i></code>
+          <code><b>docs/03-modules/invoice/</b>DOC-06-srs.md <i class="muted">→ INV-FR-02…06</i></code>
+          <code><b>docs/03-modules/invoice/</b>DOC-04-business-rules.md <i class="muted">→ 8 quy tắc</i></code>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PHẦN 4 — BỘ TIÊU CHUẨN THIẾT KẾ ===== -->
+
+    <!-- Vì sao cần tiêu chuẩn -->
+    <section class="slide dense">
+      <p class="kicker">Phần 4 · Bộ tiêu chuẩn thiết kế</p>
+      <h2>Trước khi bảo máy vẽ — <span class="accent-text">phải biết thế nào là vẽ đúng</span></h2>
+      <p>Đưa cùng một kịch bản cho AI ba lần, nó ra <b>ba màn hình khác nhau</b>. Lần nào nhìn cũng hợp lý.</p>
+      <div class="two-col">
+        <div class="card" style="border-color:rgba(248,113,113,.4)">
+          <span class="tag" style="color:#f87171">Không có tiêu chuẩn</span>
+          <p>Chín module ra <b>chín phong cách</b>. Nghiệm thu bằng cảm tính:
+            <em>“nhìn cũng được đấy”</em>.</p>
+        </div>
+        <div class="card" style="border-color:rgba(52,211,153,.45)">
+          <span class="tag" style="color:#34d399">Có tiêu chuẩn</span>
+          <p>Mọi module <b>cùng một khuôn</b>. Nghiệm thu bằng <b>đối chiếu</b>: đạt hay không,
+            chỉ ra được chỗ nào.</p>
+        </div>
+      </div>
+      <p class="afternote">Tin tốt: <b>bạn không phải nghĩ ra bộ tiêu chuẩn này.</b>
+        Dự án <b class="accent-text">đã có sẵn</b> — và slide sau là nó.</p>
+    </section>
+
+    <!-- DOC-20 là gì -->
+    <section class="slide dense">
+      <span class="beat key">🔑 Tài liệu xương sống</span>
+      <h2><code>DOC-20</code> — UI Design Principles</h2>
+      <pre class="tree"><code>docs/00-governance/<b>DOC-20-ui-design-principles.md</b></code></pre>
+      <div class="bigcard">
+        <p style="margin:0">Chuẩn hoá nguyên tắc thiết kế giao diện cho <b>toàn bộ dự án</b>.
+          Mọi <code>DOC-19</code> module và <code>DOC-06</code> SRS <b>phải tuân thủ</b> tài liệu này —
+          <b class="warn">delta có chủ đích thì ghi rõ</b> trong DOC-19 của module.</p>
+      </div>
+      <p class="afternote">Vai của BA ở đây <b>không phải phát minh</b>, mà là
+        <b>tuân thủ</b> · <b>biết tra</b> · <b>ghi rõ chỗ mình đi khác và vì sao</b>.</p>
+    </section>
+
+    <!-- Ba tầng + nguồn luận -->
+    <section class="slide dense">
+      <h2>Một bộ tiêu chuẩn <span class="accent-text">luận ra từ đâu</span></h2>
+      <div class="flow">
+        <div class="step on"><b>1 · Đề mục</b><span>gồm những mục nào</span></div>
+        <div class="arrow">→</div>
+        <div class="step on"><b>2 · Nguồn luận</b><span>rút nội dung từ đâu</span></div>
+        <div class="arrow">→</div>
+        <div class="step on"><b>3 · Phương pháp</b><span>thành tiêu chí đo được</span></div>
+      </div>
+      <div class="goodbox">
+        <p><b>Nguồn luận của <code>DOC-20</code> ghi ngay ở đầu tài liệu:</b>
+          khảo sát <b>hệ thống tham chiếu M-Invoice</b>, ngày <b>03/10/2026</b>.</p>
+      </div>
+      <p class="afternote">Đây là phương pháp dùng lại được: <b>khảo sát một sản phẩm cùng ngành đang chạy thật</b>,
+        chắt ra nguyên tắc, ghi nguồn và ngày. Tiêu chuẩn <b>có gốc</b> thì cãi nhau có trọng tài —
+        còn tiêu chuẩn <b class="danger">nghĩ ra</b> thì chỉ là ý kiến cá nhân.</p>
+    </section>
+
+    <!-- 13 nguyên tắc -->
+    <section class="slide dense packed">
+      <h2>Mười bốn nguyên tắc <code>P-01</code> → <code>P-14</code></h2>
+      <table class="cmp tight nowrap-1">
+        <tbody>
+          <tr><td><code>P-01</code></td><td><b>Jarvis-first</b> — dùng layout/table/form của <code>@jarvis/core</code>, chỉ custom khi buộc phải</td></tr>
+          <tr class="hi"><td><code>P-02</code></td><td><b>Một luồng — một pattern</b>: cùng loại màn hình thì cùng cấu trúc và hành vi nút</td></tr>
+          <tr><td><code>P-03</code></td><td><b>Toolbar gọn</b> — không quá 6 nút một hàng; thao tác phụ dồn vào <b>Chức năng ▾</b></td></tr>
+          <tr><td><code>P-04</code></td><td><b>Filter đúng chỗ</b> — trang danh sách có hàng Bộ lọc nâng cao trên bảng</td></tr>
+          <tr class="hi"><td><code>P-05</code></td><td><b>Route vs Dialog</b> — form phức tạp → route mới; CRUD đơn giản → dialog</td></tr>
+          <tr><td><code>P-06</code></td><td><b>Phím tắt chuẩn</b> — F4 Tạo · F3 Sửa · F8 Xoá, hiện ngay trên nhãn nút</td></tr>
+          <tr><td><code>P-07</code></td><td><b>Trạng thái rõ</b> — badge màu; nút phụ thuộc selection phải disabled</td></tr>
+          <tr><td><code>P-08</code> · <code>P-09</code></td><td>Tenant context trên navbar · <b>Compact density</b></td></tr>
+          <tr class="hi"><td><code>P-10</code></td><td><b>Traceability</b> — mỗi nút/field có mã <code>UI-{MOD}-{SCREEN}-{NNN}</code> trace về FR</td></tr>
+          <tr><td><code>P-11</code></td><td><b>Màu có semantics</b> — mỗi màu một vai trò, không màu trang trí</td></tr>
+          <tr class="hi"><td><code>P-12</code></td><td><b>Lỗi có mã</b> — mọi thông báo lỗi hiển thị <code>[code] message</code></td></tr>
+          <tr><td><code>P-13</code></td><td><b>Desktop-first, responsive</b> — tối ưu ≥1024px, co gọn ở dưới</td></tr>
+          <tr class="hi"><td><code>P-14</code></td><td><b>Căn lề dữ liệu</b> — <b>số căn phải</b>, <b>chữ căn trái</b>; cột số dùng <code>tabular-nums</code> để các chữ số thẳng cột</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 5 pattern -->
+    <section class="slide dense">
+      <h2>Năm khuôn màn hình — <span class="accent-text">chọn khuôn trước khi vẽ</span></h2>
+      <table class="cmp tight nowrap-1">
+        <thead><tr><th>Pattern</th><th>Dùng cho</th><th>Ví dụ trong dự án</th></tr></thead>
+        <tbody>
+          <tr class="hi"><td><b>L</b> — List CRUD</td><td>Trang danh sách có lọc, chọn dòng, phân trang</td><td><b>Hoá đơn đầu ra</b> · Danh mục · Mẫu HĐ</td></tr>
+          <tr><td><b>G</b> — Gallery</td><td>Chọn mẫu bằng thẻ hình</td><td>REG — chọn mẫu hoá đơn</td></tr>
+          <tr><td><b>E</b> — Editor split</td><td>Form bên trái, xem trước bên phải</td><td>REG — tuỳ chỉnh mẫu HĐ</td></tr>
+          <tr><td><b>F</b> — Full-page form</td><td>Form dài, nhiều bước → <b>route riêng</b></td><td>REG — tờ khai NĐ70</td></tr>
+          <tr class="hi"><td><b>D</b> — Dialog CRUD</td><td>Thực thể đơn giản, sửa nhanh</td><td>CAT — khách hàng, hàng hoá</td></tr>
+        </tbody>
+      </table>
+      <div class="warnbox">
+        <p><b>Việc đầu tiên khi mở một kịch bản:</b> nó rơi vào khuôn nào?
+          <code>INV-UC-001</code> → <b>Pattern L</b>. <code>INV-UC-002</code> → mở
+          <b>modal full-width</b> trên nền Pattern L.</p>
+      </div>
+    </section>
+
+    <!-- Nút & phím tắt -->
+    <section class="slide dense">
+      <h2>Hệ thống nút — <span class="accent-text">không tự đặt tên, không tự chọn chỗ</span></h2>
+      <table class="cmp tight nowrap-1">
+        <thead><tr><th>Nhóm</th><th>Nút</th><th>Phím</th><th>Chỗ đứng</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="4"><b>Primary CRUD</b></td><td>Tải dữ liệu</td><td>—</td><td rowspan="4">Toolbar</td></tr>
+          <tr><td><b>Tạo mới</b></td><td><b>F4</b></td></tr>
+          <tr><td><b>Chỉnh sửa</b></td><td><b>F3</b></td></tr>
+          <tr><td><b>Xoá</b></td><td><b>F8</b></td></tr>
+          <tr><td><b>Secondary</b></td><td>Sao chép · Nhập/Xuất Excel …</td><td>—</td><td>Menu <b>Chức năng ▾</b></td></tr>
+          <tr><td><b>Module</b></td><td>Ký gửi CQT · Xem mẫu HĐ</td><td>—</td><td>Toolbar hoặc ▾</td></tr>
+          <tr><td><b>Form</b></td><td>Huỷ · <b>Lưu</b> · <b>Ký &amp; gửi CQT</b></td><td>—</td><td>Footer</td></tr>
+        </tbody>
+      </table>
+      <div class="goodbox">
+        <p><b>Trạng thái nút là tiêu chí kiểm được:</b> chưa chọn dòng → Sửa/Xoá/Sao chép <b>disabled</b>;
+          chọn &gt;1 dòng → Sửa <b>disabled</b>; không có quyền → ẩn hoặc disabled kèm tooltip.</p>
+      </div>
+    </section>
+
+    <!-- Mã lỗi -->
+    <section class="slide dense">
+      <span class="beat must">P-12 · Lỗi có mã</span>
+      <h2>Mọi thông báo lỗi có <span class="accent-text">một khuôn duy nhất</span></h2>
+      <pre class="tree"><code><b>[code] message</b>
+
+<span class="danger">[INV-BR-01]</span> Hoá đơn đã ký không được chỉnh sửa.
+<span class="danger">[CAT-VAL-002]</span> Mã số thuế phải có 10 hoặc 13 chữ số.
+<span class="danger">[CQT-ERR-102]</span> Không tìm thấy MST trên CQT.</code></pre>
+      <table class="cmp tight nowrap-1">
+        <thead><tr><th>Tiền tố</th><th>Nguồn lỗi</th><th>Tiền tố</th><th>Nguồn lỗi</th></tr></thead>
+        <tbody>
+          <tr><td><code>{MOD}-VAL-</code></td><td>Validation form</td><td><code>CQT-</code></td><td>Phản hồi Cơ quan thuế</td></tr>
+          <tr><td><code>{MOD}-BR-</code></td><td>Quy tắc nghiệp vụ <span class="muted">(map DOC-04)</span></td><td><code>SYS-</code></td><td>Hệ thống / mạng</td></tr>
+          <tr><td><code>{MOD}-API-</code></td><td>Backend trả về</td><td colspan="2" class="muted">Không hiện stack trace, raw JSON hay HTTP status cho người dùng</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Năm kênh hiển thị: <b>toast</b> · <b>inline dưới ô nhập</b> · <b>banner đầu form</b> ·
+        <b>bảng rỗng</b> · <b>badge trên dòng</b> — mỗi loại lỗi có đúng một kênh.</p>
+    </section>
+
+    <!-- MỐC 2 — đọc DOC-20 -->
+    <section class="slide dense">
+      <span class="beat moc">⏸ Mốc 3 / 5 · Dừng lại</span>
+      <h2>Mở <code>DOC-20</code> ra đọc</h2>
+      <div class="moc">
+        <p class="moc-label">Đọc — 10 phút</p>
+        <p class="moc-big">10:00</p>
+        <p class="moc-text">Không đọc hết — chỉ <b>bốn mục</b> vừa nói</p>
+        <div class="moc-files">
+          <code><b>docs/00-governance/</b>DOC-20-ui-design-principles.md</code>
+          <code>　§2 Nguyên tắc tổng quát <i class="muted">→ P-01 … P-13</i></code>
+          <code>　§4 Pattern layout <i class="muted">→ L · G · E · F · D</i></code>
+          <code>　§5 Hệ thống nút <i class="muted">→ nhóm nút, trạng thái disabled</i></code>
+          <code>　§9 Thông báo &amp; lỗi <i class="muted">→ [code] message</i></code>
+        </div>
+        <p class="moc-sub"><b>Qua mốc khi</b> trả lời được: danh sách hoá đơn rơi vào khuôn nào? ·
+          chưa chọn dòng thì nút nào mờ? · lỗi đúng chuẩn trông ra sao?</p>
+      </div>
+    </section>
+
+    <!-- Ma trận BR → UI -->
+    <section class="slide dense packed">
+      <span class="beat key">🔑 Chỗ nối tài liệu với màn hình</span>
+      <h2><code>DOC-04 §4</code> — Ma trận <span class="accent-text">quy tắc → hành vi UI</span></h2>
+      <p class="note" style="margin:0 0 .2rem">Module <code>INV</code> có <b>8 quy tắc</b>, và tài liệu
+        đã chỉ sẵn mỗi quy tắc đụng vào <b>nút nào, ô nào</b>:</p>
+      <table class="cmp tight nowrap-1">
+        <thead><tr><th>Quy tắc</th><th style="width:14%">Loại</th><th>Nút / field bị ảnh hưởng</th></tr></thead>
+        <tbody>
+          <tr><td><code>INV-BR-01</code> không sửa HĐ đã ký</td><td>Validation</td><td><b>Nút Sửa</b> và row action Sửa → disabled + <code>[INV-BR-01]</code></td></tr>
+          <tr><td><code>INV-BR-02</code> sinh số khi lập</td><td>Process</td><td rowspan="2"><b>Nút Xoá</b> — tuần tự số lớn trước, hoặc xoá tự do</td></tr>
+          <tr><td><code>INV-BR-03</code> sinh số khi ký</td><td>Process</td></tr>
+          <tr class="hi"><td><code>INV-BR-04</code> tra MST CQT</td><td>Integration</td><td>Ô <b>MST người mua</b> + nút 🔍</td></tr>
+          <tr><td><code>INV-BR-05</code> HĐ chiết khấu âm</td><td>Calculation</td><td><span class="muted">out MVP — Phase 2</span></td></tr>
+          <tr class="hi"><td><code>INV-BR-06</code> trạng thái CQT</td><td>State</td><td><b>Badge cột Tr.thái</b>; bật/tắt nút <b>Ký</b></td></tr>
+          <tr class="hi"><td><code>INV-BR-07</code> tính tiền HHDV</td><td>Calculation</td><td><b>Grid HHDV</b>; footer <b>Tổng cộng</b></td></tr>
+          <tr><td><code>INV-BR-08</code> ký gửi cần CTS</td><td>Validation</td><td><b>Ký gửi CQT</b>, <b>Lưu &amp; ký</b></td></tr>
+        </tbody>
+      </table>
+      <p class="note">Không dòng nào do mình nghĩ ra — <b>tất cả đọc ra từ tài liệu</b>.</p>
+    </section>
+
+    <!-- Prompt soi theo tiêu chuẩn -->
+    <section class="slide dense">
+      <h2>Bảo AI soi theo tiêu chuẩn — rồi <span class="warn">người chốt</span></h2>
+      <div class="prompt"><code>@docs/00-governance/DOC-20-ui-design-principles.md
+@docs/03-modules/invoice/DOC-04-business-rules.md
+
+Với INV-UC-002, lập danh sách tiêu chí thiết kế màn hình.
+Mỗi tiêu chí ghi: nội dung · trace về (P-xx của DOC-20 hoặc INV-BR-xx) ·
+nhìn vào đâu biết đạt.
+
+<span class="hl">Chỉ dùng nguyên tắc có trong DOC-20. KHÔNG tự thêm tiêu chí ngoài tài liệu.</span></code></div>
+      <div class="goodbox">
+        <p><b>AI soi nhanh hơn mình, nhưng luận cả thứ không có trong tài liệu.</b>
+          Việc của BA: <b>gạch mọi dòng không trace được</b> về một <code>P-xx</code> hoặc một <code>BR</code>.</p>
+      </div>
+    </section>
+
+    <!-- ===== PHẦN 5 — THỰC HÀNH 1 ===== -->
+
+    <!-- 14 · Việc của bước này -->
+    <section class="slide dense">
+      <span class="beat hands">✋ Thực hành 1 · 25 phút</span>
+      <h2>Từ kịch bản <span class="accent-text">ra màn hình</span></h2>
+      <p>Chưa code gì cả. Bước này chỉ trả lời đúng một câu:</p>
+      <div class="chot">
+        <p class="chot-text"><code>INV-UC-002</code> cần <span class="accent-text">những màn hình nào</span>?</p>
+      </div>
+    </section>
+
+    <!-- 15 · Prompt 1 -->
+    <section class="slide dense">
+      <h2>Prompt 1 — liệt kê màn hình</h2>
+      <div class="prompt"><code>@docs/03-modules/invoice/DOC-05-use-cases.md
+@docs/03-modules/invoice/DOC-04-business-rules.md
+
+Đọc INV-UC-002. Liệt kê các màn hình cần có để đi hết luồng chính 7 bước.
+Mỗi màn hình ghi: tên · phục vụ bước nào · trỏ về quy tắc nào.
+
+<span class="hl">Chỉ liệt kê. CHƯA sinh code. CHƯA tự thêm màn hình ngoài luồng.</span></code></div>
+    </section>
+
+    <!-- 16 · Kết quả mong đợi -->
+    <section class="slide dense">
+      <h2>Kết quả mong đợi</h2>
+      <p class="muted">Khoảng <b>ba tới bốn màn hình</b>, đại ý thế này:</p>
+      <table class="cmp tight">
+        <thead><tr><th>Màn hình</th><th style="width:16%">Bước</th><th style="width:26%">Trỏ về</th></tr></thead>
+        <tbody>
+          <tr><td>Danh sách hoá đơn</td><td>điểm vào</td><td><code>INV-UC-001</code></td></tr>
+          <tr><td>Form lập hoá đơn</td><td>1–4</td><td><code>INV-FR-02</code> · <code>INV-FR-03</code></td></tr>
+          <tr><td>Khối thông tin người mua <span class="muted">(có nút Tìm kiếm MST)</span></td><td>5</td><td><code>INV-BR-04</code></td></tr>
+          <tr><td>Bảng dòng hàng hoá</td><td>6</td><td><code>INV-FR-05</code></td></tr>
+          <tr class="bad"><td>Dashboard thống kê hoá đơn</td><td><span class="danger">—</span></td><td><b class="danger">— không trỏ về đâu —</b></td></tr>
+        </tbody>
+      </table>
+      <div class="dangerbox">
+        <p>Dòng cuối là thứ AI hay tự thêm. <b>Không kịch bản nào yêu cầu nó</b> → <b class="danger">xoá</b>.</p>
+      </div>
+    </section>
+
+    <!-- MỐC 3 — danh sách màn hình -->
+    <section class="slide dense">
+      <span class="beat moc">⏸ Mốc 4 / 5 · Làm được mới đi tiếp</span>
+      <h2>Danh sách màn hình <span class="accent-text">trỏ về được</span></h2>
+      <div class="moc">
+        <p class="moc-label">Qua mốc khi</p>
+        <p class="moc-text">Mỗi màn hình trong danh sách <b>trỏ về được</b><br>
+          một bước của <code>INV-UC-002</code> hoặc một quy tắc <code>INV-BR</code>.</p>
+        <p class="moc-sub">Màn hình nào <b>không trỏ về đâu</b> → xoá khỏi danh sách.<br>
+          Chưa ra thì chạy lại <b>Prompt 1</b>.</p>
+      </div>
+    </section>
+
+    <!-- ===== PHẦN 6 — THỰC HÀNH 2 ===== -->
+
+    <!-- 18 · Kit có sẵn -->
+    <section class="slide dense">
+      <span class="beat hands">✋ Thực hành 2 · 30 phút</span>
+      <h2>Không vẽ trên giấy — dựng thẳng <span class="accent-text">cái bấm được</span></h2>
+      <p>Nền đã dựng từ buổi 05. Trong dự án có sẵn bộ kit giao diện <code>@jarvis/core</code> —
+        đã có layout trang quản trị, bảng dữ liệu, form, nút, thông báo.</p>
+      <table class="cmp tight">
+        <thead><tr><th>Cần gì</th><th>Kit có sẵn</th></tr></thead>
+        <tbody>
+          <tr><td>Khung trang quản trị</td><td><code>AdminLayout</code></td></tr>
+          <tr><td>Bảng danh sách hoá đơn</td><td><code>DataTable</code></td></tr>
+          <tr><td>Lọc theo cột</td><td><code>queryBuilder</code></td></tr>
+          <tr><td>Xem in hoá đơn</td><td><code>CraftPdf</code></td></tr>
+        </tbody>
+      </table>
+      <p class="afternote"><b>Không ai phải vẽ nút từ đầu.</b> Việc còn lại chỉ là
+        <b>ghép đúng thứ tự theo kịch bản</b>.</p>
+    </section>
+
+    <!-- 19 · Prompt 2 -->
+    <section class="slide dense">
+      <h2>Prompt 2 — dựng prototype</h2>
+      <div class="prompt"><code>@.cursor/skills/minipower-frontend-crud-react/SKILL.md
+@docs/03-modules/invoice/DOC-05-use-cases.md
+
+Dựng prototype cho INV-UC-002 vào frontend/src/features/invoice/
+
+- Dùng kit @jarvis/core: AdminLayout, DataTable, form
+- Dữ liệu <span class="hl">GIẢ</span>, chưa nối API backend
+- Bấm được trọn luồng: danh sách → Tạo mới (F4) → nhập → Lưu → Chờ ký
+- Hiện đủ ba trạng thái: Chờ ký · Thành công · Có lỗi   (INV-BR-06)
+
+<span class="hl">Không sửa gì trong thư mục jarvis/.</span></code></div>
+      <p class="note">Dòng cuối là <b>luật của dự án</b>: Jarvis là nền —
+        <b>chỉ mở rộng, không sửa vào trong</b>.</p>
+    </section>
+
+    <!-- MỐC 4 — prototype chạy -->
+    <section class="slide dense">
+      <span class="beat moc">⏸ Mốc 5 / 5 · Làm được mới đi tiếp</span>
+      <h2>Prototype <span class="accent-text">đi trọn một luồng</span></h2>
+      <div class="moc">
+        <p class="moc-label">Qua mốc khi</p>
+        <p class="moc-text">Mở trình duyệt, đi trọn vẹn<br>
+          danh sách → <b>Tạo mới</b> → nhập → <b>Lưu</b><br>
+          và thấy hoá đơn vừa tạo nằm trong danh sách, trạng thái <b class="warn">Chờ ký</b>.</p>
+        <p class="moc-sub">Ai xong <b>giơ tay</b>. Chưa xong thì xem lỗi ở bước nào,
+          chạy lại <b>Prompt 2</b> kèm mô tả lỗi.</p>
+      </div>
+    </section>
+
+    <!-- ===== PHẦN 7 — ĐỦ CHƯA THÌ ĐEM CHO KHÁCH ===== -->
+
+    <!-- 23 · Danh sách kiểm prototype -->
+    <section class="slide dense">
+      <p class="kicker">Phần 7 · Đủ chưa thì đem cho khách</p>
+      <h2>Danh sách kiểm prototype — 4 điều</h2>
+      <table class="cmp tight">
+        <thead><tr><th style="width:5%">#</th><th>Kiểm</th><th style="width:30%">Không đạt nghĩa là</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Mỗi kịch bản có <b>ít nhất một màn hình</b></td><td>Sót màn hình</td></tr>
+          <tr><td>2</td><td>Mỗi màn hình <b>trỏ về kịch bản / quy tắc</b></td><td>Màn hình thừa</td></tr>
+          <tr><td>3</td><td><b>Đi được</b> từ đầu đến cuối một nghiệp vụ</td><td>Thiếu bước ở giữa</td></tr>
+          <tr><td>4</td><td>Dùng <b>đúng kit <code>@jarvis/core</code></b>, không tự chế</td><td>Mỗi module một kiểu</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 24 · Hai chỗ confirm -->
+
+    <!-- 25 · Chưa ký gì cả -->
+
+    <!-- ===== PHẦN 8 — TỔNG KẾT ===== -->
+
+    <!-- 26 · Mang về gì -->
+
+    <!-- Bài tập về nhà -->
+    <section class="slide dense">
+      <p class="kicker">Bài tập về nhà</p>
+      <h2>Hoàn thiện <span class="accent-text">8 module còn lại</span></h2>
+      <p class="note" style="margin:0 0 .3rem">Lặp lại đúng mạch đã làm tại lớp cho từng module:
+        đọc theo trục <code>UC → FR → BR</code> → <b>Prompt 1</b> ra màn hình → <b>Prompt 2</b> dựng prototype.</p>
+      <div class="modgrid">
+        <div class="modcard"><span class="mcode">AUTH</span><span class="mname">Xác thực &amp; truy cập</span></div>
+        <div class="modcard"><span class="mcode">REG</span><span class="mname">Đăng ký phát hành</span></div>
+        <div class="modcard"><span class="mcode">ERR</span><span class="mname">Xử lý sai sót</span></div>
+        <div class="modcard"><span class="mcode">TXN</span><span class="mname">Lịch sử truyền nhận</span></div>
+        <div class="modcard"><span class="mcode">RPT</span><span class="mname">Báo cáo</span></div>
+        <div class="modcard"><span class="mcode">CAT</span><span class="mname">Danh mục</span></div>
+        <div class="modcard"><span class="mcode">SYS</span><span class="mname">Hệ thống</span></div>
+        <div class="modcard"><span class="mcode">SUP</span><span class="mname">Hỗ trợ</span></div>
+      </div>
+      <div class="moc" style="margin-top:.9rem">
+        <p class="moc-label">Tiêu chí hoàn thành</p>
+        <p class="moc-text">Giao diện <b>đồng nhất với module <code>INV</code></b> đã làm tại lớp.</p>
+      </div>
+    </section>
+
+    <!-- Đồng nhất nghĩa là gì -->
+    <section class="slide dense">
+      <h2>“Đồng nhất” — <span class="accent-text">chấm theo sáu điểm</span></h2>
+      <table class="cmp tight">
+        <thead><tr><th style="width:5%">#</th><th>Kiểm</th><th style="width:26%">Căn cứ</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Trang danh sách dùng <b>đúng khuôn</b> như hoá đơn — tiêu đề, bộ lọc trên bảng, phân trang</td><td><code>DOC-20</code> §4 Pattern L</td></tr>
+          <tr><td>2</td><td><b>Cùng bộ nút, cùng chỗ đứng</b>: Tải dữ liệu · Tạo mới · Sửa · Xoá · Chức năng ▾</td><td><code>DOC-20</code> §5</td></tr>
+          <tr><td>3</td><td>Nút phụ thuộc chọn dòng phải <b>mờ khi chưa chọn</b></td><td><code>P-07</code></td></tr>
+          <tr><td>4</td><td>Trạng thái hiển thị bằng <b>badge màu</b>, cùng quy ước màu</td><td><code>DOC-20</code> §7</td></tr>
+          <tr><td>5</td><td>Mọi lỗi theo khuôn <code>[code] message</code></td><td><code>P-12</code></td></tr>
+          <tr class="hi"><td>6</td><td><b>Số căn phải, chữ căn trái</b>; dùng kit <code>@jarvis/core</code>, không tự chế thành phần</td><td><code>P-14</code> · <code>P-01</code></td></tr>
+        </tbody>
+      </table>
+      <p class="afternote">Cách tự chấm nhanh: <b>mở hai tab cạnh nhau</b> — module mình và module hoá đơn.
+        Khác chỗ nào <b>nhìn ra ngay chỗ đó</b>.</p>
+    </section>
+
+    <!-- 28 · Buổi sau -->
+    <section class="slide dense">
+      <h2>Buổi sau</h2>
+      <div class="bigcard" style="text-align:center">
+        <p class="tag" style="font-size:.9rem">Buổi 07 — Chốt yêu cầu</p>
+        <p style="margin:.5rem 0 0">Soi lại tài liệu và prototype theo <b>danh sách kiểm</b>, sửa,
+          rồi <b class="accent-text">tự ký ba cổng</b> — đóng phase Requirements.</p>
+      </div>
+      <div class="chot" style="margin-top:1.4rem">
+        <p class="chot-text">Hôm nay các bạn <span class="accent-text">làm ra</span>.<br>
+          Buổi sau các bạn <span class="warn">chịu trách nhiệm</span> về thứ mình làm ra.</p>
+      </div>
     </section>
 
   </div>
@@ -24,7 +916,7 @@
       <button id="prev" type="button" aria-label="Slide trước">← Trước</button>
     </div>
     <div class="progress" aria-hidden="true">
-      <div id="progress-bar" class="progress-bar" style="width: 100%"></div>
+      <div id="progress-bar" class="progress-bar"></div>
     </div>
     <span id="counter" class="slide-counter">1 / 1</span>
     <button id="next" type="button" aria-label="Slide tiếp">Tiếp →</button>

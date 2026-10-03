@@ -49,11 +49,12 @@ const WORKSHOPS = [
   },
   {
     id: "06-phan-tich-yeu-cau",
-    title: "Buổi 06 — Phân tích yêu cầu",
+    title: "Buổi 06 — Từ tài liệu đến prototype",
     description:
-      "32 tài liệu cho 8 module: chuỗi quy tắc → kịch bản → đặc tả → tiêu chí nghiệm thu, mã ID và bảng truy vết, fan-out song song mà không giẫm chân.",
+      "Buổi thực hành trên dự án Hoá đơn điện tử: đọc tài liệu yêu cầu có sẵn theo trục UC → FR → BR, rồi vibe code ra prototype bấm được bằng kit Jarvis. Cách cũ mất vài tuần, nay còn vài tiếng.",
     status: "Sắp diễn ra",
     path: "workshops/06-phan-tich-yeu-cau/index.html",
+    homework: "workshops/06-phan-tich-yeu-cau/homework.html",
   },
   {
     id: "07-chot-yeu-cau",

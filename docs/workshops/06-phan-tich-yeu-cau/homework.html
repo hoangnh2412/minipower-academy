@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập về nhà — Workshop 06 · Từ tài liệu đến prototype</title>
+  <link rel="stylesheet" href="../../css/site.css">
+  <style>
+    :root{
+      --hw-accent:#4f8cff; --hw-accent-glow:rgba(79,140,255,.2);
+      --hw-chapter:#f5a623; --hw-good:#34d399; --hw-danger:#f87171;
+      --hw-surface:rgba(255,255,255,.06); --hw-border:rgba(255,255,255,.12);
+    }
+    body{overflow-y:auto}
+
+    .hw-header{padding:2.5rem 0 2rem;border-bottom:1px solid var(--color-border)}
+    .hw-header .breadcrumb{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+      font-size:.85rem;color:var(--color-muted);margin-bottom:1rem}
+    .hw-header .breadcrumb a{color:var(--color-muted)}
+    .hw-header .breadcrumb a:hover{color:var(--color-accent)}
+    .hw-header h1{margin:0 0 .75rem;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+    .hw-header .intro{margin:0;max-width:64ch;color:var(--color-muted);font-size:1.05rem;line-height:1.65}
+    .hw-header .intro strong{color:var(--color-text)}
+
+    .hw-main{padding:2rem 0 4rem}
+
+    .sect{margin:2.25rem 0 1rem;display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
+    .sect h2{margin:0;font-size:1.05rem;font-weight:700;color:var(--color-text);
+      letter-spacing:.04em;text-transform:uppercase}
+    .sect span{color:var(--color-muted);font-size:.9rem}
+
+    .task-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.25rem}
+    .task-card{background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius);padding:1.4rem 1.6rem;box-shadow:var(--shadow)}
+    .task-card .task-num{display:inline-flex;align-items:center;justify-content:center;
+      width:2rem;height:2rem;border-radius:50%;background:var(--hw-accent-glow);
+      border:1px solid rgba(79,140,255,.4);color:var(--hw-accent);font-weight:700;
+      font-size:.9rem;margin-bottom:.75rem}
+    .task-card h3{margin:0 0 .5rem;font-size:1.12rem;font-weight:600;color:var(--color-text)}
+    .task-card .task-desc{margin:0 0 .9rem;color:var(--color-muted);font-size:.94rem;line-height:1.6}
+
+    .prompt-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--hw-accent);margin-bottom:.5rem}
+    .prompt-row{display:flex;flex-direction:column;gap:.65rem}
+    @media (min-width:640px){.prompt-row{flex-direction:row;align-items:flex-start}}
+    .prompt-block{flex:1;padding:1rem 1.15rem;border-radius:8px;background:rgba(0,0,0,.35);
+      border:1px solid rgba(79,140,255,.25);font-family:var(--font-mono);font-size:.88rem;
+      line-height:1.6;color:#b8d4ff;white-space:pre-wrap;word-break:break-word}
+    .copy-btn{flex-shrink:0;padding:.55rem 1rem;border-radius:8px;border:1px solid var(--hw-border);
+      background:var(--hw-surface);color:var(--color-text);font-family:var(--font-sans);
+      font-size:.85rem;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s}
+    .copy-btn:hover{border-color:var(--hw-accent);background:var(--hw-accent-glow)}
+    .copy-btn.copied{border-color:var(--hw-good);color:var(--hw-good)}
+
+    .answer-area{width:100%;min-height:110px;margin-top:.75rem;padding:.9rem 1.1rem;border-radius:8px;
+      border:1px solid var(--color-border);background:rgba(0,0,0,.25);color:var(--color-text);
+      font-family:var(--font-sans);font-size:.94rem;line-height:1.6;resize:vertical}
+    .answer-area:focus{outline:none;border-color:var(--hw-accent);box-shadow:0 0 0 3px var(--hw-accent-glow)}
+    .answer-area::placeholder{color:var(--color-muted)}
+
+    .callout{margin-top:.9rem;padding:.8rem 1.1rem;border-radius:8px;
+      border-left:3px solid var(--hw-chapter);background:rgba(245,166,35,.1);
+      font-size:.9rem;line-height:1.55;color:#f0d9a8}
+    .callout strong{color:#ffd89b}
+    .callout.good{border-left-color:var(--hw-good);background:rgba(52,211,153,.09);color:#a7e8cd}
+    .callout.good strong{color:#c8f5e2}
+
+    .submit-note{margin-top:2rem;padding:1.25rem 1.5rem;border-radius:var(--radius);
+      background:var(--hw-accent-glow);border:1px solid rgba(79,140,255,.3);
+      font-size:.95rem;line-height:1.6;color:#c8dcff}
+    .submit-note strong{color:var(--color-text)}
+
+    .req-list{list-style:none;margin:0;padding:0;counter-reset:req;display:flex;flex-direction:column;gap:.8rem}
+    .req-list li{position:relative;padding-left:2.6rem;color:var(--color-muted);font-size:.96rem;line-height:1.6}
+    .req-list li::before{counter-increment:req;content:counter(req);position:absolute;left:0;top:.05rem;
+      width:1.8rem;height:1.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      background:var(--hw-accent-glow);border:1px solid rgba(79,140,255,.4);
+      color:var(--hw-accent);font-weight:700;font-size:.82rem}
+    .req-list li strong{color:var(--color-text);font-weight:600}
+
+    table.hw{border-collapse:collapse;width:100%;margin:.6rem 0;font-size:.92rem}
+    table.hw th,table.hw td{border:1px solid var(--color-border);padding:.55rem .8rem;
+      text-align:left;color:var(--color-muted);vertical-align:top}
+    table.hw th{color:var(--color-text);background:rgba(255,255,255,.04);font-weight:600}
+    table.hw td strong{color:var(--color-text)}
+    table.hw code{font-family:var(--font-mono);font-size:.9em;color:#b8d4ff}
+
+    pre.cmd{margin:.7rem 0 0;padding:1rem 1.15rem;border-radius:8px;background:rgba(0,0,0,.35);
+      border:1px solid var(--color-border);font-family:var(--font-mono);font-size:.88rem;
+      line-height:1.65;color:#b8d4ff;overflow-x:auto}
+
+    .progress-bar-wrap{position:sticky;top:0;z-index:20;background:var(--color-bg);
+      padding:.7rem 0;border-bottom:1px solid var(--color-border)}
+    .progress-row{display:flex;align-items:center;gap:.9rem;font-size:.88rem;color:var(--color-muted)}
+    .progress-track{flex:1;height:6px;border-radius:3px;background:var(--color-surface);overflow:hidden}
+    .progress-fill{height:100%;width:0;background:var(--hw-accent);border-radius:3px;transition:width .25s}
+
+    /* --- checklist nộp bài --- */
+    .check-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9rem}
+    .check-item{display:flex;gap:.9rem;align-items:flex-start;padding:.95rem 1.15rem;border-radius:10px;
+      background:var(--color-surface);border:1px solid var(--color-border);transition:border-color .15s}
+    .check-item:has(input:checked){border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.07)}
+    .check-item input[type=checkbox]{flex-shrink:0;width:1.25rem;height:1.25rem;margin-top:.15rem;
+      accent-color:var(--hw-good);cursor:pointer}
+    .check-item .ci-body{flex:1;min-width:0}
+    .check-item .ci-t{color:var(--color-text);font-weight:600;font-size:1rem;line-height:1.5}
+    .check-item .ci-d{margin:.3rem 0 0;color:var(--color-muted);font-size:.9rem;line-height:1.55}
+    .check-item .ci-d code{font-family:var(--font-mono);font-size:.9em;color:#b8d4ff}
+    .link-input{width:100%;margin-top:.6rem;padding:.6rem .85rem;border-radius:8px;
+      border:1px solid var(--color-border);background:rgba(0,0,0,.25);color:var(--color-text);
+      font-family:var(--font-sans);font-size:.92rem}
+    .link-input:focus{outline:none;border-color:var(--hw-accent);box-shadow:0 0 0 3px var(--hw-accent-glow)}
+    .link-input::placeholder{color:var(--color-muted)}
+
+    /* --- lưới module buổi 06 --- */
+    .mod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.7rem;margin:.2rem 0 0}
+    .mod-chip{display:flex;align-items:baseline;gap:.55rem;padding:.6rem .85rem;border-radius:9px;
+      background:var(--color-surface);border:1px solid var(--color-border)}
+    .mod-chip .mc{font-family:var(--font-mono);font-weight:700;color:var(--hw-accent);font-size:.9rem;min-width:3.2em}
+    .mod-chip .mn{color:var(--color-text);font-size:.92rem}
+    .mod-chip.done{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.07)}
+    .mod-chip.done .mc{color:var(--hw-good)}
+    .ref-card{margin:.2rem 0 0;padding:1rem 1.2rem;border-radius:10px;
+      border:1px solid rgba(79,140,255,.3);background:rgba(79,140,255,.08)}
+    .ref-card p{margin:0;color:#c8dcff;font-size:.95rem;line-height:1.6}
+    .ref-card strong{color:var(--color-text)}
+  </style>
+</head>
+<body>
+  <header class="hw-header">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Điều hướng">
+        <a href="../../index.html">Trang chủ</a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html">Workshop 06 · Từ tài liệu đến prototype</a>
+        <span aria-hidden="true">/</span>
+        <span>Bài tập về nhà</span>
+      </nav>
+      <h1>Bài tập về nhà</h1>
+      <p class="intro">
+        Tại lớp cả nhóm làm xong module <strong>Hoá đơn đầu ra</strong> — đọc tài liệu theo trục,
+        ra danh sách màn hình, rồi vibe code thành prototype bấm được.
+        Bài tập là <strong>làm nốt 8 module còn lại</strong> theo đúng mạch đó.
+        Tiêu chí hoàn thành chỉ có một: <strong>giao diện đồng nhất với module <code>INV</code></strong>.
+      </p>
+    </div>
+  </header>
+
+  <div class="progress-bar-wrap">
+    <div class="container">
+      <div class="progress-row">
+        <span id="prog-text">0 / 8 module đã xong</span>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+        <button class="copy-btn" id="btn-clear" type="button">Xoá hết</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="hw-main">
+    <div class="container">
+
+      <div class="sect"><h2>Tám module phải làm</h2><span>mỗi module lặp lại đúng ba bước dưới</span></div>
+      <div class="mod-grid">
+        <div class="mod-chip"><span class="mc">AUTH</span><span class="mn">Xác thực &amp; truy cập</span></div>
+        <div class="mod-chip"><span class="mc">REG</span><span class="mn">Đăng ký phát hành</span></div>
+        <div class="mod-chip"><span class="mc">ERR</span><span class="mn">Xử lý sai sót</span></div>
+        <div class="mod-chip"><span class="mc">TXN</span><span class="mn">Lịch sử truyền nhận</span></div>
+        <div class="mod-chip"><span class="mc">RPT</span><span class="mn">Báo cáo</span></div>
+        <div class="mod-chip"><span class="mc">CAT</span><span class="mn">Danh mục</span></div>
+        <div class="mod-chip"><span class="mc">SYS</span><span class="mn">Hệ thống</span></div>
+        <div class="mod-chip"><span class="mc">SUP</span><span class="mn">Hỗ trợ</span></div>
+      </div>
+
+      <div class="ref-card" style="margin-top:1rem">
+        <p><strong>Mốc để so sánh:</strong> module <code>INV</code> đã làm tại lớp.
+          Mở nó lên cạnh module đang làm — đó là bản mẫu, không phải tham khảo cho vui.</p>
+      </div>
+
+      <div class="sect"><h2>Ba bước cho mỗi module</h2><span>giống hệt tại lớp</span></div>
+
+      <ul class="task-list">
+        <li class="task-card">
+          <div class="task-num">1</div>
+          <h3>Đọc tài liệu theo trục</h3>
+          <p class="task-desc">Đừng đọc tuần tự. Chọn <strong>một kịch bản</strong> trong <code>DOC-05</code>,
+            lần ra chức năng trong <code>DOC-06</code>, rồi lần tiếp ra quy tắc trong <code>DOC-04</code>.</p>
+          <table class="hw">
+            <thead><tr><th style="width:30%">File</th><th>Tìm gì</th></tr></thead>
+            <tbody>
+              <tr><td><code>DOC-05-use-cases.md</code></td><td>Chọn <strong>1 kịch bản</strong> làm trục — ưu tiên cái đánh dấu MVP</td></tr>
+              <tr><td><code>DOC-06-srs.md</code></td><td>Kịch bản đó đẻ ra <strong>những chức năng nào</strong></td></tr>
+              <tr><td><code>DOC-04-business-rules.md</code></td><td>Chức năng đó <strong>trỏ về quy tắc nào</strong> — nhớ đọc cột <strong>Loại</strong></td></tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            <strong>Cột “Loại” quyết định màn hình phải có gì.</strong>
+            Validation → chặn + thông báo · State → badge + hành động theo trạng thái ·
+            Calculation → trường tự tính chỉ đọc · Integration → trạng thái chờ + lỗi kết nối ·
+            Process → thứ tự thao tác · Compliance → mẫu cố định · Security → ai không được thấy.
+          </div>
+        </li>
+
+        <li class="task-card">
+          <div class="task-num">2</div>
+          <h3>Prompt 1 — liệt kê màn hình</h3>
+          <p class="task-desc">Bắt AI <strong>nói ra trước</strong>, mình soi rồi mới cho nó dựng.
+            Thay <code>{module}</code> và <code>{UC}</code> bằng của bạn.</p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p1">@docs/03-modules/{module}/DOC-05-use-cases.md
+@docs/03-modules/{module}/DOC-04-business-rules.md
+
+Đọc {UC}. Liệt kê các màn hình cần có để đi hết luồng chính.
+Mỗi màn hình ghi: tên · phục vụ bước nào · trỏ về quy tắc nào.
+
+Chỉ liệt kê. CHƯA sinh code. CHƯA tự thêm màn hình ngoài luồng.</div>
+            <button class="copy-btn" data-copy="p1" type="button">Copy</button>
+          </div>
+          <div class="callout good">
+            <strong>Soi trước khi đi tiếp:</strong> màn hình nào <strong>không trỏ về đâu</strong> thì xoá.
+            Đó là thứ AI tự thêm vì “dự án nào chẳng cần”.
+          </div>
+        </li>
+
+        <li class="task-card">
+          <div class="task-num">3</div>
+          <h3>Prompt 2 — dựng prototype</h3>
+          <p class="task-desc">Dữ liệu giả, chưa nối API. Cần <strong>bấm được</strong> trọn một luồng.</p>
+          <div class="prompt-label">Prompt</div>
+          <div class="prompt-row">
+            <div class="prompt-block" id="p2">@.cursor/skills/minipower-frontend-crud-react/SKILL.md
+@docs/00-governance/DOC-20-ui-design-principles.md
+@docs/03-modules/{module}/DOC-05-use-cases.md
+
+Dựng prototype cho {UC} vào frontend/src/features/{module}/
+
+- Tuân thủ DOC-20: pattern layout, hệ thống nút, badge trạng thái, [code] message
+- Dùng kit @jarvis/core: AdminLayout, DataTable, form
+- Dữ liệu GIẢ, chưa nối API backend
+- Giao diện phải đồng nhất với module invoice đã làm
+
+Không sửa gì trong thư mục jarvis/.</div>
+            <button class="copy-btn" data-copy="p2" type="button">Copy</button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="sect"><h2>Tiêu chí hoàn thành</h2><span>sáu điểm — chấm được, không cảm tính</span></div>
+      <table class="hw">
+        <thead><tr><th style="width:5%">#</th><th>Kiểm</th><th style="width:24%">Căn cứ</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Trang danh sách dùng <strong>đúng khuôn</strong> như hoá đơn — tiêu đề, bộ lọc trên bảng, phân trang</td><td><code>DOC-20</code> §4 Pattern L</td></tr>
+          <tr><td>2</td><td><strong>Cùng bộ nút, cùng chỗ đứng</strong>: Tải dữ liệu · Tạo mới · Sửa · Xoá · Chức năng ▾</td><td><code>DOC-20</code> §5</td></tr>
+          <tr><td>3</td><td>Nút phụ thuộc chọn dòng phải <strong>mờ khi chưa chọn</strong></td><td><code>P-07</code></td></tr>
+          <tr><td>4</td><td>Trạng thái hiển thị bằng <strong>badge màu</strong>, cùng quy ước màu</td><td><code>DOC-20</code> §7</td></tr>
+          <tr><td>5</td><td>Mọi lỗi theo khuôn <code>[code] message</code></td><td><code>P-12</code></td></tr>
+          <tr><td>6</td><td><strong>Số căn phải, chữ căn trái</strong>; dùng kit <code>@jarvis/core</code>, không tự chế thành phần</td><td><code>P-14</code> · <code>P-01</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Cách tự chấm nhanh:</strong> mở hai tab cạnh nhau — module của bạn và module hoá đơn.
+        Khác chỗ nào nhìn ra ngay chỗ đó.
+      </div>
+
+      <div class="sect"><h2>Tích khi xong</h2><span>đủ sáu điểm trên mới tích</span></div>
+      <ul class="check-list">
+        <li class="check-item">
+          <input type="checkbox" data-k="m1" id="m1">
+          <div class="ci-body">
+            <label class="ci-t" for="m1"><code>AUTH</code> — Xác thực &amp; truy cập</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/auth/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m2" id="m2">
+          <div class="ci-body">
+            <label class="ci-t" for="m2"><code>REG</code> — Đăng ký phát hành</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/register/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m3" id="m3">
+          <div class="ci-body">
+            <label class="ci-t" for="m3"><code>ERR</code> — Xử lý sai sót</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/error-handling/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m4" id="m4">
+          <div class="ci-body">
+            <label class="ci-t" for="m4"><code>TXN</code> — Lịch sử truyền nhận</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/transmission/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m5" id="m5">
+          <div class="ci-body">
+            <label class="ci-t" for="m5"><code>RPT</code> — Báo cáo</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/report/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m6" id="m6">
+          <div class="ci-body">
+            <label class="ci-t" for="m6"><code>CAT</code> — Danh mục</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/catalog/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m7" id="m7">
+          <div class="ci-body">
+            <label class="ci-t" for="m7"><code>SYS</code> — Hệ thống</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/system/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="m8" id="m8">
+          <div class="ci-body">
+            <label class="ci-t" for="m8"><code>SUP</code> — Hỗ trợ</label>
+            <p class="ci-d">Đọc <code>docs/03-modules/support/</code> theo trục → Prompt 1 → Prompt 2 →
+              tự chấm sáu điểm đồng nhất.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" data-k="push" id="push">
+          <div class="ci-body">
+            <label class="ci-t" for="push">Đẩy tất cả lên GitHub</label>
+            <p class="ci-d">Cùng repo với tài liệu — code và tri thức dự án nằm chung một chỗ.</p>
+            <input class="link-input" type="text" data-k="repo" placeholder="Dán link repo của bạn vào đây…">
+          </div>
+        </li>
+      </ul>
+
+      <div class="sect"><h2>Đẩy lên GitHub</h2></div>
+      <pre class="cmd">git add .
+git commit -m "Buổi 06: prototype 8 module còn lại"
+git push</pre>
+      <div class="callout">
+        <strong>Đừng đẩy khoá bí mật lên GitHub.</strong> Kiểm lại file cấu hình trước khi commit —
+        không có mật khẩu, không có khoá API.
+      </div>
+
+      <div class="submit-note">
+        <strong>Hạn nộp và nơi nộp:</strong> theo thông báo trong group.
+        <br><br>
+        Nội dung bạn tích và dán trong trang này được <strong>lưu tự động trên máy bạn</strong> —
+        đóng tab mở lại vẫn còn.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><a href="index.html">← Quay lại slide workshop</a> · MiniPower Academy</p>
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "minipower-hw-06";
+    const TOTAL = 8;
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+    let luuDuoc = true;
+    function saveState(state) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+      catch { if (luuDuoc) { luuDuoc = false; canhBaoKhongLuuDuoc(); } }
+    }
+    function canhBaoKhongLuuDuoc() {
+      const box = document.createElement("div");
+      box.setAttribute("role", "status");
+      box.style.cssText =
+        "position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:99;max-width:38rem;" +
+        "margin:0 auto;padding:.85rem 1rem;border-radius:.6rem;line-height:1.5;" +
+        "background:#4a2c00;color:#ffe0b2;border:1px solid #8a5200;font-size:.95rem";
+      box.innerHTML =
+        "\u26a0\ufe0f <strong>Trình duyệt đang chặn lưu tự động.</strong> Bài làm sẽ mất khi tải lại trang.";
+      document.body.appendChild(box);
+    }
+    let state = loadState();
+
+    function chep(text, btn) {
+      const xong = () => {
+        btn.textContent = "Đã copy";
+        btn.classList.add("copied");
+        setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1600);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(xong).catch(() => chepKieuCu(text, xong));
+      } else { chepKieuCu(text, xong); }
+    }
+    function chepKieuCu(text, xong) {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.cssText = "position:fixed;left:-9999px";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); xong(); } catch {}
+      document.body.removeChild(ta);
+    }
+
+    document.querySelectorAll("[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = document.getElementById(btn.dataset.copy);
+        if (el) chep(el.textContent, btn);
+      });
+    });
+
+    const boxes = [...document.querySelectorAll("input[type=checkbox][data-k]")];
+    const inputs = [...document.querySelectorAll("input.link-input[data-k]")];
+    const modBoxes = boxes.filter((b) => /^m\d+$/.test(b.dataset.k));
+
+    function capNhatTienDo() {
+      const xong = modBoxes.filter((b) => b.checked).length;
+      document.getElementById("prog-text").textContent = `${xong} / ${TOTAL} module đã xong`;
+      document.getElementById("prog-fill").style.width = `${(xong / TOTAL) * 100}%`;
+      modBoxes.forEach((b, i) => {
+        const chip = document.querySelectorAll(".mod-chip")[i];
+        if (chip) chip.classList.toggle("done", b.checked);
+      });
+    }
+
+    boxes.forEach((b) => {
+      if (state[b.dataset.k]) b.checked = true;
+      b.addEventListener("change", () => {
+        state[b.dataset.k] = b.checked; saveState(state); capNhatTienDo();
+      });
+    });
+    inputs.forEach((i) => {
+      if (state[i.dataset.k]) i.value = state[i.dataset.k];
+      i.addEventListener("input", () => { state[i.dataset.k] = i.value; saveState(state); });
+    });
+
+    document.getElementById("btn-clear").addEventListener("click", () => {
+      if (!confirm("Xoá hết nội dung đã tích và đã dán?")) return;
+      state = {}; saveState(state);
+      boxes.forEach((b) => (b.checked = false));
+      inputs.forEach((i) => (i.value = ""));
+      capNhatTienDo();
+    });
+
+    capNhatTienDo();
+  </script>
+</body>
+</html>
