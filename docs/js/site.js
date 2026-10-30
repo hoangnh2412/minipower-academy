@@ -102,6 +102,13 @@ const SHARES = [
       "5 lệnh nhỏ để kiểm soát trí nhớ của Claude Code: /clear, /compact, /resume, /memory, /cost.",
     path: "shares/claude-code/session-context/index.html",
   },
+  {
+    id: "teamwork-thuc-chien",
+    title: "Teamwork trong thực chiến dự án",
+    description:
+      "Workshop 120 phút: niềm tin, giao tiếp, trách nhiệm, cùng thực thi và phát triển; hai hoạt động nhóm, cam kết của đội.",
+    path: "shares/teamwork/index.html",
+  },
 ];
 
 function renderWorkshops() {
