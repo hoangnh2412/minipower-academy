@@ -37,10 +37,12 @@ Khoá học **không** dạy "AI tự chạy dự án". Chi tiết trong `assets
 | `assets/` | **Nguồn gốc nội dung** — `curriculum.md` (lộ trình 10 buổi) ở gốc; nội dung theo buổi nằm trong `workshops/` |
 | `assets/workshops/NN-slug/` | Một buổi: file theo 5 giai đoạn pipeline — `1-concept.md`, `2-script-raw.md`, `2-script-final.md`, `3-storyboard.md`, `4-prompts.md` |
 | `assets/_template/` | Khung 5 file giai đoạn mẫu — sao chép khi tạo buổi mới |
+| `assets/shares/<slug>/` | Nội dung nguồn của một **share** (buổi chia sẻ ngoài lộ trình 10 buổi): `README.md` tổng quan + `script.md` kịch bản trình bày. Ví dụ `assets/shares/teamwork/` |
 | `assets/_shared/` | Tài sản dùng chung mọi buổi — `base_prompt.md`, ảnh nhân vật (`characters_*.png`, `sample.png`) |
 | `docs/` | **Site tĩnh xuất bản** qua GitHub Pages — đây là nội dung người xem thấy |
 | `docs/workshops/NN-slug/` | Một buổi workshop: `index.html` (deck), `homework.html`, `slides/` (ảnh webp) |
 | `docs/workshops/_template/` | Khung deck mẫu — sao chép khi tạo buổi mới |
+| `docs/shares/<slug>/` | Deck xuất bản của một share (`index.html`); đăng ký trong `SHARES[]` của `docs/js/site.js` |
 | `docs/workshops/_shared/` | CSS/JS dùng chung cho các deck kiểu text |
 | `docs/js/site.js` | Danh sách workshop hiển thị trên trang chủ (`WORKSHOPS[]`) |
 | `scripts/` | Script Node xử lý ảnh slide (nén PNG, chuyển WebP) |
