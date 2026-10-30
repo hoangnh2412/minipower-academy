@@ -459,9 +459,89 @@ b,strong{font-weight:600}
 .sr .ar{color:var(--teal);width:32px;height:32px}
 .sr .to{font-size:32px;font-weight:800;letter-spacing:-.012em}
 
+
+/* ---------- Icons (inline SVG, theme-aware) ---------- */
+svg.ico{display:block;flex:none;stroke-width:2.6}
+.opt{position:relative}
+.opt .ico{position:absolute;top:40px;right:44px;width:112px;height:112px;color:var(--teal);opacity:.42}
+.sit .who .ico{margin-left:auto;width:42px;height:42px;color:var(--brick)}
+.needs li{padding-top:66px}
+.needs li::before,.needs li::after{display:none}
+.needs li .ico{position:absolute;left:0;top:0;width:48px;height:48px;color:var(--teal)}
+.scards li{position:relative}
+.scards .q{padding-right:60px}
+.scards li .ico{position:absolute;top:24px;right:26px;width:42px;height:42px;color:var(--amber)}
+.lead3 .ico{width:64px;height:64px;color:var(--amber);margin-bottom:18px}
+.ego h3{display:flex;align-items:center;gap:18px}
+.ego .ico{width:52px;height:52px;color:var(--amber)}
+.s-section h2{max-width:960px}
+.s-section .sub{max-width:940px}
+.deco{position:absolute;right:110px;top:130px;width:400px;height:400px;color:var(--pine-muted);opacity:.75;stroke-width:1.25;stroke-dasharray:1;stroke-dashoffset:0;pointer-events:none}
+.sticky{position:relative}
+.sticky::before{content:"";position:absolute;left:50%;top:-14px;width:130px;height:30px;background:rgba(255,255,255,.42);translate:-50% 0;rotate:-2deg;border-radius:2px}
+.dark .sticky::before{background:rgba(255,255,255,.22)}
+
+/* ---------- Case context (practice) ---------- */
+.ctx{font-size:27px;line-height:1.5;max-width:1380px;margin-bottom:38px}
+.ctx b{color:var(--teal)}
+.sprint.tl{gap:16px;margin-bottom:0}
+.sprint.tl .day{padding:18px 22px 22px}
+.sprint.tl .dn{font-size:23px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.sprint.tl .st{font-size:23px;font-weight:400;line-height:1.38;color:var(--muted)}
+.sprint.tl .day.bad .st{color:var(--brick);font-weight:600}
+.bubbles.six{gap:22px 28px}
+.bubbles.six blockquote{font-size:26px;min-height:0;padding:22px 28px}
+.bubbles.six blockquote::after{bottom:-10px;left:30px;width:22px;height:22px}
+.bubbles.six figcaption{margin:14px 0 0 30px;font-size:21px}
+
+/* ---------- Motion: staggered entrance (--d set by script) ---------- */
+.is-active .an{animation:rise .6s cubic-bezier(.2,.7,.2,1) calc(var(--d,0)*1ms) both}
+@keyframes rise{from{opacity:0;translate:0 28px}to{opacity:1;translate:0 0}}
+@keyframes popin{from{opacity:0;scale:.5}to{opacity:1;scale:1}}
+@keyframes fromleft{from{opacity:0;translate:-48px 0}to{opacity:1;translate:0 0}}
+@keyframes drop{from{opacity:0;translate:0 -70px}to{opacity:1;translate:0 0}}
+@keyframes shake{0%,100%{translate:0 0}20%{translate:-9px 0}40%{translate:9px 0}60%{translate:-6px 0}80%{translate:6px 0}}
+@keyframes drawpath{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes strike{from{background-size:0 3px}to{background-size:100% 3px}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes march{from{background-position-x:0}to{background-position-x:26px}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+
+/* variants */
+.is-active .qmark.an,.is-active .thanks.an{animation-name:popin;animation-timing-function:cubic-bezier(.3,1.5,.5,1)}
+.is-active .s-section h2.an,.is-active .s-title h1.an{animation-name:fromleft}
+.is-active .sticky.an{animation-name:drop;animation-timing-function:cubic-bezier(.3,1.35,.5,1);animation-duration:.7s}
+.is-active .deco{animation:rise .6s ease calc(var(--d,0)*1ms) both,drawpath 1.8s cubic-bezier(.4,0,.2,1) calc(var(--d,0)*1ms + 150ms) both}
+.is-active .rail .cur .ck{animation:popin .55s cubic-bezier(.3,1.6,.5,1) .35s both}
+.is-active .letter{animation:popin .6s cubic-bezier(.3,1.6,.5,1) calc(var(--d,0)*1ms + 180ms) both}
+.is-active .roles .tickmark{animation:popin .45s cubic-bezier(.3,1.6,.5,1) calc(var(--d,0)*1ms + 420ms + var(--k,0)*160ms) both}
+.roles li:nth-child(2){--k:1}.roles li:nth-child(3){--k:2}.roles li:nth-child(4){--k:3}
+.is-active .tbar span{animation:wipe .7s cubic-bezier(.2,.7,.2,1) both}
+.tbar span:nth-child(2){animation-delay:.1s!important}.tbar span:nth-child(3){animation-delay:.45s!important}.tbar span:nth-child(4){animation-delay:.8s!important}.tbar span:nth-child(5){animation-delay:1.15s!important}
+.is-active .day .flag{animation:popin .5s cubic-bezier(.3,1.6,.5,1) calc(var(--d,0)*1ms + 450ms) both}
+.is-active .an.bad:not(.h3){animation:rise .6s cubic-bezier(.2,.7,.2,1) calc(var(--d,0)*1ms) both,shake .5s ease calc(var(--d,0)*1ms + 650ms) both}
+.is-active .lnode.bad{animation:shake .5s ease calc(var(--d,0)*1ms + 900ms) both}
+.wait::before{border-top:0;height:3px;margin-top:-1.5px;background:repeating-linear-gradient(90deg,var(--line) 0 13px,transparent 13px 26px);animation:march .8s linear infinite}
+.hub .spoke{--len:1;stroke-dasharray:1;stroke-dashoffset:0}
+.is-active .hub .spoke{animation:drawpath .6s ease both}
+.hub .spoke:nth-of-type(2){animation-delay:.25s}.hub .spoke:nth-of-type(3){animation-delay:.4s}.hub .spoke:nth-of-type(4){animation-delay:.55s}.hub .spoke:nth-of-type(5){animation-delay:.7s}.hub .spoke:nth-of-type(6){animation-delay:.85s}
+.hub .mate{transform-box:fill-box;transform-origin:center}
+.is-active .hub .mate{animation:popin .4s cubic-bezier(.3,1.6,.5,1) both}
+.hub .mate:nth-of-type(2){animation-delay:.25s}.hub .mate:nth-of-type(3){animation-delay:.4s}.hub .mate:nth-of-type(4){animation-delay:.55s}.hub .mate:nth-of-type(5){animation-delay:.7s}.hub .mate:nth-of-type(6){animation-delay:.85s}
+.hub .hero{transform-box:fill-box;transform-origin:center}
+.is-active .hub .hero{animation:beat 1.5s ease-in-out 1.2s infinite}
+.sr s{text-decoration:none;background:linear-gradient(var(--brick),var(--brick)) no-repeat 0 54%/100% 3px}
+.is-active .sr s{animation:strike .45s ease calc(var(--d,0)*1ms + 350ms) both}
+.is-active .sr .ar{animation:popin .4s cubic-bezier(.3,1.6,.5,1) calc(var(--d,0)*1ms + 700ms) both}
+.is-active .sr .to{animation:fromleft .5s cubic-bezier(.2,.7,.2,1) calc(var(--d,0)*1ms + 820ms) both}
+.timer.run .tv{animation:pulse 1s ease-in-out infinite}
+.timer.done .tv{animation:blink .5s steps(1) 6}
+
 @media (prefers-reduced-motion: reduce){
   .slide,.slide.is-active,.progress span{transition:none}
-  .is-active .chain .seg1,.is-active .chain .seg2,.is-active .chain .segall,.is-active .chain .crack,.is-active .chain .mend{animation:none}
+  .slide *,.slide *::before,.slide *::after{animation:none!important}
 }
 </style>
 </head>
@@ -470,6 +550,27 @@ b,strong{font-weight:600}
   <symbol id="crack" viewBox="0 0 24 40"><path d="M15 2 L8 14 L16 22 L8 31 L12 38" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="ring" viewBox="0 0 24 40"><circle cx="12" cy="20" r="8.5" fill="var(--rf, none)" stroke="currentColor" stroke-width="3.2"/></symbol>
   <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="7" pathLength="1"/><path pathLength="1" d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/><circle cx="24" cy="24" r="14" pathLength="1"/></g></symbol>
+  <symbol id="i-people" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="16" r="7" pathLength="1"/><circle cx="33" cy="19" r="5" pathLength="1"/><path pathLength="1" d="M5 40c0-8 6-13 13-13s13 5 13 13"/><path pathLength="1" d="M33 29c6 0 10 4 10 10"/></g></symbol>
+  <symbol id="i-shield" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M24 5l15 6v11c0 9-6 16-15 21C15 38 9 31 9 22V11z"/><path pathLength="1" d="M17 23l5 5 10-10"/></g></symbol>
+  <symbol id="i-chat" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M8 8h20a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H17l-7 6v-6H8a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z"/><path pathLength="1" d="M36 18h4a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-2v6l-7-6h-9a4 4 0 0 1-4-4v-1"/></g></symbol>
+  <symbol id="i-flag" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M11 44V5"/><path pathLength="1" d="M11 8h25l-6 8 6 8H11"/></g></symbol>
+  <symbol id="i-sprout" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M24 44V25"/><path pathLength="1" d="M24 31c0-9 6-14 15-14 0 9-6 14-15 14z"/><path pathLength="1" d="M24 25c0-7-5-12-13-12 0 7 5 12 13 12z"/><path pathLength="1" d="M12 44h24"/></g></symbol>
+  <symbol id="i-notes" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M8 8h24v16l-8 8H8z"/><path pathLength="1" d="M24 32v-8h8"/><path pathLength="1" d="M14 16h12M14 22h8"/><path pathLength="1" d="M36 24l6 6-12 12h-6v-6z"/></g></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M4 24s7-11 20-11 20 11 20 11-7 11-20 11S4 24 4 24z"/><circle cx="24" cy="24" r="5" pathLength="1"/><path pathLength="1" d="M9 39L39 9"/></g></symbol>
+  <symbol id="i-eye" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M4 24s7-11 20-11 20 11 20 11-7 11-20 11S4 24 4 24z"/><circle cx="24" cy="24" r="5" pathLength="1"/></g></symbol>
+  <symbol id="i-bug" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="28" rx="9" ry="12" pathLength="1"/><path pathLength="1" d="M15 24H7M41 24h-8M16 33l-7 5M32 33l7 5M24 16v24"/><path pathLength="1" d="M18 16c0-4 3-7 6-7s6 3 6 7"/><path pathLength="1" d="M17 12l-4-4M31 12l4-4"/></g></symbol>
+  <symbol id="i-clock-alert" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="21" cy="27" r="15" pathLength="1"/><path pathLength="1" d="M21 18v10l7 4"/><path pathLength="1" d="M40 5v9M40 19v1"/></g></symbol>
+  <symbol id="i-bolt" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M27 4L10 27h11l-3 17 17-24H24z"/></g></symbol>
+  <symbol id="i-siren" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M12 37V25a12 12 0 0 1 24 0v12"/><path pathLength="1" d="M6 41h36"/><path pathLength="1" d="M24 5v4M9 11l3 3M39 11l-3 3"/></g></symbol>
+  <symbol id="i-bulb" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M14 19a10 10 0 1 1 20 0c0 5-4 7-4 11H18c0-4-4-6-4-11z"/><path pathLength="1" d="M18 36h12M20 41h8"/></g></symbol>
+  <symbol id="i-badge" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="15" r="7" pathLength="1"/><path pathLength="1" d="M7 40c0-8 6-13 13-13 3 0 5 1 7 2"/><path pathLength="1" d="M29 36l4 4 9-9"/></g></symbol>
+  <symbol id="i-link" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M20 28l8-8"/><path pathLength="1" d="M18 31l-4 4a6.5 6.5 0 0 1-9-9l6-6a6.5 6.5 0 0 1 9 0"/><path pathLength="1" d="M30 17l4-4a6.5 6.5 0 0 1 9 9l-6 6a6.5 6.5 0 0 1-9 0"/></g></symbol>
+  <symbol id="i-lifebuoy" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="17" pathLength="1"/><circle cx="24" cy="24" r="7" pathLength="1"/><path pathLength="1" d="M24 7v10M24 31v10M7 24h10M31 24h10"/></g></symbol>
+  <symbol id="i-swap" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M8 16h30l-7-7"/><path pathLength="1" d="M40 32H10l7 7"/></g></symbol>
+  <symbol id="i-weight" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M9 42h30l-4-24H13z"/><path pathLength="1" d="M18 18c0-8 12-8 12 0"/><path pathLength="1" d="M20 30h8"/></g></symbol>
+  <symbol id="i-merge" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M10 6v8c0 7 14 7 14 14v14"/><path pathLength="1" d="M38 6v8c0 7-14 7-14 14"/><path pathLength="1" d="M18 36l6 6 6-6"/></g></symbol>
+  <symbol id="i-scale" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M24 8v34M14 42h20M8 14h32"/><path pathLength="1" d="M13 14l-7 14a7 7 0 0 0 14 0zM35 14l-7 14a7 7 0 0 0 14 0z"/></g></symbol>
   <symbol id="tick" viewBox="0 0 24 24"><path d="M4.5 12.5l4.6 4.6L19.5 6.8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -499,9 +600,9 @@ b,strong{font-weight:600}
 <section class="slide" data-section="Mở đầu">
   <h2 class="title">Dự án gần nhất của bạn gặp khó chủ yếu vì đâu?</h2>
   <div class="vote">
-    <div class="opt"><span class="letter">A</span><h3>Vấn đề kỹ thuật</h3><p>Công nghệ mới, hạ tầng, hiệu năng, lỗi code khó tìm…</p></div>
+    <div class="opt"><svg class="ico" aria-hidden="true"><use href="#i-gear"/></svg><span class="letter">A</span><h3>Vấn đề kỹ thuật</h3><p>Công nghệ mới, hạ tầng, hiệu năng, lỗi code khó tìm…</p></div>
     <span class="or">hay</span>
-    <div class="opt"><span class="letter">B</span><h3>Vấn đề phối hợp</h3><p>Hiểu sai yêu cầu, bàn giao lệch nhau, báo rủi ro muộn, đổ lỗi cho nhau…</p></div>
+    <div class="opt"><svg class="ico" aria-hidden="true"><use href="#i-people"/></svg><span class="letter">B</span><h3>Vấn đề phối hợp</h3><p>Hiểu sai yêu cầu, bàn giao lệch nhau, báo rủi ro muộn, đổ lỗi cho nhau…</p></div>
   </div>
   <p class="foot">Giơ tay hoặc bình chọn. Cuối buổi, chúng ta sẽ quay lại câu hỏi này.</p>
   <aside class="notes">(3 phút) Cho mọi người giơ tay chọn A hoặc B, ghi tỉ lệ lên bảng. Thường đa số chọn B. Hỏi thêm 1–2 người: lần gần nhất dự án gặp khó vì phối hợp là chuyện gì? Nếu kết quả nghiêng về A, hỏi tiếp: vấn đề kỹ thuật đó có được phát hiện và báo sớm không? Câu trả lời thường dẫn về B.</aside>
@@ -566,9 +667,9 @@ b,strong{font-weight:600}
     <li><span class="sw k1"></span><span class="t">0:00</span><span class="nm">Mở đầu</span><span class="ds">Câu hỏi mở, câu chuyện “đội toàn người giỏi”</span><span class="m">10 phút</span></li>
     <li><span class="sw k2"></span><span class="t">0:10</span><span class="nm">Phần 1: Niềm tin và tôn trọng</span><span class="ds">An toàn tâm lý, không đổ lỗi, dám nói</span><span class="m">15 phút</span></li>
     <li><span class="sw k2"></span><span class="t">0:25</span><span class="nm">Phần 2: Giao tiếp và phối hợp</span><span class="ds">Xác nhận yêu cầu, bàn giao, góp ý</span><span class="m">20 phút</span></li>
-    <li><span class="sw k3"></span><span class="t">0:45</span><span class="nm">Phần 3: Trách nhiệm và làm chủ</span><span class="ds">Ownership, lãnh đạo không cần chức danh</span><span class="m">15 phút</span></li>
+    <li><span class="sw k3"></span><span class="t">0:45</span><span class="nm">Phần 3: Trách nhiệm và làm chủ</span><span class="ds">Tinh thần làm chủ, lãnh đạo không cần chức danh</span><span class="m">15 phút</span></li>
     <li><span class="sw k3"></span><span class="t">1:00</span><span class="nm">Phần 4: Thực thi và phát triển</span><span class="ds">Vai trò, phụ thuộc, chia sẻ tri thức</span><span class="m">20 phút</span></li>
-    <li><span class="sw k4"></span><span class="t">1:20</span><span class="nm">Phần 5: Thực hành</span><span class="ds">Blame or Ownership, Retro, cam kết của đội</span><span class="m">35 phút</span></li>
+    <li><span class="sw k4"></span><span class="t">1:20</span><span class="nm">Phần 5: Thực hành</span><span class="ds">Đổ lỗi hay làm chủ, Retro, cam kết của đội</span><span class="m">35 phút</span></li>
     <li><span class="sw k1"></span><span class="t">1:55</span><span class="nm">Kết</span><span class="ds">Năm chuyển đổi tư duy</span><span class="m">5 phút</span></li>
   </ol>
   <aside class="notes">(1 phút) Giới thiệu lộ trình: đi từ nhận thức (niềm tin, giao tiếp) sang hành động (trách nhiệm, thực thi), rồi thực hành. Hơn một phần ba thời gian là làm việc nhóm. Khuyến khích mọi người ngắt lời để kể tình huống tương tự trong dự án của mình.</aside>
@@ -576,6 +677,7 @@ b,strong{font-weight:600}
 
 <!-- 7 -->
 <section class="slide dark s-section" data-section="Phần 1: Niềm tin">
+  <svg class="deco" aria-hidden="true"><use href="#i-shield"/></svg>
   <p class="part">Phần 1</p>
   <h2>Niềm tin và sự tôn trọng</h2>
   <p class="sub">Nền móng của đội ngũ. Không tin nhau, mọi quy trình phía sau chỉ còn là hình thức.</p>
@@ -588,10 +690,10 @@ b,strong{font-weight:600}
   <div class="rail" data-cur="0"></div>
   <h2 class="title">Bốn tình huống, một điểm chung</h2>
   <ul class="sit">
-    <li><span class="who"><span class="role">Dev</span>thấy BA phân tích sai</span><span class="what">Nhưng ngại phản biện, cứ thế code theo tài liệu</span><span class="fear">“Mình nói ra có bị cho là lấn sân không?”</span></li>
-    <li><span class="who"><span class="role">QC</span>tìm ra lỗi nghiêm trọng</span><span class="what">Nhưng ghi nhẹ đi, vì sợ ảnh hưởng thành tích của Dev</span><span class="fear">“Báo đúng mức thì mất lòng anh em.”</span></li>
-    <li><span class="who"><span class="role">Dev</span>thấy rủi ro tiến độ</span><span class="what">Nhưng không dám báo quản lý, hy vọng sẽ kịp</span><span class="fear">“Nói sớm thì bị đánh giá là yếu.”</span></li>
-    <li><span class="who"><span class="role">Đội</span>một người mắc lỗi</span><span class="what">Cả nhóm xúm vào chỉ trích trong buổi họp</span><span class="fear">“Lần sau, có thấy gì cũng im cho lành.”</span></li>
+    <li><span class="who"><span class="role">Dev</span>thấy BA phân tích sai<svg class="ico" aria-hidden="true"><use href="#i-eye-off"/></svg></span><span class="what">Nhưng ngại phản biện, cứ thế code theo tài liệu</span><span class="fear">“Mình nói ra có bị cho là lấn sân không?”</span></li>
+    <li><span class="who"><span class="role">QC</span>tìm ra lỗi nghiêm trọng<svg class="ico" aria-hidden="true"><use href="#i-bug"/></svg></span><span class="what">Nhưng ghi nhẹ đi, vì sợ ảnh hưởng thành tích của Dev</span><span class="fear">“Báo đúng mức thì mất lòng anh em.”</span></li>
+    <li><span class="who"><span class="role">Dev</span>thấy rủi ro tiến độ<svg class="ico" aria-hidden="true"><use href="#i-clock-alert"/></svg></span><span class="what">Nhưng không dám báo quản lý, hy vọng sẽ kịp</span><span class="fear">“Nói sớm thì bị đánh giá là yếu.”</span></li>
+    <li><span class="who"><span class="role">Đội</span>một người mắc lỗi<svg class="ico" aria-hidden="true"><use href="#i-bolt"/></svg></span><span class="what">Cả nhóm xúm vào chỉ trích trong buổi họp</span><span class="fear">“Lần sau, có thấy gì cũng im cho lành.”</span></li>
   </ul>
   <p class="foot">Ai cũng thấy vấn đề, nhưng không ai nói. Vì sao?</p>
   <aside class="notes">(4 phút) Đọc nhanh bốn tình huống. Hỏi phòng: ai từng ở một trong bốn vị trí này? Điểm chung: ai cũng thấy vấn đề, nhưng không ai nói, vì sợ. Sợ bị đánh giá, sợ mất lòng, sợ bị quy trách nhiệm. Chữ “sợ” là đầu mối dẫn sang slide sau: khái niệm an toàn tâm lý.</aside>
@@ -658,6 +760,7 @@ b,strong{font-weight:600}
 
 <!-- 12 -->
 <section class="slide dark s-section" data-section="Phần 2: Giao tiếp">
+  <svg class="deco" aria-hidden="true"><use href="#i-chat"/></svg>
   <p class="part">Phần 2</p>
   <h2>Giao tiếp và phối hợp</h2>
   <p class="sub">Phần lớn lỗi “kỹ thuật” thực ra là lỗi của một câu chưa được hỏi.</p>
@@ -772,7 +875,7 @@ b,strong{font-weight:600}
     </div>
   </div>
   <div class="ego">
-    <h3>Gác lại cái tôi</h3>
+    <h3><svg class="ico" aria-hidden="true"><use href="#i-merge"/></svg>Gác lại cái tôi</h3>
     <p>Không phải lúc nào ý tưởng của mình cũng đúng, phương án của mình cũng tốt nhất. Thay “Cách đó sai rồi” bằng “Mình có một phương án khác, thử so sánh nhé”. Phản biện ý tưởng, không phản biện con người.</p>
   </div>
   <aside class="notes">(4 phút) Tranh luận tích cực là tranh luận có kết quả: ra được phương án tốt hơn, không ai bị tổn thương. Ví dụ mẫu câu góp ý: “Hôm qua PR merge mà chưa chạy test (tình huống), QC phải test lại từ đầu (tác động), lần sau mình chạy test trước khi merge nhé (đề xuất)”. Xin phòng một ví dụ góp ý đã nhận mà họ thấy hữu ích.</aside>
@@ -788,18 +891,19 @@ b,strong{font-weight:600}
 
 <!-- 18 -->
 <section class="slide dark s-section" data-section="Phần 3: Trách nhiệm">
+  <svg class="deco" aria-hidden="true"><use href="#i-flag"/></svg>
   <p class="part">Phần 3</p>
   <h2>Trách nhiệm và tinh thần làm chủ</h2>
   <p class="sub">Quy trình chỉ chạy khi mỗi người coi kết quả chung là việc của mình.</p>
   <div class="rail on-dark" data-cur="2"></div>
-  <aside class="notes">Chuyển phần. Đây là phần quan trọng nhất với đội kỹ thuật: ownership không phải khẩu hiệu, nó thể hiện ở từng phản xạ nhỏ khi gặp vấn đề.</aside>
+  <aside class="notes">Chuyển phần. Đây là phần quan trọng nhất với đội kỹ thuật: tinh thần làm chủ không phải khẩu hiệu, nó thể hiện ở từng phản xạ nhỏ khi gặp vấn đề.</aside>
 </section>
 
 <!-- 19 -->
 <section class="slide bp" data-section="Phần 3: Trách nhiệm">
   <div class="rail" data-cur="2"></div>
-  <h2 class="title">Thụ động hay Ownership?</h2>
-  <div class="vhead"><span class="bad">Tư duy thụ động</span><span class="ok">Tư duy Ownership</span></div>
+  <h2 class="title">Thụ động hay làm chủ?</h2>
+  <div class="vhead"><span class="bad">Tư duy thụ động</span><span class="ok">Tư duy làm chủ</span></div>
   <div class="vbody">
     <div class="l">“Tôi chỉ làm theo yêu cầu”</div><div class="r">Tôi hiểu mục tiêu của công việc</div>
     <div class="l">“Đây không phải việc của tôi”</div><div class="r">Tôi tìm đúng người để cùng xử lý</div>
@@ -833,7 +937,7 @@ b,strong{font-weight:600}
       <li><span class="num">5</span>Theo dõi đến khi đóng, cập nhật cho cả đội</li>
     </ol>
   </div>
-  <aside class="notes">(4 phút) Thay bằng một tình huống tích hợp thật nếu có. Ownership không có nghĩa là tự sửa hệ thống của người khác, mà là chủ động làm hết phần mình để vấn đề được giải quyết nhanh nhất. Tập trung giải quyết vấn đề, không tập trung chứng minh lỗi thuộc về ai.</aside>
+  <aside class="notes">(4 phút) Thay bằng một tình huống tích hợp thật nếu có. Làm chủ không có nghĩa là tự sửa hệ thống của người khác, mà là chủ động làm hết phần mình để vấn đề được giải quyết nhanh nhất. Tập trung giải quyết vấn đề, không tập trung chứng minh lỗi thuộc về ai.</aside>
 </section>
 
 <!-- 21 -->
@@ -841,12 +945,12 @@ b,strong{font-weight:600}
   <div class="rail" data-cur="2"></div>
   <h2 class="title">Lãnh đạo không cần chức danh</h2>
   <div class="lead3">
-    <div><span class="role">Dev</span><h3>Khi có sự cố</h3><p>Đứng ra điều phối: gom thông tin, chia việc, cập nhật cho mọi người.</p></div>
-    <div><span class="role">QC</span><h3>Khi lỗi lọt</h3><p>Đề xuất một cải tiến cho quy trình test, thay vì chỉ ghi nhận lỗi.</p></div>
-    <div><span class="role">BA</span><h3>Khi bắt đầu tính năng</h3><p>Giúp cả đội hiểu vì sao làm tính năng này, không chỉ làm gì.</p></div>
+    <div><svg class="ico" aria-hidden="true"><use href="#i-siren"/></svg><span class="role">Dev</span><h3>Khi có sự cố</h3><p>Đứng ra điều phối: gom thông tin, chia việc, cập nhật cho mọi người.</p></div>
+    <div><svg class="ico" aria-hidden="true"><use href="#i-bug"/></svg><span class="role">QC</span><h3>Khi lỗi lọt</h3><p>Đề xuất một cải tiến cho quy trình test, thay vì chỉ ghi nhận lỗi.</p></div>
+    <div><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="role">BA</span><h3>Khi bắt đầu tính năng</h3><p>Giúp cả đội hiểu vì sao làm tính năng này, không chỉ làm gì.</p></div>
   </div>
   <div class="ego">
-    <h3>Làm nhiều hơn khi cần</h3>
+    <h3><svg class="ico" aria-hidden="true"><use href="#i-scale"/></svg>Làm nhiều hơn khi cần</h3>
     <p>Sẵn sàng gánh thêm lúc đội cần là đáng quý. Nhưng nếu sprint nào cũng phải làm ngoài giờ để chữa cháy, đó là vấn đề của kế hoạch, không phải thước đo tinh thần đồng đội.</p>
   </div>
   <aside class="notes">(5 phút) Xin mỗi vai trò trong phòng một ví dụ họ đã dẫn dắt mà không cần chức danh. Ảnh hưởng đến từ hành động, không từ vị trí. Về “going the extra mile”: ghi nhận người gánh thêm, nhưng đừng để nó thành chuẩn mực; chữa cháy thường xuyên là dấu hiệu kế hoạch hoặc phân công có vấn đề.</aside>
@@ -862,6 +966,7 @@ b,strong{font-weight:600}
 
 <!-- 23 -->
 <section class="slide dark s-section" data-section="Phần 4: Thực thi và phát triển">
+  <svg class="deco" aria-hidden="true"><use href="#i-sprout"/></svg>
   <p class="part">Phần 4</p>
   <h2>Cùng thực thi, cùng phát triển</h2>
   <p class="sub">Teamwork không có nghĩa là tất cả mọi người đều làm tất cả mọi việc.</p>
@@ -875,11 +980,11 @@ b,strong{font-weight:600}
   <h2 class="title">Một đội thực thi tốt cần năm điều</h2>
   <div class="mid">
     <ul class="needs">
-      <li><b>Đúng người, đúng vai trò</b><span>Không ép mọi người giống nhau; đặt người vào việc họ làm tốt nhất</span></li>
-      <li><b>Rõ trách nhiệm</b><span>Mỗi kết quả có một người sở hữu, cả đội biết đó là ai</span></li>
-      <li><b>Rõ phụ thuộc</b><span>Việc nào chờ việc nào, chờ ai; nói ra trước khi bị chặn</span></li>
-      <li><b>Minh bạch tiến độ và rủi ro</b><span>Bảng việc thật, không “xanh cho đẹp”; rủi ro được nêu ở daily</span></li>
-      <li><b>Có cơ chế hỗ trợ</b><span>Khi một người gặp khó, đội có cách san việc, không đợi người đó gục</span></li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-badge"/></svg><b>Đúng người, đúng vai trò</b><span>Không ép mọi người giống nhau; đặt người vào việc họ làm tốt nhất</span></li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg><b>Rõ trách nhiệm</b><span>Mỗi kết quả có một người sở hữu, cả đội biết đó là ai</span></li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg><b>Rõ phụ thuộc</b><span>Việc nào chờ việc nào, chờ ai; nói ra trước khi bị chặn</span></li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-eye"/></svg><b>Minh bạch tiến độ và rủi ro</b><span>Bảng việc thật, không “xanh cho đẹp”; rủi ro được nêu ở daily</span></li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-lifebuoy"/></svg><b>Có cơ chế hỗ trợ</b><span>Khi một người gặp khó, đội có cách san việc, không đợi người đó gục</span></li>
     </ul>
   </div>
   <p class="foot">Tầm nhìn chung và mục tiêu chung chỉ có giá trị khi được dịch thành năm điều này trong từng sprint.</p>
@@ -891,12 +996,12 @@ b,strong{font-weight:600}
   <div class="rail" data-cur="3"></div>
   <h2 class="title">Khi áp lực đến, đội tốt khác đội thường ở đâu?</h2>
   <ul class="scards">
-    <li><span class="q">Gần deadline, Dev chưa xong</span><span class="a">Nói ra sớm; cắt phạm vi hoặc san việc, không một mình gánh đến phút cuối</span></li>
-    <li><span class="q">BA đổi yêu cầu giữa chừng</span><span class="a">Qua một đầu mối, nói rõ ảnh hưởng tiến độ, cả đội cùng quyết nhận hay lùi</span></li>
-    <li><span class="q">QC phát hiện nhiều lỗi sát ngày release</span><span class="a">Phân loại theo mức độ; quyết release hay hoãn dựa trên dữ liệu, không trên áp lực</span></li>
-    <li><span class="q">Production sự cố ngoài giờ</span><span class="a">Có lịch trực, có runbook; người trực điều phối, cả đội không đổ dồn vào một người</span></li>
-    <li><span class="q">Một người giỏi đang quá tải</span><span class="a">Quá tải là rủi ro của đội, không phải vinh dự cá nhân; san việc, làm cặp</span></li>
-    <li><span class="q">Hai team phụ thuộc nhau nhưng không thống nhất kế hoạch</span><span class="a">Chốt giao diện và mốc bàn giao trước; một người điều phối chung cho cả hai</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-clock-alert"/></svg><span class="q">Gần deadline, Dev chưa xong</span><span class="a">Nói ra sớm; cắt phạm vi hoặc san việc, không một mình gánh đến phút cuối</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-swap"/></svg><span class="q">BA đổi yêu cầu giữa chừng</span><span class="a">Qua một đầu mối, nói rõ ảnh hưởng tiến độ, cả đội cùng quyết nhận hay lùi</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-bug"/></svg><span class="q">QC phát hiện nhiều lỗi sát ngày release</span><span class="a">Phân loại theo mức độ; quyết release hay hoãn dựa trên dữ liệu, không trên áp lực</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-siren"/></svg><span class="q">Production sự cố ngoài giờ</span><span class="a">Có lịch trực, có runbook; người trực điều phối, cả đội không đổ dồn vào một người</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-weight"/></svg><span class="q">Một người giỏi đang quá tải</span><span class="a">Quá tải là rủi ro của đội, không phải vinh dự cá nhân; san việc, làm cặp</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg><span class="q">Hai team phụ thuộc nhau nhưng không thống nhất kế hoạch</span><span class="a">Chốt giao diện và mốc bàn giao trước; một người điều phối chung cho cả hai</span></li>
   </ul>
   <p class="foot">Chọn một tình huống: đội của bạn đã xử lý thế nào?</p>
   <aside class="notes">(7 phút) Không đi hết sáu ô. Chọn 2–3 tình huống anh có câu chuyện thật, kể kỹ: lúc đó đội đã làm gì, điều gì giá như làm khác. Rồi hỏi phòng chọn một ô và kể cách đội họ đã xử lý. Cải tiến liên tục nằm ở câu hỏi cuối: lần sau làm khác đi điều gì?</aside>
@@ -967,38 +1072,57 @@ b,strong{font-weight:600}
 
 <!-- 29 -->
 <section class="slide dark s-section" data-section="Phần 5: Thực hành">
+  <svg class="deco" aria-hidden="true"><use href="#i-notes"/></svg>
   <p class="part">Phần 5</p>
   <h2>Thực hành</h2>
   <p class="sub">Từ hiểu sang làm: phân tích một tình huống và cùng viết cam kết của đội.</p>
-  <aside class="notes">Chuyển sang thực hành. Chia nhóm 4–5 người, trộn các vai trò (PM, BA, Dev, QC, DevOps) trong mỗi nhóm. Nghiên cứu về đào tạo teamwork cho thấy thực hành và mô phỏng hiệu quả hơn nghe giảng thụ động (McEwan và cộng sự, 2017, PLOS ONE); kiểm tra lại nguồn trước khi trích.</aside>
+  <aside class="notes">Chuyển sang thực hành. Chia nhóm 4–5 người, trộn các vai trò (PM, BA, Dev, QC, DevOps, và nếu có thì cả Sale, CSKH) trong mỗi nhóm. Nghiên cứu về đào tạo teamwork cho thấy thực hành và mô phỏng hiệu quả hơn nghe giảng thụ động (McEwan và cộng sự, 2017, PLOS ONE); kiểm tra lại nguồn trước khi trích.</aside>
 </section>
 
 <!-- 30 -->
 <section class="slide" data-section="Phần 5: Thực hành">
-  <h2 class="title">Blame or Ownership? Dự án trễ 2 tuần</h2>
+  <h2 class="title">Đổ lỗi hay làm chủ? Dự án trễ 2 tuần</h2>
+  <p class="ctx">Dự án triển khai hệ thống hoá đơn điện tử cho một chuỗi 40 cửa hàng. Hợp đồng ký đầu tháng 3, cam kết go-live sau <b>8 tuần</b>. Đội dự án gồm PM, BA, ba Dev, một QC; <b>Sale</b> là người ký hợp đồng và giữ quan hệ với giám đốc chuỗi; <b>CSKH</b> tiếp nhận phản hồi từ các cửa hàng sau khi ký.</p>
+  <div class="sprint tl">
+    <div class="day risk"><span class="flag">Hứa ngoài hợp đồng</span><span class="dn">Tuần 0</span><span class="st">Sale ký hợp đồng, hứa miệng thêm “tích hợp với phần mềm kế toán” dù không có trong phạm vi.</span></div>
+    <div class="day"><span class="dn">Tuần 1–2</span><span class="st">BA phân tích theo hợp đồng. Khách bận, chỉ xác nhận qua Zalo với Sale, BA không được xem.</span></div>
+    <div class="day"><span class="dn">Tuần 3–5</span><span class="st">Dev code. CSKH nhận ba yêu cầu sửa từ cửa hàng, chuyển thẳng vào nhóm chat chung, không ai nhận.</span></div>
+    <div class="day risk"><span class="flag">Đổi logic, không báo</span><span class="dn">Tuần 6</span><span class="st">Dev tự làm thêm tích hợp kế toán vì “Sale đã hứa”. Không báo PM, không báo QC, không ghi tài liệu.</span></div>
+    <div class="day"><span class="dn">Tuần 7</span><span class="st">Bàn giao QC dồn một lần. QC tìm ra 40 lỗi, 6 lỗi nghiêm trọng, phần tích hợp không có tài liệu để test.</span></div>
+    <div class="day bad"><span class="dn">Tuần 10</span><span class="st">Go-live trễ 2 tuần. Giám đốc chuỗi phàn nàn với Sale; CSKH phải xin lỗi từng cửa hàng.</span></div>
+  </div>
+  <p class="foot">Sáu người ngồi vào buổi họp sau go-live. Mỗi người một câu.</p>
+  <aside class="notes">(3 phút) Đọc bối cảnh cho cả phòng. Nhấn vào ba điểm gãy: Sale hứa ngoài hợp đồng mà đội không biết; thông tin từ khách đi theo hai đường (Sale và CSKH) nhưng không đường nào đến BA; Dev đổi phạm vi mà không báo ai. Chưa phân tích ở đây, chỉ dựng tình huống. Slide sau là lời của sáu người và nhiệm vụ nhóm.</aside>
+</section>
+
+<!-- 31 -->
+<section class="slide" data-section="Phần 5: Thực hành">
+  <h2 class="title">Sáu người, sáu câu trả lời</h2>
   <div class="act">
-    <div class="bubbles">
-      <figure class="bub"><blockquote>“Dev làm chậm.”</blockquote><figcaption>PM</figcaption></figure>
-      <figure class="bub"><blockquote>“BA đổi yêu cầu liên tục.”</blockquote><figcaption>Dev</figcaption></figure>
-      <figure class="bub"><blockquote>“Khách hàng mãi chưa xác nhận.”</blockquote><figcaption>BA</figcaption></figure>
-      <figure class="bub"><blockquote>“Dev bàn giao quá muộn.”</blockquote><figcaption>QC</figcaption></figure>
+    <div class="bubbles six">
+      <figure class="bub"><blockquote>“Dev làm chậm, tuần nào cũng xin thêm thời gian.”</blockquote><figcaption>PM</figcaption></figure>
+      <figure class="bub"><blockquote>“BA và CSKH đổi yêu cầu liên tục, Sale thì hứa thêm việc.”</blockquote><figcaption>Dev</figcaption></figure>
+      <figure class="bub"><blockquote>“Khách không bao giờ xác nhận với tôi, chỉ nói với Sale.”</blockquote><figcaption>BA</figcaption></figure>
+      <figure class="bub"><blockquote>“Bàn giao dồn một cục ở tuần 7, test kiểu gì cho kịp.”</blockquote><figcaption>QC</figcaption></figure>
+      <figure class="bub"><blockquote>“Tôi bán được hợp đồng. Làm ra được hay không là việc của kỹ thuật.”</blockquote><figcaption>Sale</figcaption></figure>
+      <figure class="bub"><blockquote>“Khách gọi hỏi tiến độ, tôi không có thông tin gì để trả lời.”</blockquote><figcaption>CSKH</figcaption></figure>
     </div>
     <div class="task">
       <h3>Nhiệm vụ nhóm, 12 phút</h3>
       <ol class="tasks">
         <li>Nguyên nhân gốc là gì? (không phải ai có lỗi)</li>
-        <li>Mỗi vai trò lẽ ra có thể làm gì khác?</li>
-        <li>Phương án gỡ 2 tuần trễ</li>
-        <li>Một thay đổi để không lặp lại</li>
+        <li>Mỗi vai trò, kể cả Sale và CSKH, lẽ ra có thể làm gì khác?</li>
+        <li>Phương án gỡ 2 tuần trễ và giữ được khách</li>
+        <li>Một thay đổi để không lặp lại ở dự án sau</li>
       </ol>
       <p class="rule">Luật chơi: không câu nào được bắt đầu bằng “Tại vì bạn…”</p>
       <div class="timer" data-min="12"><span class="tv">12:00</span><button class="tb start" type="button">Bắt đầu</button><button class="tb reset" type="button">Đặt lại</button></div>
     </div>
   </div>
-  <aside class="notes">(20 phút: 12 phút thảo luận, 8 phút trình bày, mỗi nhóm khoảng 2 phút). Bấm “Bắt đầu” trên đồng hồ khi các nhóm bắt tay vào làm. Người điều phối đi quanh các nhóm, nhắc luật chơi. Khi tổng kết, chỉ ra rằng cả bốn người đều đúng một phần: vấn đề nằm ở chỗ không ai nhìn bức tranh chung và không ai báo rủi ro sớm.</aside>
+  <aside class="notes">(20 phút: 12 phút thảo luận, 8 phút trình bày, mỗi nhóm khoảng 2 phút). Bấm “Bắt đầu” trên đồng hồ khi các nhóm bắt tay vào làm. Người điều phối đi quanh các nhóm, nhắc luật chơi. Khi tổng kết, chỉ ra rằng cả sáu người đều đúng một phần: không ai sai phần việc của mình, nhưng không ai nhìn bức tranh chung và không ai báo rủi ro sớm. Nhấn riêng hai vai trò ngoài đội kỹ thuật: Sale hứa thêm mà không đưa vào phạm vi là tạo nợ cho cả đội; CSKH nhận yêu cầu khách mà không có đầu mối chuyển vào dự án là để thông tin rơi. Teamwork không dừng ở đội kỹ thuật, nó bao gồm cả người bán và người chăm sóc khách.</aside>
 </section>
 
-<!-- 31 -->
+<!-- 32 -->
 <section class="slide" data-section="Phần 5: Thực hành">
   <h2 class="title">Retro: Start, Stop, Continue</h2>
   <div class="stickies">
@@ -1017,7 +1141,7 @@ b,strong{font-weight:600}
   <aside class="notes">(15 phút) Chuẩn bị giấy nhớ 3 màu cho 3 cột. Người điều phối gom các ý giống nhau trước khi bình chọn, bình chọn bằng dấu chấm. Chỉ giữ lại các ý được nhiều phiếu nhất để chuyển thành cam kết.</aside>
 </section>
 
-<!-- 32 -->
+<!-- 33 -->
 <section class="slide" data-section="Phần 5: Thực hành">
   <h2 class="title">Cam kết làm việc của đội</h2>
   <div class="agree">
@@ -1045,7 +1169,7 @@ b,strong{font-weight:600}
   <aside class="notes">Chiếu slide này khi các nhóm đang chốt cam kết, như một ví dụ tham khảo. Cam kết chính thức nên được chụp lại, gửi cho cả đội và dán ở nơi làm việc hoặc trang dự án; xem lại sau 1 sprint.</aside>
 </section>
 
-<!-- 33 -->
+<!-- 34 -->
 <section class="slide" data-section="Kết">
   <h2 class="title">Năm chuyển đổi tư duy</h2>
   <div class="sr"><s>“Tôi hoàn thành việc của tôi”</s><svg class="ar"><use href="#arrow"/></svg><span class="to">Chúng ta hoàn thành mục tiêu chung</span></div>
@@ -1057,7 +1181,7 @@ b,strong{font-weight:600}
   <aside class="notes">(3 phút) Quay lại câu hỏi mở đầu: giờ nhìn lại, khó khăn của dự án nằm ở A hay B? Sau đó đọc năm chuyển đổi, mỗi dòng dừng một nhịp.</aside>
 </section>
 
-<!-- 34 -->
+<!-- 35 -->
 <section class="slide dark s-close" data-section="Kết">
   <p class="stmt">Một đội tuyệt vời không phải là nhóm người làm việc cùng nhau, mà là những người tin nhau, đỡ nhau, dám phản biện nhau và cùng nhau lớn lên.</p>
   <p class="en">A great team is a group of people who trust, support, challenge and grow together.</p>
@@ -1078,7 +1202,7 @@ b,strong{font-weight:600}
 
   <div class="chrome" id="chrome" role="toolbar" aria-label="Điều khiển trình chiếu">
     <button class="cbtn back" id="prev" type="button" aria-label="Slide trước" title="Slide trước (←)"><svg aria-hidden="true"><use href="#arrow"/></svg></button>
-    <span class="count" id="counter" aria-live="polite">1 / 34</span>
+    <span class="count" id="counter" aria-live="polite">1 / 35</span>
     <button class="cbtn" id="next" type="button" aria-label="Slide sau" title="Slide sau (→)"><svg aria-hidden="true"><use href="#arrow"/></svg></button>
     <span class="sec" id="sec"></span>
     <button class="cbtn txt" id="notesBtn" type="button" aria-pressed="false" title="Phím N">Ghi chú</button>
@@ -1114,6 +1238,27 @@ b,strong{font-weight:600}
     const on = c === 'all' ? PH.map((_, i) => i) : c.split(',').map(Number);
     r.innerHTML = PH.map((p, k) => '<div class="cell' + (on.includes(k) ? ' cur' : '') + '"><div class="lab">' + p +
       '</div><div class="trk"><svg class="ck" viewBox="0 0 24 40" aria-hidden="true"><use href="#ring"/></svg></div></div>').join('');
+  });
+
+  // entrance animation: mark elements and assign a staggered delay (--d, ms) per slide
+  const AN = '.kicker,.s-title h1,.tag,.tag2,.by,.title,.part,.s-section h2,.sub,.deco,.qmark,.stmt,.en,.thanks,' +
+    '.ctx,.opt,.or,.foot,.punch,.two>div,.vhead,.vbody>div,.tbar,.agenda li,.sit li,.h3,.sprint .day,.roots li,.practice,' +
+    '.story-q,.steps4 li,.story li,.chainrow>*,.t3h,.t3>div,.fb>div,.ego,.scenario,.lane,.lead3>div,.needs li,' +
+    '.scards li,.hub,.hubright>*,.bub,.task,.sticky,.retro-run>*,.doc,.keep,.sr';
+  const ROWS = { '.vbody': 2, '.t3': 3 };
+  slides.forEach(s => {
+    let i = 0;
+    s.querySelectorAll(AN).forEach(el => {
+      if (el.parentElement.closest('.an')) return; // parent already animates
+      el.classList.add('an');
+      let step = 1;
+      for (const sel in ROWS) if (el.parentElement.matches(sel)) {
+        step = Array.prototype.indexOf.call(el.parentElement.children, el) % ROWS[sel] === 0 ? 1 : 0;
+      }
+      if (step && i) i += 1;
+      if (!i) i = 1;
+      el.style.setProperty('--d', String(Math.min(i - 1, 14) * 85));
+    });
   });
 
   slides.forEach((s, k) => {
@@ -1210,12 +1355,12 @@ b,strong{font-weight:600}
       tv.textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0');
       t.classList.toggle('done', left === 0);
     };
-    const stop = () => { clearInterval(id); id = null; };
+    const stop = () => { clearInterval(id); id = null; t.classList.remove('run'); };
     sb.addEventListener('click', () => {
       if (id) { stop(); sb.textContent = 'Tiếp tục'; return; }
       if (left === 0) left = total;
       id = setInterval(() => { left = Math.max(0, left - 1); show(); if (left === 0) { stop(); sb.textContent = 'Bắt đầu'; } }, 1000);
-      sb.textContent = 'Tạm dừng'; show();
+      sb.textContent = 'Tạm dừng'; t.classList.add('run'); show();
     });
     rb.addEventListener('click', () => { stop(); left = total; sb.textContent = 'Bắt đầu'; show(); });
     show();
