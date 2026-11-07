@@ -11,7 +11,15 @@ Thông điệp xuyên suốt: *đội ngũ được đo bằng kết quả chung
 | `README.md` | Tổng quan, cấu trúc buổi, nơi đặt deck |
 | `script.md` | Kịch bản trình bày đầy đủ: lời nói gợi ý cho 35 slide, chỗ tương tác, câu chuyển ý, bước điều phối thực hành, checklist chuẩn bị |
 
-Deck trình chiếu (đã xuất bản) nằm ở `docs/shares/teamwork/index.html`. Deck kiểu text, một file tự chứa: font, CSS, icon SVG, animation và ghi chú người nói đều nằm trong file. Ghi chú trong deck là bản tóm tắt của `script.md`.
+Deck trình chiếu (đã xuất bản) nằm ở `docs/shares/teamwork/`:
+
+| Deck | Nội dung |
+| --- | --- |
+| `index.html` | Buổi chính, 35 slide, 120 phút: năm mắt xích của đội và hai bài tập thực hành |
+| `retro-mo-phong.html` | Bản mô phỏng, 10 slide, ít chữ: cùng bảy bước nhưng chỉ có khung và placeholder (Vấn đề 1, Bạn A, Ý kiến…), dùng khi muốn cả phòng hình dung cách buổi retro vận hành mà không gắn với nội dung thật |
+| `retro.html` | Buổi tiếp nối, 12 slide: "Khách phàn nàn, đội họp lại thế nào?", bảy bước họp rút kinh nghiệm, mỗi bước một slide kèm ví dụ ẩn danh từ một buổi retro thật |
+
+Deck chính Deck kiểu text, một file tự chứa: font, CSS, icon SVG, animation và ghi chú người nói đều nằm trong file. Ghi chú trong deck là bản tóm tắt của `script.md`.
 
 - Xem local: `python3 -m http.server 4173 --directory docs`, mở `/shares/teamwork/`.
 - Trên web: trang chủ MiniPower Academy, mục chia sẻ. Deck được đăng ký trong `SHARES[]` tại `docs/js/site.js`.

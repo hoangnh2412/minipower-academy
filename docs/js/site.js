@@ -109,6 +109,20 @@ const SHARES = [
       "Workshop 120 phút: niềm tin, giao tiếp, trách nhiệm, cùng thực thi và phát triển; hai hoạt động nhóm, cam kết của đội.",
     path: "shares/teamwork/index.html",
   },
+  {
+    id: "teamwork-retro",
+    title: "Khách phàn nàn, đội họp lại thế nào?",
+    description:
+      "Bảy bước họp rút kinh nghiệm không đổ lỗi, kể lại từ một buổi retro thật: nêu vấn đề, lắng nghe, gom ý, tìm gốc rễ, chốt giải pháp, cam kết, phân công.",
+    path: "shares/teamwork/retro.html",
+  },
+  {
+    id: "teamwork-retro-mo-phong",
+    title: "Mô phỏng một buổi retro",
+    description:
+      "Bản rút gọn chỉ có khung và chỗ trống: bảy bước họp rút kinh nghiệm vận hành thế nào, từ bảng vấn đề đến bảng phân công.",
+    path: "shares/teamwork/retro-mo-phong.html",
+  },
 ];
 
 function renderWorkshops() {
